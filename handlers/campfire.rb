@@ -13,6 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
+require 'rubygems' if RUBY_VERSION < '1.9.0'
 require "tinder"
 
 CAMPFIRE_ACCOUNT = "account"
