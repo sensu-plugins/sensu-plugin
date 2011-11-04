@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Sensu IRC Handler
+# ===
+#
+# This handler reports alerts to a specified IRC channel. You need to set the IRC_SERVER
+# contant in this file to your requested nick, password, IRC server, port and channel. If 
+# you wish to use SSL please set IRC_SSL to true.
+#
 #!/usr/bin/env ruby
  require 'rubygems' if RUBY_VERSION < '1.9.0'
  require 'carrier-pigeon'
