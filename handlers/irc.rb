@@ -27,6 +27,7 @@ require 'timeout'
 require 'json'
 
 IRC_SERVER = 'irc://sensubot:password@irc.freenode.net:6667#channel'
+IRC_PASSWORD = ''
 IRC_SSL = false
 
 module Sensu
@@ -64,7 +65,11 @@ module Sensu
       description = "#{@incident_key}: #{@event['check']['output']}"
       begin
         timeout(10) do
-          CarrierPigeon.send(:uri => IRC_SERVER, :message => description, :ssl => IRC_SSL, :join => true)
+          if IRC_PASSWORD
+            CarrierPigeon.send(:uri => IRC_SERVER, :channel_password => IRC_PASSWORD, :message => description, :ssl => IRC_SSL, :join => true)
+          else
+            CarrierPigeon.send(:uri => IRC_SERVER, :message => description, :ssl => IRC_SSL, :join => true)
+          end
           puts 'irc -- sent alert for ' + @incident_key + ' to IRC.'
        end
       rescue Timeout::Error
