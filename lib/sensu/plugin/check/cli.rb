@@ -20,6 +20,16 @@ class Sensu
           end
         end
 
+        class << self
+          def check_name(name=nil)
+            if name
+              @check_name = name
+            else
+              @check_name || self.to_s
+            end
+          end
+        end
+
         def run
           unknown "No check implemented! You should override Sensu::Check::CLI#run."
         end
