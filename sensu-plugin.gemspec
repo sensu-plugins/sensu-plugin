@@ -14,4 +14,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.files         = `git ls-files -- lib handlers plugins`.split("\n")
   s.executables   = `git ls-files -- bin`.split("\n").map {|f| File.basename(f) }
+
+  s.add_dependency('json')
 end
