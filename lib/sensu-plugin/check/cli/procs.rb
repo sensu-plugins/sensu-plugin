@@ -10,7 +10,7 @@
 # Released under the same terms as Sensu (the MIT license); see LICENSE
 # for details.
 
-require 'sensu/plugin/check/cli'
+require 'sensu-plugin/check/cli'
 
 class Sensu::Plugin::Check::CLI::Procs < Sensu::Plugin::Check::CLI
 

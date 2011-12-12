@@ -1,4 +1,4 @@
-require 'sensu/plugin'
+require 'sensu-plugin'
 require 'mixlib/cli'
 
 module Sensu
