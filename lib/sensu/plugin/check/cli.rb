@@ -9,7 +9,7 @@ module Sensu
 
         Sensu::Plugin::EXIT_CODES.each do |status, code|
           define_method(status.downcase) do |msg|
-            puts "#{status}: #{msg}"
+            puts "#{self.class.check_name}: #{status} - #{msg}"
             code
           end
         end
