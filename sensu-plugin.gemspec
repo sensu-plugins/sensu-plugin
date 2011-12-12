@@ -1,7 +1,7 @@
-require File.expand_path(File.dirname(__FILE__)) + '/lib/sensu/plugin'
+require File.expand_path(File.dirname(__FILE__)) + '/lib/sensu-plugin'
 
 Gem::Specification.new do |s|
-  s.name          = 'sensu-plugins'
+  s.name          = 'sensu-plugin'
   s.version       = Sensu::Plugin::VERSION
   s.platform      = Gem::Platform::RUBY
   s.authors       = ['Decklin Foster']
