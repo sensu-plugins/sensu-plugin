@@ -31,7 +31,7 @@ class Sensu
         end
 
         def run
-          unknown "No check implemented! You should override Sensu::Check::CLI#run."
+          unknown "No check implemented! You should override Sensu::Plugin::Check::CLI#run."
         end
 
         @@autorun = self
