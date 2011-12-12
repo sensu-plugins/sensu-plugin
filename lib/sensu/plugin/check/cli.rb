@@ -1,19 +1,13 @@
+require 'sensu/plugin'
 require 'mixlib/cli'
 
-EXIT_CODES = {
-  'OK' => 0,
-  'WARNING' => 1,
-  'CRITICAL' => 2,
-  'UNKNOWN' => 3,
-}
-
-class Sensu
-  class Plugin
+module Sensu
+  module Plugin
     class Check
       class CLI
         include Mixlib::CLI
 
-        EXIT_CODES.each do |status, code|
+        Sensu::Plugin::EXIT_CODES.each do |status, code|
           define_method(status.downcase) do |msg|
             puts "#{status}: #{msg}"
             code
