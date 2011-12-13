@@ -6,9 +6,15 @@ module Sensu
     class CLI
       include Mixlib::CLI
 
+      # Implementing classes should override this to produce appropriate
+      # output for their handler.
+
       def format_output(status, output)
         output
       end
+
+      # This will define 'ok', 'warning', 'critical', and 'unknown'
+      # methods, which the plugin should call to exit.
 
       Sensu::Plugin::EXIT_CODES.each do |status, code|
         define_method(status.downcase) do |*args|
@@ -17,9 +23,15 @@ module Sensu
         end
       end
 
+      # Implementing classes must override this.
+
       def run
         unknown "Not implemented! You should override Sensu::Plugin::CLI#run."
       end
+
+      # Behind-the-scenes stuff below. If you do something crazy like
+      # define two plugins in one script, the last one will 'win' in
+      # terms of what gets auto-run.
 
       @@autorun = self
       class << self
