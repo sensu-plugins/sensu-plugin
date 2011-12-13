@@ -11,9 +11,9 @@ module Sensu
       end
 
       Sensu::Plugin::EXIT_CODES.each do |status, code|
-        define_method(status.downcase) do |output|
-          puts format_output(status, output)
-          code
+        define_method(status.downcase) do |*args|
+          puts format_output(status, *args)
+          exit(code)
         end
       end
 
@@ -33,7 +33,8 @@ module Sensu
       at_exit do
         check = @@autorun.new
         check.parse_options
-        exit(check.run)
+        check.run
+        warning "Check did not exit! You should call an exit code method."
       end
 
     end
