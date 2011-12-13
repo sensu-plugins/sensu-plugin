@@ -8,7 +8,7 @@ module Sensu
 
         def format_output(status, output)
           output[:timestamp] ||= Time.now.to_i
-          JSON.generate(output)
+          ::JSON.generate(output)
         end
 
       end

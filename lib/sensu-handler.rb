@@ -1,3 +1,5 @@
+require 'json'
+
 module Sensu
   class Handler
 
@@ -36,7 +38,7 @@ module Sensu
 
     at_exit do
       handler = @@autorun.new
-      event = JSON.parse(STDIN.read)
+      event = ::JSON.parse(STDIN.read)
       if handler.filter(event)
         handler.handle(event)
       end
