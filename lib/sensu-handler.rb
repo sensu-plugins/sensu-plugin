@@ -1,7 +1,3 @@
-# NOTE: this file is installed under 'sensu-plugin' with the rest of
-# this gem, so to get Sensu::Handler, you have to require
-# 'sensu-plugin/handler'. Sorry.
-
 module Sensu
   class Handler
 
