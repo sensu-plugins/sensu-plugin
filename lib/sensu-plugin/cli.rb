@@ -43,9 +43,15 @@ module Sensu
       end
 
       at_exit do
-        check = @@autorun.new
-        check.parse_options
-        check.run
+        begin
+          check = @@autorun.new
+          check.parse_options
+          check.run
+        rescue SystemExit => e
+          exit e.status
+        rescue Exception => e
+          critical "Check failed to run: #{e}"
+        end
         warning "Check did not exit! You should call an exit code method."
       end
 
