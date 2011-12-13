@@ -7,7 +7,7 @@ module Sensu
       class CLI < Sensu::Plugin::CLI
 
         def format_output(status, output)
-          JSON.generate(output)
+          JSON.generate(output.merge(:timestamp => Time.now.to_i))
         end
 
       end
