@@ -1,18 +1,64 @@
-* Sensu Plugins
+* Sensu Plugin
 
-This gem contains some example plugins, and libraries for writing your
-own. For a Nagios-style check plugin, subclass:
+This is a framework for writing your own Sensu plugins and handlers.
+It's not required to write a plugin (most Nagios plugins will work
+without modification); it just makes it easier.
 
-  - Sensu::Plugin::Check::CLI
+Examples of plugins written with and without it can be found in
+the =sensu-community-plugins= repository.
 
-For a metric outputting JSON, subclass:
+** Checks and Metrics
 
-  - Sensu::Plugin::Metric::CLI
+To implement your own check, subclass =Sensu::Plugin::Check::CLI=, like
+this:
 
-For your own handler, subclass:
+#+BEGIN_SRC ruby
+require 'sensu-plugin/check/cli'
 
-  - Sensu::Handler
+class MyCheck < Sensu::Plugin::Check::CLI
+
+  check_name 'My awesome check' # defaults to class name
+  option :foo, :short => '-f' # Mixlib::CLI is included
+
+  def run
+    ok "All is well"
+  end
+
+end
+#+END_SRC
+
+This will output a string, like "My awesome check: OK - All is well",
+and exit with a code of 0. The available exit methods, which will
+immediately end the process, are:
+
+  - =ok=
+  - =warning=
+  - =critical=
+  - =unknown=
+
+For a metric, subclass =Sensu::Plugin::Metric::CLI=. Your argument to
+whichever exit method will be converted to JSON instead of Nagios-style
+output. =check_name= is not supported. If your object doesnt respond to
+=[:timestamp]=, it will add one for you.
+
+You can override =format_output= if you want something other than these
+two formats, but it's not documented yet.
+
+** Handlers
+
+For your own handler, subclass =Sensu::Handler=. It looks much like
+checks and metrics; see the =handlers= directory for examples. Your class
+should implement =handle(event)=. It is passed the event, which has been
+read from stdin and parsed as JSON. Output to stdout will go to the log.
+
+You can decide if you want to handle the event by overriding the
+=filter= method; but this also isn't documented yet (see the source; the
+built in method does some important filtering, so you probably want to
+call it with =super=).
 
 * License
 
-Released under the MIT license; see LICENSE for copyright and terms.
+Copyright 2011 Decklin Foster
+
+Released under the same terms as Sensu (the MIT license); see LICENSE
+for details.
