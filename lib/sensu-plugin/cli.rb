@@ -50,9 +50,9 @@ module Sensu
         rescue SystemExit => e
           exit e.status
         rescue Exception => e
-          critical "Check failed to run: #{e}"
+          self.new.critical "Check failed to run: #{e}"
         end
-        warning "Check did not exit! You should call an exit code method."
+        self.new.warning "Check did not exit! You should call an exit code method."
       end
 
     end
