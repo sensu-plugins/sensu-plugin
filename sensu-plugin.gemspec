@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
   s.has_rdoc      = false
   s.require_paths = ['lib']
-  s.files         = `git ls-files -- lib handlers plugins`.split("\n")
-  s.executables   = `git ls-files -- bin`.split("\n").map {|f| File.basename(f) }
+  s.files         = Dir['lib/**/*.rb']
+  s.executables   = Dir['bin/*'].map {|p| File.basename(p) }
 
   s.add_dependency('json')
   s.add_dependency('mixlib-cli', '>= 1.1.0')

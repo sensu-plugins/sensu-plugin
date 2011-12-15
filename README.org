@@ -5,6 +5,18 @@ own. You don't need to use these libraries to write a check (indeed, you
 should be able to just drop in any Nagios plugin), but they will
 hopefully make it easier.
 
+** Installation
+
+This gem will install the contents of =bin= as scripts; your RubyGems
+installation will install wrappers for them somewhere in your =$PATH=.
+Because the actual directory used for this varies between systems, you
+should not use the full path to a check in a =command= in your Sensu
+config -- just let $PATH handle it.
+
+To avoid conflicting with system binaries, all scripts are named
+starting with =check-=, =metric-=, or =handler-=. We recommend you
+follow this convention.
+
 ** Checks and Metrics
 
 To implement your own check, subclass =Sensu::Plugin::Check::CLI=, like
