@@ -44,6 +44,12 @@ output. =check_name= is not supported. If your object doesnt respond to
 You can override =format_output= if you want something other than these
 two formats, but it's not documented yet.
 
+*** Utilities
+
+Various utility methods will be collected under Sensu::Plugin::Util.
+These won't depend on any extra gems or include actual CLI checks; it's
+just for common things that many checks might want to do.
+
 ** Handlers
 
 For your own handler, subclass =Sensu::Handler=. It looks much like
