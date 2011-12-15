@@ -1,21 +1,11 @@
-* Sensu Plugins
+* Sensu Plugin
 
-This gem contains some example plugins, and libraries for writing your
-own. You don't need to use these libraries to write a check (indeed, you
-should be able to just drop in any Nagios plugin), but they will
-hopefully make it easier.
+This is a framework for writing your own Sensu plugins and handlers.
+It's not required to write a plugin (most Nagios plugins will work
+without modification); it just makes it easier.
 
-** Installation
-
-This gem will install the contents of =bin= as scripts; your RubyGems
-installation will install wrappers for them somewhere in your =$PATH=.
-Because the actual directory used for this varies between systems, you
-should not use the full path to a check in a =command= in your Sensu
-config -- just let $PATH handle it.
-
-To avoid conflicting with system binaries, all scripts are named
-starting with =check-=, =metric-=, or =handler-=. We recommend you
-follow this convention.
+Examples of plugins written with and without it can be found in
+the =sensu-community-plugins= repository.
 
 ** Checks and Metrics
 
@@ -68,13 +58,7 @@ call it with =super=).
 
 * License
 
-Copyright 2011 Sonian, Inc. and contributors.
+Copyright 2011 Decklin Foster
 
 Released under the same terms as Sensu (the MIT license); see LICENSE
 for details.
-
-NOTE: When adding a plugin, copy the preceding two paragraphs to a
-comment in each source file, changing the copyright holder to your own
-name or organization. If you wish to use a different open source
-license, please submit a pull request adding that license to the repo
-and use that license's boilerplate instead.
