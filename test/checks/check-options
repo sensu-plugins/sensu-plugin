@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'sensu-plugin/check/cli'
+
+class TestCheck < Sensu::Plugin::Check::CLI
+
+  option :ok, :short => '-o'
+  option :warn, :short => '-w'
+  option :crit, :short => '-c'
+  option :unknown, :short => '-u'
+
+  def run
+    if config[:ok]
+      ok "Simulating OK"
+    elsif config[:warn]
+      warning "Simulating a warning"
+    elsif config[:crit]
+      critical "Simulating a critical error"
+    elsif config[:unknown]
+      unknown "Simulating an unknown result"
+    end
+  end
+
+end
