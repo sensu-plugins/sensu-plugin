@@ -37,8 +37,17 @@ module Sensu
       end
     end
 
+    # Unfortunately, we need to reimplement config loading. I'm not sure there's
+    # a good way to allow overriding these paths.
+
+    CONFIGS = ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
+
+    def load_config(filename)
+      JSON.parse(File.open(filename, 'r').read) rescue Hash.new
+    end
+
     def settings
-      @settings ||= Sensu::Config.new(:validate => false).settings
+      @settings ||= CONFIGS.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
     end
 
     at_exit do
@@ -49,5 +58,16 @@ module Sensu
       end
     end
 
+  end
+end
+
+# Copied from Sensu (0.8.19)
+
+class Hash
+  def deep_merge(hash)
+    merger = proc do |key, value1, value2|
+      value1.is_a?(Hash) && value2.is_a?(Hash) ? value1.merge(value2, &merger) : value2
+    end
+    self.merge(hash, &merger)
   end
 end

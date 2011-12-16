@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.files         = Dir['lib/**/*.rb']
   s.test_files    = Dir['test/*.rb']
 
-  s.add_dependency('sensu', '>= 0.8.19')
   s.add_dependency('json')
   s.add_dependency('mixlib-cli', '>= 1.1.0')
 end
