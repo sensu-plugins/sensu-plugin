@@ -1,4 +1,5 @@
 require 'json'
+require 'sensu/config'
 
 module Sensu
   class Handler
@@ -36,31 +37,12 @@ module Sensu
       end
     end
 
-    SITE_CONFIG_DIR = '/etc/sensu/site-config'
-
-    attr_accessor :config
-
-    @@site_config = nil
-    class << self
-      def site_config(name)
-        config_file = File.join(SITE_CONFIG_DIR, "#{name}.json")
-        if File.readable?(config_file)
-          begin
-            @@site_config = JSON.parse(File.open(config_file, 'r').read)
-          rescue JSON::ParserError => e
-            puts "configuration file must be valid JSON: #{e}"
-            exit 2
-          end
-        else
-          puts "configuration file does not exist or is not readable: #{config_file}"
-          exit 2
-        end
-      end
+    def settings
+      @settings ||= Sensu::Config.new(:validate => false).settings
     end
 
     at_exit do
       handler = @@autorun.new
-      handler.config = @@site_config if @@site_config
       event = ::JSON.parse(STDIN.read)
       if handler.filter(event)
         handler.handle(event)
