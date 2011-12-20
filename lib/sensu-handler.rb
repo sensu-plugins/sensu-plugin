@@ -1,3 +1,4 @@
+require 'net/http'
 require 'json'
 require 'sensu/config'
 
@@ -10,20 +11,13 @@ module Sensu
       puts 'ignoring event -- no handler defined'
     end
 
-    # Overriding filtering logic is optional. Returns truthy if the
-    # event should be handled and falsy if it should not.
+    # Filters exit the proccess if the event should not be handled.
+    # Implementation of the default filters is below.
 
     def filter(event)
-      if event['check']['alert'] == false
-        puts 'alert disabled -- filtered event ' + short_name(event)
-        exit 0
-      end
-      refresh = (60.fdiv(event['check']['interval']) * 30).to_i
-      event['occurrences'] == 1 || event['occurrences'] % refresh == 0
-    end
-
-    def short_name(event)
-      event['client']['name'] + '/' + event['check']['name']
+      filter_disabled(event)
+      filter_occurrences(event)
+      filter_silenced(event)
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -53,8 +47,47 @@ module Sensu
     at_exit do
       handler = @@autorun.new
       event = ::JSON.parse(STDIN.read)
-      if handler.filter(event)
-        handler.handle(event)
+      handler.filter(event)
+      handler.handle(event)
+    end
+
+    # Helpers and filters
+
+    def bail(event, msg)
+      puts msg + ': ' + event['client']['name'] + '/' + event['check']['name']
+      exit 0
+    end
+
+    def api_request(*path)
+      http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
+      http.request(Net::HTTP::Get.new(path.join('/')))
+    end
+
+    def filter_disabled(event)
+      if event['check']['alert'] == false
+        bail event, 'alert disabled'
+      end
+    end
+
+    def filter_occurrences
+      refresh = (60.fdiv(event['check']['interval']) * 30).to_i
+      unless event['occurrences'] == 1 || event['occurrences'] % refresh == 0
+        bail event, 'not enough occurrences'
+      end
+    end
+
+    def filter_silenced(event)
+      begin
+        timeout(3) do
+          if api_request('/stash/silence', event['client']['name']).code == '200'
+            bail event, 'client alerts silenced'
+          end
+          if api_request('/stash/silence', event['client']['name'], event['check']['name']).code == '200'
+            bail event, 'check alerts silenced'
+          end
+        end
+      rescue Timeout::Error
+        puts 'Timed out while attempting to query the Sensu API for stashes'
       end
     end
 
