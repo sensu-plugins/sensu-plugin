@@ -16,7 +16,7 @@ module Sensu
 
     def filter
       filter_disabled
-      filter_occurrences
+      filter_repeated
       filter_silenced
     end
 
@@ -78,10 +78,16 @@ module Sensu
       end
     end
 
-    def filter_occurrences
-      refresh = (60.fdiv(@event['check']['interval']) * 30).to_i
-      unless @event['occurrences'] == 1 || @event['occurrences'] % refresh == 0
+    def filter_repeated
+      occurrences = @event['check']['occurrences'] || 1
+      interval = @event['check']['interval'] || 30
+      refresh = @event['check']['refresh'] || 1800
+      if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
+      end
+      if @event['occurrences'] > occurrences
+        n = refresh.fdiv(interval).to_i
+        bail 'only repeating alert every' + n + 'occurrences' unless @event['occurrences'] % n == 0
       end
     end
 
