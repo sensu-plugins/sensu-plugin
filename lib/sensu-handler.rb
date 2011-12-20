@@ -7,17 +7,17 @@ module Sensu
 
     # Implementing classes should override this.
 
-    def handle(event)
+    def handle
       puts 'ignoring event -- no handler defined'
     end
 
     # Filters exit the proccess if the event should not be handled.
     # Implementation of the default filters is below.
 
-    def filter(event)
-      filter_disabled(event)
-      filter_occurrences(event)
-      filter_silenced(event)
+    def filter
+      filter_disabled
+      filter_occurrences
+      filter_silenced
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -44,17 +44,26 @@ module Sensu
       @settings ||= CONFIGS.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
     end
 
+    def read_event(file)
+      begin
+        @event = ::JSON.parse(file.read)
+      rescue
+        puts 'Error reading event'
+        exit 0
+      end
+    end
+
     at_exit do
       handler = @@autorun.new
-      event = ::JSON.parse(STDIN.read)
-      handler.filter(event)
-      handler.handle(event)
+      handler.read_event(STDIN)
+      handler.filter
+      handler.handle
     end
 
     # Helpers and filters
 
-    def bail(event, msg)
-      puts msg + ': ' + event['client']['name'] + '/' + event['check']['name']
+    def bail(msg)
+      puts msg + ': ' + @event['client']['name'] + '/' + @event['check']['name']
       exit 0
     end
 
@@ -63,27 +72,27 @@ module Sensu
       http.request(Net::HTTP::Get.new(path.join('/')))
     end
 
-    def filter_disabled(event)
-      if event['check']['alert'] == false
-        bail event, 'alert disabled'
+    def filter_disabled
+      if @event['check']['alert'] == false
+        bail 'alert disabled'
       end
     end
 
     def filter_occurrences
-      refresh = (60.fdiv(event['check']['interval']) * 30).to_i
-      unless event['occurrences'] == 1 || event['occurrences'] % refresh == 0
-        bail event, 'not enough occurrences'
+      refresh = (60.fdiv(@event['check']['interval']) * 30).to_i
+      unless @event['occurrences'] == 1 || @event['occurrences'] % refresh == 0
+        bail 'not enough occurrences'
       end
     end
 
-    def filter_silenced(event)
+    def filter_silenced
       begin
         timeout(3) do
-          if api_request('/stash/silence', event['client']['name']).code == '200'
-            bail event, 'client alerts silenced'
+          if api_request('/stash/silence', @event['client']['name']).code == '200'
+            bail 'client alerts silenced'
           end
-          if api_request('/stash/silence', event['client']['name'], event['check']['name']).code == '200'
-            bail event, 'check alerts silenced'
+          if api_request('/stash/silence', @event['client']['name'], @event['check']['name']).code == '200'
+            bail 'check alerts silenced'
           end
         end
       rescue Timeout::Error

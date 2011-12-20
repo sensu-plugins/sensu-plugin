@@ -55,8 +55,9 @@ just for common things that many checks might want to do.
 
 For your own handler, subclass =Sensu::Handler=. It looks much like
 checks and metrics; see the =handlers= directory for examples. Your class
-should implement =handle(event)=. It is passed the event, which has been
-read from stdin and parsed as JSON. Output to stdout will go to the log.
+should implement =handle=. The instance variable =@event= will be set
+for you if a JSON event can be read from stdin; otherwise, the handler
+will abort. Output to stdout will go to the log.
 
 You can decide if you want to handle the event by overriding the
 =filter= method; but this also isn't documented yet (see the source; the
