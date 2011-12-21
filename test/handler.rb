@@ -28,4 +28,10 @@ class TestHandler < MiniTest::Unit::TestCase
     assert $?.exitstatus == 0 && output =~ /Event:.*test/
   end
 
+  def test_missing_keys
+    event = {}
+    output = run_script(event)
+    assert $?.exitstatus == 0 && output =~ /Event:/
+  end
+
 end

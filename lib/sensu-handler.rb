@@ -47,6 +47,9 @@ module Sensu
     def read_event(file)
       begin
         @event = ::JSON.parse(file.read)
+        @event['occurrences'] ||= 1
+        @event['check'] ||= Hash.new
+        @event['client'] ||= Hash.new
       rescue
         puts 'Error reading event'
         exit 0
