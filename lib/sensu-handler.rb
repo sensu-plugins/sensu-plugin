@@ -1,6 +1,5 @@
 require 'net/http'
 require 'json'
-require 'sensu/config'
 
 module Sensu
   class Handler
