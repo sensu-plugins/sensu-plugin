@@ -4,10 +4,10 @@ require 'rubygems'
 require 'minitest/autorun'
 require 'json'
 
-class TestHandler < MiniTest::Unit::TestCase
+class TestHandlerExternal < MiniTest::Unit::TestCase
 
   def setup
-    @script = File.join(File.dirname(__FILE__), 'handlers/handle-nofilter')
+    @script = File.join(File.dirname(__FILE__), 'external/handle-nofilter')
   end
 
   def run_script(event)
