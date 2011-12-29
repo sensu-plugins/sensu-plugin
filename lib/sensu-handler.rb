@@ -89,7 +89,7 @@ module Sensu
       end
       if @event['occurrences'] > occurrences
         n = refresh.fdiv(interval).to_i
-        bail 'only repeating alert every' + n + 'occurrences' unless @event['occurrences'] % n == 0
+        bail 'only repeating alert every ' + n.to_s + ' occurrences' unless @event['occurrences'] % n == 0
       end
     end
 
