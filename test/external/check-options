@@ -11,13 +11,13 @@ class TestCheck < Sensu::Plugin::Check::CLI
 
   def run
     if config[:ok]
-      ok "Simulating OK"
+      ok "Simulating OK, argv = #{argv.join(' ')}"
     elsif config[:warn]
-      warning "Simulating a warning"
+      warning "Simulating a warning, argv = #{argv.join(' ')}"
     elsif config[:crit]
-      critical "Simulating a critical error"
+      critical "Simulating a critical error, argv = #{argv.join(' ')}"
     elsif config[:unknown]
-      unknown "Simulating an unknown result"
+      unknown "Simulating an unknown result, argv = #{argv.join(' ')}"
     end
   end
 

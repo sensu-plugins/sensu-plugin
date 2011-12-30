@@ -40,4 +40,9 @@ class TestCheckExternal < MiniTest::Unit::TestCase
     assert $?.exitstatus == 1
   end
 
+  def test_argv
+    output = run_script '-o', 'foo'
+    assert $?.exitstatus == 0 && output.include?('argv = foo')
+  end
+
 end

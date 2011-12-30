@@ -6,6 +6,8 @@ module Sensu
     class CLI
       include Mixlib::CLI
 
+      attr_accessor :argv
+
       # Implementing classes should override this to produce appropriate
       # output for their handler.
 
@@ -45,7 +47,7 @@ module Sensu
       at_exit do
         begin
           check = @@autorun.new
-          check.parse_options
+          check.argv = check.parse_options
           check.run
         rescue SystemExit => e
           exit e.status
