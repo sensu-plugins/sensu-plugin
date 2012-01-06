@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'sensu-plugin/metric/cli'
+
+class TestMetric < Sensu::Plugin::Metric::CLI::JSON
+
+  def run
+    ok 'hello' => 1234
+  end
+
+end
