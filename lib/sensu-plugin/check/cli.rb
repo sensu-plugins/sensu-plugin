@@ -15,8 +15,12 @@ module Sensu
           end
         end
 
-        def format_output(status, output)
-          "#{self.class.check_name}: #{status} - #{output}"
+        def message(msg)
+          @message = msg
+        end
+
+        def output(msg=@message)
+          puts "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : "")
         end
 
       end

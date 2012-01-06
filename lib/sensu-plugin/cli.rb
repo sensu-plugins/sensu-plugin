@@ -11,8 +11,7 @@ module Sensu
       # Implementing classes should override this to produce appropriate
       # output for their handler.
 
-      def format_output(status, output)
-        output
+      def output(*args)
       end
 
       # This will define 'ok', 'warning', 'critical', and 'unknown'
@@ -20,7 +19,8 @@ module Sensu
 
       Sensu::Plugin::EXIT_CODES.each do |status, code|
         define_method(status.downcase) do |*args|
-          puts format_output(status, *args)
+          @status = status
+          output(*args)
           exit(code)
         end
       end
@@ -52,7 +52,7 @@ module Sensu
         rescue SystemExit => e
           exit e.status
         rescue Exception => e
-          self.new.critical "Check failed to run: #{e}"
+          self.new.critical "Check failed to run: #{e.message}, #{e.backtrace}"
         end
         self.new.warning "Check did not exit! You should call an exit code method."
       end
