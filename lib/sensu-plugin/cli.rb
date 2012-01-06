@@ -11,8 +11,7 @@ module Sensu
       # Implementing classes should override this to produce appropriate
       # output for their handler.
 
-      def format_output(status, output)
-        output
+      def output(*args)
       end
 
       # This will define 'ok', 'warning', 'critical', and 'unknown'
@@ -20,7 +19,8 @@ module Sensu
 
       Sensu::Plugin::EXIT_CODES.each do |status, code|
         define_method(status.downcase) do |*args|
-          puts format_output(status, *args)
+          @status = status
+          output(*args)
           exit(code)
         end
       end
