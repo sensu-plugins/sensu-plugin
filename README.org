@@ -72,8 +72,8 @@ end
 
 JSON output takes one argument (the object), and adds a 'timestamp' key
 if missing. Graphite output takes two arguments, the metric path and the
-value, and optionally the timestamp as a third argument. =Time.now= is
-used for the timestamp if it is not specified.
+value, and optionally the timestamp as a third argument. =Time.now.to_i=
+is used for the timestamp if it is not specified.
 
 Exit codes do not affect metric output, but they can still be used by
 your handlers.
