@@ -20,7 +20,7 @@ module Sensu
         end
 
         def format_output(status, msg=@message)
-          "#{self.class.check_name}: #{status}" + (msg ? " - #{msg}" : "")
+          "#{self.class.check_name} #{status}" + (msg ? ": #{msg}" : "")
         end
 
       end
