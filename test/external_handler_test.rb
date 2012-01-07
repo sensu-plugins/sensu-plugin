@@ -1,21 +1,12 @@
-#!/usr/bin/env ruby
-
 require 'rubygems'
 require 'minitest/autorun'
 require 'json'
 
 class TestHandlerExternal < MiniTest::Unit::TestCase
+  include SensuPluginTestHelper
 
   def setup
-    @script = File.join(File.dirname(__FILE__), 'external/handle-nofilter')
-  end
-
-  def run_script(event)
-    output = IO.popen(@script, 'r+') do |child|
-      child.puts JSON.generate(event)
-      child.close_write
-      child.read
-    end
+    set_script 'external/handle-nofilter'
   end
 
   def test_handled
@@ -24,13 +15,13 @@ class TestHandlerExternal < MiniTest::Unit::TestCase
       'check' => { 'name' => 'test' },
       'occurrences' => 1,
     }
-    output = run_script(event)
+    output = run_script_with_input(JSON.generate(event))
     assert $?.exitstatus == 0 && output =~ /Event:.*test/
   end
 
   def test_missing_keys
     event = {}
-    output = run_script(event)
+    output = run_script_with_input(JSON.generate(event))
     assert $?.exitstatus == 0 && output =~ /Event:/
   end
 

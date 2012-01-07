@@ -1,18 +1,11 @@
-#!/usr/bin/env ruby
-
 require 'rubygems'
 require 'minitest/autorun'
 
 class TestMetricExternal < MiniTest::Unit::TestCase
+  include SensuPluginTestHelper
 
   def setup
-    @script = File.join(File.dirname(__FILE__), 'external/trivial-metric')
-  end
-
-  def run_script(*args)
-    IO.popen([@script] + args, 'r+') do |child|
-      child.read
-    end
+    set_script 'external/trivial-metric'
   end
 
   def test_ok

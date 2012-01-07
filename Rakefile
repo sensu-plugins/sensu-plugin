@@ -7,6 +7,7 @@ ENV['RUBYLIB'] = File.join(File.dirname(__FILE__), 'lib')
 
 desc "Run tests"
 task :test do
+  require File.join(File.dirname(__FILE__), 'test', 'helper')
   Dir['test/*_test.rb'].each do |test|
     require File.join(File.dirname(__FILE__), test)
   end
