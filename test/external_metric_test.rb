@@ -14,3 +14,17 @@ class TestMetricExternal < MiniTest::Unit::TestCase
   end
 
 end
+
+class TestGraphiteMetricExternal < MiniTest::Unit::TestCase
+  include SensuPluginTestHelper
+
+  def setup
+    set_script 'external/multi-output'
+  end
+
+  def test_multi
+    lines = run_script.split("\n")
+    assert lines.size == 2 && lines.all? {|line| line.split("\t").size == 3 }
+  end
+
+end
