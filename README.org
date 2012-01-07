@@ -85,6 +85,12 @@ many times as you want, then call an exit method without any arguments.
 For either checks or metrics, you can override =output= if you want
 something other than these formats.
 
+*** Options
+
+For help on setting up options, see the =mixlib-cli= documentation.
+Command line arguments that are not parsed as options are available via
+the =argv= method.
+
 *** Utilities
 
 Various utility methods will be collected under Sensu::Plugin::Util.
