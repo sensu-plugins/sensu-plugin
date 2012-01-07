@@ -28,6 +28,11 @@ class TestCheckExternal < MiniTest::Unit::TestCase
     assert $?.exitstatus == 3
   end
 
+  def test_override
+    output = run_script '-O'
+    assert $?.exitstatus == 0 && !output.include?('argv =')
+  end
+
   def test_fallthrough
     run_script
     assert $?.exitstatus == 1

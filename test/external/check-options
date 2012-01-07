@@ -8,16 +8,20 @@ class TestCheck < Sensu::Plugin::Check::CLI
   option :warn, :short => '-w'
   option :crit, :short => '-c'
   option :unknown, :short => '-u'
+  option :override, :short => '-O'
 
   def run
+    message "Testing, argv = #{argv.join(' ')}"
     if config[:ok]
-      ok "Simulating OK, argv = #{argv.join(' ')}"
+      ok
     elsif config[:warn]
-      warning "Simulating a warning, argv = #{argv.join(' ')}"
+      warning
     elsif config[:crit]
-      critical "Simulating a critical error, argv = #{argv.join(' ')}"
+      critical
     elsif config[:unknown]
-      unknown "Simulating an unknown result, argv = #{argv.join(' ')}"
+      unknown
+    elsif config[:override]
+      ok "Overriding message"
     end
   end
 
