@@ -111,13 +111,18 @@ module Sensu
   end
 end
 
-# Copied from Sensu (0.8.19)
+# Copied from Sensu (0.9.3)
 
+class Array
+  def deep_merge(other_array, &merger)
+    concat(other_array).uniq
+  end
+end
 class Hash
-  def deep_merge(hash)
-    merger = proc do |key, value1, value2|
-      value1.is_a?(Hash) && value2.is_a?(Hash) ? value1.merge(value2, &merger) : value2
+  def deep_merge(other_hash, &merger)
+    merger ||= proc do |k, oldval, newval|
+      oldval.deep_merge(newval, &merger) rescue newval
     end
-    self.merge(hash, &merger)
+    merge(other_hash, &merger)
   end
 end
