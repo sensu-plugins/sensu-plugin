@@ -8,6 +8,7 @@ class TestCheck < Sensu::Plugin::Check::CLI
   option :warn, :short => '-w'
   option :crit, :short => '-c'
   option :unknown, :short => '-u'
+  option :fail, :short => '-f'
   option :override, :short => '-O'
 
   def run
@@ -20,6 +21,8 @@ class TestCheck < Sensu::Plugin::Check::CLI
       critical
     elsif config[:unknown]
       unknown
+    elsif config[:fail]
+      raise RuntimeError
     elsif config[:override]
       ok "Overriding message"
     end
