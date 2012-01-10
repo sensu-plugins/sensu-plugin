@@ -12,6 +12,7 @@ module Sensu
       # output for their handler.
 
       def output(*args)
+        puts "Sensu::Plugin::CLI: #{args}"
       end
 
       # This will define 'ok', 'warning', 'critical', and 'unknown'
