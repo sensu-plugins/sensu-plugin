@@ -15,7 +15,7 @@ module Sensu
 
     def filter
       filter_disabled
-      filter_repeated
+      filter_repeated unless @event['action'] == 'resolve'
       filter_silenced
     end
 
