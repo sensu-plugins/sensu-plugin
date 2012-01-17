@@ -17,7 +17,6 @@ require 'sensu-plugin/check/cli'
 
 class MyCheck < Sensu::Plugin::Check::CLI
 
-  check_name 'my_awesome_check' # defaults to class name
   option :foo, :short => '-f' # Mixlib::CLI is included
 
   def run
@@ -27,9 +26,9 @@ class MyCheck < Sensu::Plugin::Check::CLI
 end
 #+END_SRC
 
-This will output the string "my_awesome_check OK: All is well" (like a
-Nagios plugin), and exit with a code of 0. The available exit methods,
-which will immediately end the process, are:
+This will output the string "MyCheck OK: All is well" (like a Nagios
+plugin), and exit with a code of 0. The available exit methods, which
+will immediately end the process, are:
 
   - =ok=
   - =warning=

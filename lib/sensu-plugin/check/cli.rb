@@ -5,22 +5,12 @@ module Sensu
     class Check
       class CLI < Sensu::Plugin::CLI
 
-        class << self
-          def check_name(name=nil)
-            if name
-              @check_name = name
-            else
-              @check_name || self.to_s
-            end
-          end
-        end
-
         def message(msg)
           @message = msg
         end
 
         def output(msg=@message)
-          puts "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : "")
+          nagios_style_output(msg)
         end
 
       end
