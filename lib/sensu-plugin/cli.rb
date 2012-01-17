@@ -15,6 +15,20 @@ module Sensu
         puts "Sensu::Plugin::CLI: #{args}"
       end
 
+      # Implementations of output can call this method to get a "Nagios
+      # style" line of text. Sensu plugins can output anything, but this
+      # is a familiar format and allows even using a sensu-plugin check
+      # from Nagios in a pinch.
+
+      def nagios_style_output(msg=nil)
+        name = ENV['SENSU_PLUGIN_NAME'] || self.class.name
+        if msg.nil?
+          puts "#{name} #{@status}"
+        else
+          puts "#{name} #{@status}: " + msg.to_s.gsub("\n", ' ')
+        end
+      end
+
       # This will define 'ok', 'warning', 'critical', and 'unknown'
       # methods, which the plugin should call to exit.
 
