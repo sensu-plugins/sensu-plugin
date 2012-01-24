@@ -69,7 +69,7 @@ module Sensu
       exit 0
     end
 
-    def api_request(method, path)
+    def api_request(method, path, &blk)
       http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
       req = case method.to_s.upcase
       when 'GET'
@@ -81,6 +81,7 @@ module Sensu
       when 'PUT'
         Net::HTTP::Put.new(path)
       end
+      yield(req) if block_given?
       http.request(req)
     end
 
