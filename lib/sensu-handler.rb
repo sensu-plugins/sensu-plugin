@@ -69,9 +69,19 @@ module Sensu
       exit 0
     end
 
-    def api_request(*path)
+    def api_request(method, path)
       http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
-      http.request(Net::HTTP::Get.new(path.join('/')))
+      req = case method.to_s.upcase
+      when 'GET'
+        Net::HTTP::Get.new(path)
+      when 'POST'
+        Net::HTTP::Post.new(path)
+      when 'DELETE'
+        Net::HTTP::Delete.new(path)
+      when 'PUT'
+        Net::HTTP::Put.new(path)
+      end
+      http.request(req)
     end
 
     def filter_disabled
@@ -93,13 +103,17 @@ module Sensu
       end
     end
 
+    def stash_exists?(path)
+      api_request(:GET, '/stash' + path).code == '200'
+    end
+
     def filter_silenced
       begin
         timeout(3) do
-          if api_request('/stash/silence', @event['client']['name']).code == '200'
+          if stash_exists?('/silence/' + @event['client']['name'])
             bail 'client alerts silenced'
           end
-          if api_request('/stash/silence', @event['client']['name'], @event['check']['name']).code == '200'
+          if stash_exists?('/silence/' + @event['client']['name'] + '/' + @event['check']['name'])
             bail 'check alerts silenced'
           end
         end
