@@ -103,10 +103,6 @@ module Sensu
       end
     end
 
-    def stash_exists?(path)
-      api_request(:GET, '/stash' + path).code == '200'
-    end
-
     def filter_silenced
       begin
         timeout(3) do
@@ -120,6 +116,10 @@ module Sensu
       rescue Timeout::Error
         puts 'Timed out while attempting to query the Sensu API for stashes'
       end
+    end
+
+    def stash_exists?(path)
+      api_request(:GET, '/stash' + path).code == '200'
     end
 
   end
