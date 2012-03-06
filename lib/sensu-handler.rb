@@ -79,6 +79,9 @@ module Sensu
     def api_request(method, path, &blk)
       http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
       req = NET_HTTP_REQ_CLASS[method.to_s.upcase].new(path)
+      if settings['api']['user'] && settings['api']['password']
+        req.basic_auth(settings['api']['user'], settings['api']['password'])
+      end
       yield(req) if block_given?
       http.request(req)
     end
