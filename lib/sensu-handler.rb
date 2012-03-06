@@ -81,6 +81,9 @@ module Sensu
       when 'PUT'
         Net::HTTP::Put.new(path)
       end
+      if settings['api']['user'] && settings['api']['password']
+        req.basic_auth(settings['api']['user'], settings['api']['password'])
+      end
       yield(req) if block_given?
       http.request(req)
     end
