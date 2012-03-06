@@ -1,6 +1,13 @@
 require 'net/http'
 require 'json'
 
+NET_HTTP_REQ_CLASS = {
+  'GET' => Net::HTTP::Get,
+  'POST' => Net::HTTP::Post,
+  'DELETE' => Net::HTTP::Delete,
+  'PUT' => Net::HTTP::Put,
+}
+
 module Sensu
   class Handler
 
@@ -71,16 +78,7 @@ module Sensu
 
     def api_request(method, path, &blk)
       http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
-      req = case method.to_s.upcase
-      when 'GET'
-        Net::HTTP::Get.new(path)
-      when 'POST'
-        Net::HTTP::Post.new(path)
-      when 'DELETE'
-        Net::HTTP::Delete.new(path)
-      when 'PUT'
-        Net::HTTP::Put.new(path)
-      end
+      req = NET_HTTP_REQ_CLASS[method.to_s.upcase].new(path)
       yield(req) if block_given?
       http.request(req)
     end
