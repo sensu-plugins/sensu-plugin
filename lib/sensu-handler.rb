@@ -92,12 +92,11 @@ module Sensu
       if(@event['subdue'].respond_to?(:[]))
         start = Time.parse(@event['subdue']['start'])
         stop = Time.parse(@event['subdue']['end'])
-        zone = start.zone
         if(stop < start) # -> 11pm - 6am
           if(Time.now < stop)
-            start = Time.parse("12:00 am #{zone}")
+            start = Time.parse("12:00 am")
           else
-            stop = Time.parse("12:00 pm #{zone}")
+            stop = Time.parse("12:00 pm")
           end
         end
         if(Time.now >= start && Time.now <= stop)
