@@ -93,6 +93,63 @@ class TestHandlerExternalWithFilter < MiniTest::Unit::TestCase
     assert $?.exitstatus == 0 && output =~ /Event:/
   end
 
+  def test_day_subdued
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => { 'name' => 'test' },
+      'occurrences' => 1,
+      'subdue' => {
+        'days' => Time.now.strftime('%A')
+      }
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/subdue/, output)
+  end
+
+  def test_days_subdued
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => { 'name' => 'test' },
+      'occurrences' => 1,
+      'subdue' => {
+        'days' => [Time.now.strftime('%A'), 'Monday']
+      }
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/subdue/, output)
+  end
+
+  def test_day_nonsubdued
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => { 'name' => 'test' },
+      'occurrences' => 1,
+      'subdue' => {
+        'days' => (Time.now + 86400).strftime('%A')
+      }
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert $?.exitstatus == 0 && output =~ /Event:/
+  end
+
+  def test_days_nonsubdued
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => { 'name' => 'test' },
+      'occurrences' => 1,
+      'subdue' => {
+        'days' => [
+          (Time.now + 86400).strftime('%A'),
+          (Time.now + 172800).strftime('%A')
+        ]
+      }
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert $?.exitstatus == 0 && output =~ /Event:/
+  end
+
   def test_missing_keys
     event = {}
     output = run_script_with_input(JSON.generate(event))
