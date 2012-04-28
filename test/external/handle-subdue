@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' if RUBY_VERSION < '1.9.0'
+require 'sensu-handler'
+
+class NoFilter < Sensu::Handler
+
+  def handle
+    puts 'Event: ' + @event.inspect
+  end
+
+  def filter_repeated
+  end
+
+  def filter_silenced
+  end
+
+end

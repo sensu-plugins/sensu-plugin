@@ -1,5 +1,6 @@
 require 'net/http'
 require 'json'
+require 'time'
 
 NET_HTTP_REQ_CLASS = {
   'GET' => Net::HTTP::Get,
@@ -22,6 +23,7 @@ module Sensu
 
     def filter
       filter_disabled
+      filter_subdued
       filter_repeated unless @event['action'] == 'resolve'
       filter_silenced
     end
@@ -84,6 +86,26 @@ module Sensu
       end
       yield(req) if block_given?
       http.request(req)
+    end
+
+    def filter_subdued
+      if(@event['check']['subdue'].is_a?(Hash))
+        if(@event['check']['subdue'].has_key?('start') && @event['check']['subdue'].has_key?('end'))
+          start = Time.parse(@event['check']['subdue']['start'])
+          stop = Time.parse(@event['check']['subdue']['end'])
+          if(stop < start) # -> 11pm - 6am
+            if(Time.now < stop)
+              start = Time.parse("12:00 am")
+            else
+              stop = Time.parse("12:00 pm")
+            end
+          end
+        end
+        days = Array(@event['check']['subdue']['days']).map(&:downcase)
+        if(days.include?(Time.now.strftime('%A').downcase) || (start && Time.now >= start && Time.now <= stop))
+          bail 'alert currently subdued'
+        end
+      end
     end
 
     def filter_disabled
