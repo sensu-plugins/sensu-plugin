@@ -89,10 +89,10 @@ module Sensu
     end
 
     def filter_subdued
-      if(@event['subdue'].respond_to?(:[]))
-        if(@event['subdue']['start'])
-          start = Time.parse(@event['subdue']['start'])
-          stop = Time.parse(@event['subdue']['end'])
+      if(@event['check']['subdue'].is_a?(Hash))
+        if(@event['check']['subdue'].has_key?('start') && @event['check']['subdue'].has_key?('end'))
+          start = Time.parse(@event['check']['subdue']['start'])
+          stop = Time.parse(@event['check']['subdue']['end'])
           if(stop < start) # -> 11pm - 6am
             if(Time.now < stop)
               start = Time.parse("12:00 am")
@@ -101,7 +101,7 @@ module Sensu
             end
           end
         end
-        days = Array(@event['subdue']['days']).map(&:downcase)
+        days = Array(@event['check']['subdue']['days']).map(&:downcase)
         if(days.include?(Time.now.strftime('%A').downcase) || (start && Time.now >= start && Time.now <= stop))
           bail 'alert currently subdued'
         end
