@@ -37,18 +37,20 @@ module Sensu
       end
     end
 
-    # Unfortunately, we need to reimplement config loading. I'm not sure there's
-    # a good way to allow overriding these paths.
-
-    CONFIGS = ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
-              + Dir[ENV['SENSU_CONFIG_DIR']] + [ENV['SENSU_CONFIG_FILE']]
-
     def load_config(filename)
       JSON.parse(File.open(filename, 'r').read) rescue Hash.new
     end
 
     def settings
-      @settings ||= CONFIGS.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
+      # Unfortunately, we need to reimplement config loading. I'm not sure
+      # there's a good way to allow overriding these paths.
+      configs = ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
+
+      # add ENV var directories and files if set by sensu server
+      configs += Dir[ENV['SENSU_CONFIG_DIR']] unless ENV['SENSU_CONFIG_DIR'].nil?
+      configs += [ENV['SENSU_CONFIG_FILE']] unless ENV['SENSU_CONFIG_FILE'].nil?
+
+      @settings ||= configs.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
     end
 
     def read_event(file)
