@@ -3,13 +3,6 @@ require 'json'
 
 module Sensu
 
-  CONFIG_FILES = case
-  when ENV['SENSU_CONFIG_FILES']
-    ENV['SENSU_CONFIG_FILES'].split(':')
-  else
-    ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
-  end
-
   NET_HTTP_REQ_CLASS = {
     'GET' => Net::HTTP::Get,
     'POST' => Net::HTTP::Post,
@@ -46,12 +39,20 @@ module Sensu
       end
     end
 
+    def config_files
+      if ENV['SENSU_CONFIG_FILES']
+        ENV['SENSU_CONFIG_FILES'].split(':')
+      else
+        ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
+      end
+    end
+
     def load_config(filename)
       JSON.parse(File.open(filename, 'r').read) rescue Hash.new
     end
 
     def settings
-      @settings ||= CONFIG_FILES.map { |f| load_config(f) }.reduce { |a, b| a.deep_merge(b) }
+      @settings ||= config_files.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
     end
 
     def read_event(file)
