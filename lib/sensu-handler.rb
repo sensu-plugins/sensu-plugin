@@ -22,7 +22,7 @@ module Sensu
 
     def filter
       filter_disabled
-      filter_repeated unless @event['action'] == 'resolve'
+      filter_repeated 
       filter_silenced
     end
 
@@ -99,7 +99,7 @@ module Sensu
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end
-      if @event['occurrences'] > occurrences
+      if @event['occurrences'] > occurrences && @event['action'] == 'create'
         n = refresh.fdiv(interval).to_i
         bail 'only repeating alert every ' + n.to_s + ' occurrences' unless @event['occurrences'] % n == 0
       end
