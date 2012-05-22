@@ -40,7 +40,7 @@ module Sensu
     # Unfortunately, we need to reimplement config loading. I'm not sure there's
     # a good way to allow overriding these paths.
 
-    CONFIGS = ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
+    CONFIGS = ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
 
     def load_config(filename)
       JSON.parse(File.open(filename, 'r').read) rescue Hash.new
