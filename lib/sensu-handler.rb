@@ -22,7 +22,7 @@ module Sensu
 
     def filter
       filter_disabled
-      filter_repeated 
+      filter_repeated
       filter_silenced
     end
 
@@ -45,7 +45,7 @@ module Sensu
     when ENV['SENSU_CONFIG_FILES']
       ENV['SENSU_CONFIG_FILES'].split(':')
     else
-      ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
+      ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
     end
 
     def settings
