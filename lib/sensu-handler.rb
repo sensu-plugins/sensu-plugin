@@ -1,10 +1,9 @@
 require 'net/http'
 require 'json'
 
-
 module Sensu
 
-  CONFIGS = case
+  CONFIG_FILES = case
   when ENV['SENSU_CONFIG_FILES']
     ENV['SENSU_CONFIG_FILES'].split(':')
   else
@@ -52,7 +51,7 @@ module Sensu
     end
 
     def settings
-      @settings ||= CONFIGS.map { |f| load_config(f) }.reduce { |a, b| a.deep_merge(b) }
+      @settings ||= CONFIG_FILES.map { |f| load_config(f) }.reduce { |a, b| a.deep_merge(b) }
     end
 
     def read_event(file)
@@ -148,7 +147,7 @@ module Sensu
                   bail 'check dependency event exists'
                 end
               end
-            rescue
+            rescue Timeout::Error
               puts 'timed out while attempting to query the sensu api for an event'
             end
           end
@@ -157,6 +156,7 @@ module Sensu
     end
 
   end
+
 end
 
 # Monkey Patching.
