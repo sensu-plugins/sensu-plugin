@@ -41,4 +41,15 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
   end
+
+  def test_dependency_event_exists
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => { 'name' => 'test', 'dependencies' => ['foo', 'bar'] },
+      'occurrences' => 1
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/dependency event exists/, output)
+  end
 end

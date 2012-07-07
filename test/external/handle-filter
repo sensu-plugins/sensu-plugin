@@ -17,4 +17,8 @@ class Filter < Sensu::Handler
   def stash_exists?(*args)
     nil
   end
+
+  def event_exists?(*args)
+    true
+  end
 end
