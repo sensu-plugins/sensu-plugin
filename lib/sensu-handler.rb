@@ -73,7 +73,7 @@ module Sensu
       handler.handle
     end
 
-    # Helpers and filters
+    # Helpers and filters.
 
     def bail(msg)
       puts msg + ': ' + @event['client']['name'] + '/' + @event['check']['name']
