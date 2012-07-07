@@ -1,14 +1,23 @@
 require 'net/http'
 require 'json'
 
-NET_HTTP_REQ_CLASS = {
-  'GET' => Net::HTTP::Get,
-  'POST' => Net::HTTP::Post,
-  'DELETE' => Net::HTTP::Delete,
-  'PUT' => Net::HTTP::Put,
-}
 
 module Sensu
+
+  CONFIGS = case
+  when ENV['SENSU_CONFIG_FILES']
+    ENV['SENSU_CONFIG_FILES'].split(':')
+  else
+    ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
+  end
+
+  NET_HTTP_REQ_CLASS = {
+    'GET' => Net::HTTP::Get,
+    'POST' => Net::HTTP::Post,
+    'DELETE' => Net::HTTP::Delete,
+    'PUT' => Net::HTTP::Put,
+  }
+
   class Handler
 
     # Implementing classes should override this.
@@ -24,6 +33,7 @@ module Sensu
       filter_disabled
       filter_repeated
       filter_silenced
+      filter_dependencies
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -41,25 +51,18 @@ module Sensu
       JSON.parse(File.open(filename, 'r').read) rescue Hash.new
     end
 
-    CONFIGS = case
-    when ENV['SENSU_CONFIG_FILES']
-      ENV['SENSU_CONFIG_FILES'].split(':')
-    else
-      ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
-    end
-
     def settings
-      @settings ||= CONFIGS.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
+      @settings ||= CONFIGS.map { |f| load_config(f) }.reduce { |a, b| a.deep_merge(b) }
     end
 
     def read_event(file)
       begin
         @event = ::JSON.parse(file.read)
         @event['occurrences'] ||= 1
-        @event['check'] ||= Hash.new
-        @event['client'] ||= Hash.new
-      rescue => e
-        puts 'Error reading event: ' + e.message
+        @event['check']       ||= Hash.new
+        @event['client']      ||= Hash.new
+      rescue => error
+        puts 'error reading event: ' + error.message
         exit 0
       end
     end
@@ -96,29 +99,16 @@ module Sensu
 
     def filter_repeated
       occurrences = @event['check']['occurrences'] || 1
-      interval = @event['check']['interval'] || 30
-      refresh = @event['check']['refresh'] || 1800
+      interval    = @event['check']['interval']    || 30
+      refresh     = @event['check']['refresh']     || 1800
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end
       if @event['occurrences'] > occurrences && @event['action'] == 'create'
-        n = refresh.fdiv(interval).to_i
-        bail 'only repeating alert every ' + n.to_s + ' occurrences' unless @event['occurrences'] % n == 0
-      end
-    end
-
-    def filter_silenced
-      begin
-        timeout(3) do
-          if stash_exists?('/silence/' + @event['client']['name'])
-            bail 'client alerts silenced'
-          end
-          if stash_exists?('/silence/' + @event['client']['name'] + '/' + @event['check']['name'])
-            bail 'check alerts silenced'
-          end
+        number = refresh.fdiv(interval).to_i
+        unless @event['occurrences'] % number == 0
+          bail 'only handling every ' + number.to_s + ' occurrences'
         end
-      rescue Timeout::Error
-        puts 'Timed out while attempting to query the Sensu API for stashes'
       end
     end
 
@@ -126,20 +116,61 @@ module Sensu
       api_request(:GET, '/stash' + path).code == '200'
     end
 
+    def filter_silenced
+      stashes = {
+        'client' => '/silence/' + @event['client']['name'],
+        'check'  => '/silence/' + @event['client']['name'] + '/' + @event['check']['name']
+      }
+      stashes.each do |scope, path|
+        begin
+          timeout(2) do
+            if stash_exists?(path)
+              bail scope + ' alerts silenced'
+            end
+          end
+        rescue Timeout::Error
+          puts 'timed out while attempting to query the sensu api for a stash'
+        end
+      end
+    end
+
+    def event_exists?(client, check)
+      api_request(:GET, '/event/' + client + '/' + check).code == '200'
+    end
+
+    def filter_dependencies
+      if @event['check'].has_key?('dependencies')
+        if @event['check']['dependencies'].is_a?(Array)
+          @event['check']['dependencies'].each do |check|
+            begin
+              timeout(2) do
+                if event_exists?(@event['client']['name'], check)
+                  bail 'check dependency event exists'
+                end
+              end
+            rescue
+              puts 'timed out while attempting to query the sensu api for an event'
+            end
+          end
+        end
+      end
+    end
+
   end
 end
 
-# Copied from Sensu (0.9.3)
+# Monkey Patching.
 
 class Array
   def deep_merge(other_array, &merger)
     concat(other_array).uniq
   end
 end
+
 class Hash
   def deep_merge(other_hash, &merger)
-    merger ||= proc do |k, oldval, newval|
-      oldval.deep_merge(newval, &merger) rescue newval
+    merger ||= proc do |key, old_value, new_value|
+      old_value.deep_merge(new_value, &merger) rescue new_value
     end
     merge(other_hash, &merger)
   end
