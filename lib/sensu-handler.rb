@@ -4,10 +4,10 @@ require 'json'
 module Sensu
 
   NET_HTTP_REQ_CLASS = {
-    'GET' => Net::HTTP::Get,
-    'POST' => Net::HTTP::Post,
+    'GET'    => Net::HTTP::Get,
+    'POST'   => Net::HTTP::Post,
     'DELETE' => Net::HTTP::Delete,
-    'PUT' => Net::HTTP::Put,
+    'PUT'    => Net::HTTP::Put
   }
 
   class Handler
