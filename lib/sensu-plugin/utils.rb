@@ -1,3 +1,5 @@
+require 'json'
+
 module Sensu
   module Plugin
     module Utils

@@ -1,5 +1,4 @@
 require 'net/http'
-require 'json'
 require 'sensu-plugin/utils'
 
 module Sensu
