@@ -30,6 +30,18 @@ module Sensu
         end
       end
 
+      def net_http_req_class(method)
+        case method.to_s.upcase
+        when 'GET'
+          Net::HTTP::Get
+        when 'POST'
+          Net::HTTP::Post
+        when 'DELETE'
+          Net::HTTP::Delete
+        when 'PUT'
+          Net::HTTP::Put
+        end
+      end
     end
   end
 end
