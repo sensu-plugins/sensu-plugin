@@ -34,6 +34,18 @@ module Sensu
       end
     end
 
+    def read_event(file)
+      begin
+        @event = ::JSON.parse(file.read)
+        @event['occurrences'] ||= 1
+        @event['check']       ||= Hash.new
+        @event['client']      ||= Hash.new
+      rescue => error
+        puts 'error reading event: ' + error.message
+        exit 1
+      end
+    end
+
     at_exit do
       handler = @@autorun.new
       handler.read_event(STDIN)

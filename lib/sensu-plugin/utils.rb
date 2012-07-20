@@ -18,18 +18,6 @@ module Sensu
         @settings ||= config_files.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
       end
 
-      def read_event(file)
-        begin
-          @event = ::JSON.parse(file.read)
-          @event['occurrences'] ||= 1
-          @event['check']       ||= Hash.new
-          @event['client']      ||= Hash.new
-        rescue => error
-          puts 'error reading event: ' + error.message
-          exit 0
-        end
-      end
-
       def net_http_req_class(method)
         case method.to_s.upcase
         when 'GET'
@@ -42,6 +30,7 @@ module Sensu
           Net::HTTP::Put
         end
       end
+
     end
   end
 end
