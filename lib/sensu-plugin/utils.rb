@@ -13,7 +13,7 @@ module Sensu
       end
 
       def load_config(filename)
-        JSON.parse(File.open(filename, 'r').read) rescue Hash.new
+        ::JSON.parse(File.open(filename, 'r').read) rescue Hash.new
       end
 
       def settings
