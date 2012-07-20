@@ -1,16 +1,9 @@
 require 'net/http'
-require 'json'
+require 'sensu-plugin/utils'
 
 module Sensu
-
-  NET_HTTP_REQ_CLASS = {
-    'GET'    => Net::HTTP::Get,
-    'POST'   => Net::HTTP::Post,
-    'DELETE' => Net::HTTP::Delete,
-    'PUT'    => Net::HTTP::Put
-  }
-
   class Handler
+    include Sensu::Plugin::Utils
 
     # Implementing classes should override this.
 
@@ -39,22 +32,6 @@ module Sensu
       end
     end
 
-    def config_files
-      if ENV['SENSU_CONFIG_FILES']
-        ENV['SENSU_CONFIG_FILES'].split(':')
-      else
-        ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
-      end
-    end
-
-    def load_config(filename)
-      JSON.parse(File.open(filename, 'r').read) rescue Hash.new
-    end
-
-    def settings
-      @settings ||= config_files.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
-    end
-
     def read_event(file)
       begin
         @event = ::JSON.parse(file.read)
@@ -63,7 +40,7 @@ module Sensu
         @event['client']      ||= Hash.new
       rescue => error
         puts 'error reading event: ' + error.message
-        exit 0
+        exit 1
       end
     end
 
@@ -83,7 +60,7 @@ module Sensu
 
     def api_request(method, path, &blk)
       http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
-      req = NET_HTTP_REQ_CLASS[method.to_s.upcase].new(path)
+      req = net_http_req_class(method).new(path)
       if settings['api']['user'] && settings['api']['password']
         req.basic_auth(settings['api']['user'], settings['api']['password'])
       end
@@ -156,23 +133,5 @@ module Sensu
       end
     end
 
-  end
-
-end
-
-# Monkey Patching.
-
-class Array
-  def deep_merge(other_array, &merger)
-    concat(other_array).uniq
-  end
-end
-
-class Hash
-  def deep_merge(other_hash, &merger)
-    merger ||= proc do |key, old_value, new_value|
-      old_value.deep_merge(new_value, &merger) rescue new_value
-    end
-    merge(other_hash, &merger)
   end
 end
