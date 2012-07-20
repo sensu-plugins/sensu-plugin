@@ -1,3 +1,5 @@
+require 'sensu-plugin/utils'
+
 module Sensu
   class Mutator
     include Sensu::Plugin::Utils
