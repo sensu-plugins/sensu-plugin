@@ -33,3 +33,20 @@ module Sensu
     end
   end
 end
+
+# Monkey Patching.
+
+class Array
+  def deep_merge(other_array, &merger)
+    concat(other_array).uniq
+  end
+end
+
+class Hash
+  def deep_merge(other_hash, &merger)
+    merger ||= proc do |key, old_value, new_value|
+      old_value.deep_merge(new_value, &merger) rescue new_value
+    end
+    merge(other_hash, &merger)
+  end
+end
