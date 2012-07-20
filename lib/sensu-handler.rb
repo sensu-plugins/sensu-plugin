@@ -2,7 +2,6 @@ require 'net/http'
 require 'sensu-plugin/utils'
 
 module Sensu
-
   class Handler
     include Sensu::Plugin::Utils
 
@@ -135,5 +134,4 @@ module Sensu
     end
 
   end
-
 end
