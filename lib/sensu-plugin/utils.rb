@@ -24,8 +24,8 @@ module Sensu
           @event['occurrences'] ||= 1
           @event['check']       ||= Hash.new
           @event['client']      ||= Hash.new
-        rescue => error
-          puts 'error reading event: ' + error.message
+        rescue => e
+          puts 'error reading event: ' + e.message
           exit 0
         end
       end
