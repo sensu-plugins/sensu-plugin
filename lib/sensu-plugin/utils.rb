@@ -6,7 +6,7 @@ module Sensu
         if ENV['SENSU_CONFIG_FILES']
           ENV['SENSU_CONFIG_FILES'].split(':')
         else
-          ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/*.json']
+          ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
         end
       end
 
