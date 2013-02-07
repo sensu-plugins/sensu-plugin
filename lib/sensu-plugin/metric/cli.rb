@@ -8,7 +8,9 @@ module Sensu
 
         class JSON < Sensu::Plugin::CLI
           def output(obj=nil)
-            unless obj.nil? || obj.is_a?(String) || obj.is_a?(Exception)
+            if obj.is_a?(String) || obj.is_a?(Exception)
+              puts obj.to_s
+            elsif obj.is_a?(Hash)
               obj['timestamp'] ||= Time.now.to_i
               puts ::JSON.generate(obj)
             end
@@ -16,9 +18,12 @@ module Sensu
         end
 
         class Graphite < Sensu::Plugin::CLI
-          def output(path=nil, value=nil, timestamp=Time.now.to_i)
-            unless path.nil? || path.is_a?(Exception) || value.nil?
-              puts [path, value, timestamp].join("\t")
+          def output(*args)
+            if args[0].is_a?(Exception) || args[1].nil?
+              puts args[0].to_s
+            else
+              args[2] ||= Time.now.to_i
+              puts args[0..2].join("\t")
             end
           end
         end
