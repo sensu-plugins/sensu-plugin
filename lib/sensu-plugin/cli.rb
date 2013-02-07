@@ -21,7 +21,7 @@ module Sensu
       Sensu::Plugin::EXIT_CODES.each do |status, code|
         define_method(status.downcase) do |*args|
           @status = status
-          output(*args)
+          puts "#{args}"
           exit(code)
         end
       end
