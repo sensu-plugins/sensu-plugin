@@ -8,6 +8,11 @@ module Sensu
 
       attr_accessor :argv
 
+      def initialize
+        super
+        self.argv = self.parse_options
+      end
+
       # Implementing classes should override this to produce appropriate
       # output for their handler.
 
@@ -21,7 +26,7 @@ module Sensu
       Sensu::Plugin::EXIT_CODES.each do |status, code|
         define_method(status.downcase) do |*args|
           @status = status
-          puts "#{args}"
+          output(*args)
           exit(code)
         end
       end

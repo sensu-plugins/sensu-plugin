@@ -15,11 +15,6 @@ module Sensu
           end
         end
 
-        def initialize
-          super
-          self.argv = self.parse_options
-        end
-
         def message(msg)
           @message = msg
         end

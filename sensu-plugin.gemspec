@@ -17,4 +17,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency('json')
   s.add_dependency('mixlib-cli', '>= 1.1.0')
+
+  s.add_development_dependency('rake')
 end
