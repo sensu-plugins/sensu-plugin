@@ -1,4 +1,5 @@
 require 'rubygems'
+gem 'minitest' if RUBY_VERSION < '1.9.0'
 require 'minitest/autorun'
 
 module SensuPluginTestHelper
@@ -8,13 +9,13 @@ module SensuPluginTestHelper
   end
 
   def run_script(*args)
-    IO.popen([@script] + args, 'r+') do |child|
+    IO.popen(([@script] + args).join(' '), 'r+') do |child|
       child.read
     end
   end
 
   def run_script_with_input(input, *args)
-    IO.popen([@script] + args, 'r+') do |child|
+    IO.popen(([@script] + args).join(' '), 'r+') do |child|
       child.puts input
       child.close_write
       child.read
