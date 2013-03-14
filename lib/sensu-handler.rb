@@ -73,7 +73,7 @@ module Sensu
       end
       if @event['occurrences'] > occurrences && @event['action'] == 'create'
         number = refresh.fdiv(interval).to_i
-        unless @event['occurrences'] % number == 0
+        unless number == 0 || @event['occurrences'] % number == 0
           bail 'only handling every ' + number.to_s + ' occurrences'
         end
       end
