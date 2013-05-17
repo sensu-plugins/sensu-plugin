@@ -8,9 +8,9 @@ module Sensu
 
       attr_accessor :argv
 
-      def initialize
-        super
-        self.argv = self.parse_options
+      def initialize(argv=ARGV)
+        super()
+        self.argv = self.parse_options(argv)
       end
 
       # Implementing classes should override this to produce appropriate
