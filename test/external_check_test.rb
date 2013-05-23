@@ -40,7 +40,7 @@ class TestCheckExternal < MiniTest::Unit::TestCase
 
   def test_exception
     output = run_script '-f'
-    assert $?.exitstatus == 2 && output.include?('failed')
+    assert $?.exitstatus == 3 && output.include?('failed')
   end
 
   def test_argv
