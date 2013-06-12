@@ -1,4 +1,4 @@
-require 'sensu-plugin/cli'
+require 'sensu-plugin/check/cli'
 require 'json'
 
 module Sensu
@@ -23,9 +23,8 @@ module Sensu
         end
 
         class Graphite < Sensu::Plugin::Check::CLI
-          @metrics = String.new
-
           def metric(*args)
+            @metrics ||= String.new
             if args[0].is_a?(Exception) || args[1].nil?
               @metrics << args[0].to_s + "\n"
             else
