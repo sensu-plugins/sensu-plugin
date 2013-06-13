@@ -17,7 +17,7 @@ module Sensu
           end
 
           def output(msg=@message)
-            result = { :output => "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : ""), :metrics => @metrics }
+            result = { :desciption => "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : ""), :metrics => @metrics }
             puts ::JSON.generate(result)
           end
         end
@@ -34,7 +34,7 @@ module Sensu
           end
 
           def output(msg=@message)
-            result = { :output => "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : ""), :metrics => @metrics }
+            result = { :desciption => "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : ""), :metrics => @metrics }
             puts ::JSON.generate(result)
           end
         end
