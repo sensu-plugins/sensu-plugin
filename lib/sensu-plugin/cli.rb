@@ -56,6 +56,8 @@ module Sensu
           check.run
         rescue SystemExit => e
           exit e.status
+        rescue OptionParser::InvalidOption => e
+          exit 1
         rescue Exception => e
           check.critical "Check failed to run: #{e.message}, #{e.backtrace}"
         end
