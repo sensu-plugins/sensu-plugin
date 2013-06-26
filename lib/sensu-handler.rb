@@ -86,8 +86,14 @@ module Sensu
     def filter_silenced
       stashes = {
         'client' => '/silence/' + @event['client']['name'],
-        'check'  => '/silence/' + @event['client']['name'] + '/' + @event['check']['name']
+        'check'  => '/silence/' + @event['client']['name'] + '/' + @event['check']['name'],
+        'all'    => '/silence/' + '*'
       }
+      if @event['client']['subscriptions']
+        @event['client']['subscriptions'].each do |subscription|
+          stashes.merge!({ "sub_#{subscription}" => "/silence/subscribed/#{subscription}" })
+        end
+      end
       stashes.each do |scope, path|
         begin
           timeout(2) do
