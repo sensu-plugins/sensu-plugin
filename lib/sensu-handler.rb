@@ -86,7 +86,8 @@ module Sensu
     def filter_silenced
       stashes = {
         'client' => '/silence/' + @event['client']['name'],
-        'check'  => '/silence/' + @event['client']['name'] + '/' + @event['check']['name']
+        'check'  => '/silence/' + @event['client']['name'] + '/' + @event['check']['name'],
+        'all'           => '/silence/' + '*'
       }
       stashes.each do |scope, path|
         begin
