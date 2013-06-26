@@ -22,7 +22,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
 
   def test_resolve_enough_occurrences
     event = {
-      'client' => { 'name' => 'test' },
+      'client' => { 'name' => 'test', 'subscriptions' => ["test"] },
       'check' => { 'name' => 'test', 'occurrences' => 2 },
       'occurrences' => 3
     }
@@ -33,7 +33,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
 
   def test_refresh_enough_occurrences
     event = {
-      'client' => { 'name' => 'test' },
+      'client' => { 'name' => 'test', 'subscriptions' => ["test"] },
       'check' => { 'name' => 'test' },
       'occurrences' => 60,
       'action' => 'create'
@@ -57,7 +57,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
 
   def test_refresh_bypass
     event = {
-      'client' => { 'name' => 'test' },
+      'client' => { 'name' => 'test', 'subscriptions' => ["test"] },
       'check' => { 'name' => 'test', 'refresh' => 0 },
       'occurrences' => 59,
       'action' => 'create'
@@ -69,7 +69,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
 
   def test_refresh_less_than_interval
     event = {
-      'client' => { 'name' => 'test' },
+      'client' => { 'name' => 'test', 'subscriptions' => ["test"] },
       'check' => { 'name' => 'test', 'refresh' => 30 },
       'occurrences' => 59,
       'action' => 'create'
@@ -92,7 +92,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
 
   def test_dependency_event_exists
     event = {
-      'client' => { 'name' => 'test' },
+      'client' => { 'name' => 'test', 'subscriptions' => ["test"] },
       'check' => { 'name' => 'test', 'dependencies' => ['foo', 'bar'] },
       'occurrences' => 1
     }
