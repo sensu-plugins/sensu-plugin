@@ -90,8 +90,8 @@ module Sensu
         'all'    => '/silence/' + '*'
       }
       if @event['client']['subscriptions']
-        @event['client']['subscriptions'].each do |s|
-          stashes.merge!({ "sub_#{s}" => "/silence/subscribed/#{s}" })
+        @event['client']['subscriptions'].each do |subscription|
+          stashes.merge!({ "sub_#{subscription}" => "/silence/subscribed/#{subscription}" })
         end
       end
       stashes.each do |scope, path|
