@@ -89,6 +89,9 @@ module Sensu
         'check'  => '/silence/' + @event['client']['name'] + '/' + @event['check']['name'],
         'all'           => '/silence/' + '*'
       }
+      @event['client']['subscriptions'].each do |s|
+        stashes.merge!({ "sub_#{s}" => "/silence/subscribed/#{s}" })
+      end
       stashes.each do |scope, path|
         begin
           timeout(2) do
