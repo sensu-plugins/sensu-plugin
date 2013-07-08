@@ -33,8 +33,8 @@ module Sensu
             if args[0].is_a?(Exception) || args[1].nil?
               puts args[0].to_s
             else
-              args[2] ||= 'kv'
-              puts [args[0..1].join(':'), args[2]].join('|')
+              type = args[2] || 'kv'
+              puts [args[0..1].join(':'), type].join('|')
             end
           end
         end
