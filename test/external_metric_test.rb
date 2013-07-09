@@ -28,3 +28,22 @@ class TestGraphiteMetricExternal < MiniTest::Unit::TestCase
   end
 
 end
+
+class TestStatsdMetricExternal < MiniTest::Unit::TestCase
+  include SensuPluginTestHelper
+
+  def setup
+    set_script 'external/statsd-output'
+  end
+
+  def test_statsd
+    lines = run_script.split("\n")
+    assert lines.size == 2
+    lines.each do |line|
+      assert line.split('|').size == 2
+      assert line.split('|').first.split(':').size == 2
+    end
+  end
+
+end
+
