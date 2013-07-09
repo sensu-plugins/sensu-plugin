@@ -28,6 +28,17 @@ module Sensu
           end
         end
 
+        class Statsd < Sensu::Plugin::CLI
+          def output(*args)
+            if args[0].is_a?(Exception) || args[1].nil?
+              puts args[0].to_s
+            else
+              type = args[2] || 'kv'
+              puts [args[0..1].join(':'), type].join('|')
+            end
+          end
+        end
+
       end
     end
   end
