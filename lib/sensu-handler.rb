@@ -133,6 +133,17 @@ module Sensu
           end
         end
       end if @event['client']['dependencies']
+
+      @event['check']['dependencies'].each do |check|
+        if event_exists?(@event['client']['name'], check)
+          if settings['auto_silence_dependencies']
+            unless stash_exists? "%s/%s" % [@event['client']['name'], check]
+              http_post "/stashes/silence/%s/%s" % [@event['client']['name'], check]
+            end
+          end
+          bail "dependency event exists: %s" % check
+        end
+      end if @event['check']['dependencies']
     end
 
   end

@@ -122,6 +122,56 @@ JSON file in =/etc/sensu/conf.d=, with a unique top-level key, like:
 }
 #+END_EXAMPLE
 
+** Dependencies
+
+Sensu checks already support dependencies. Now, the client can be configured to
+depend on events associated with other clients. Furthermore, it is now possible
+for handlers using this code to auto-silence events based on dependency
+matching.
+
+The following example solves 2 types of problems:
+
+  - Silence events for virtual node **foo** when physical node **bar** is unreachable
+  - Silence events for **service_b** checks when **service_a** checks fail
+
+On the Sensu server
+#+BEGIN_EXAMPLE
+{
+  "auto_silence_dependencies": true
+  "checks": {
+    "service_a": {
+      "command": "exit 2"
+      "subscribers": ["all"],
+    },
+    "service_b": {
+      "command": "exit 2"
+      "subscribers": ["all"],
+      "dependencies" ["service_a"]
+    }
+  }
+}
+#+END_EXAMPLE
+
+On virtual host **foo** running on physical host **bar**
+
+#+BEGIN_EXAMPLE
+{
+  "client": {
+    "name": "foo",
+    "address": "192.168.0.2",
+    "subscriptions": [
+      "all"
+    ],
+    "dependencies": {
+      "bar": [
+        "keepalive"
+      ]
+    }
+  }
+}
+#+END_EXAMPLE
+
+
 * License
 
 Copyright 2011 Decklin Foster
