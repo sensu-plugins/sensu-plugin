@@ -120,29 +120,25 @@ module Sensu
       puts 'timed out while attempting to query the sensu api for an event'
     end
 
+    def filter_dependency(client, check)
+      if event_exists?(client, check)
+        if settings['auto_silence_dependencies']
+          unless stash_exists?("%s/%s" % [client, check])
+            http_post "/stashes/silence/%s/%s" % [client, check]
+          end
+        end
+        bail "dependency event exists: %s/%s" % [client, check]
+      end
+    end
     def filter_dependencies
       @event['client']['dependencies'].each do |client, checks|
         checks.each do |check|
-          if event_exists?(client, check)
-            if settings['auto_silence_dependencies']
-              unless stash_exists? @event['client']['name']
-                http_post "/stashes/silence/%s" % @event['client']['name']
-              end
-            end
-            bail "dependency event exists: %s/%s" % [client, check]
-          end
+          filter_dependency(client, check)
         end
       end if @event['client']['dependencies']
 
       @event['check']['dependencies'].each do |check|
-        if event_exists?(@event['client']['name'], check)
-          if settings['auto_silence_dependencies']
-            unless stash_exists? "%s/%s" % [@event['client']['name'], check]
-              http_post "/stashes/silence/%s/%s" % [@event['client']['name'], check]
-            end
-          end
-          bail "dependency event exists: %s" % check
-        end
+        filter_dependency(@event['client']['name'], check)
       end if @event['check']['dependencies']
     end
 
