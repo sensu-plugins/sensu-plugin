@@ -131,8 +131,8 @@ matching.
 
 The following example solves 2 types of problems:
 
-  - Silence events for virtual node **foo** when physical node **bar** is unreachable
-  - Silence events for **service_b** checks when **service_a** checks fail
+  - Silence events for node *foo* when node *bar* is unreachable
+  - Silence events for *service_b* checks when *service_a* checks fail
 
 On the Sensu server
 #+BEGIN_EXAMPLE
@@ -152,7 +152,7 @@ On the Sensu server
 }
 #+END_EXAMPLE
 
-On virtual host **foo** running on physical host **bar**
+On *foo*
 
 #+BEGIN_EXAMPLE
 {
