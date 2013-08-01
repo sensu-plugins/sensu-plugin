@@ -1,6 +1,7 @@
 require 'net/http'
 require 'json'
 require 'sensu-plugin/utils'
+require 'httparty'
 
 module Sensu
 
@@ -21,6 +22,24 @@ module Sensu
       filter_repeated
       filter_silenced
       filter_dependencies
+    end
+
+    def api_url
+      "http://%s:%s" % [settings['api']['host'], settings['api']['port']]
+    end
+
+    def http_get(path)
+      HTTParty.get "%s/%s" % [api_url, path]
+    end
+
+    def http_post(path, data={})
+      HTTParty.post("%s/%s" % [api_url, path], {
+        body: data.to_json,
+        headers: {
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/json'
+        }
+      })
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -48,16 +67,6 @@ module Sensu
       exit 0
     end
 
-    def api_request(method, path, &blk)
-      http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
-      req = net_http_req_class(method).new(path)
-      if settings['api']['user'] && settings['api']['password']
-        req.basic_auth(settings['api']['user'], settings['api']['password'])
-      end
-      yield(req) if block_given?
-      http.request(req)
-    end
-
     def filter_disabled
       if @event['check']['alert'] == false
         bail 'alert disabled'
@@ -79,10 +88,6 @@ module Sensu
       end
     end
 
-    def stash_exists?(path)
-      api_request(:GET, '/stash' + path).code == '200'
-    end
-
     def filter_silenced
       stashes = {
         'client'       => '/silence/' + @event['client']['name'],
@@ -90,40 +95,45 @@ module Sensu
         'check'        => '/silence/all/' + @event['check']['name']
       }
       stashes.each do |scope, path|
-        begin
-          timeout(2) do
-            if stash_exists?(path)
-              bail scope + ' alerts silenced'
-            end
+        timeout(2) do
+          if stash_exists? path
+            bail scope + ' alerts silenced'
           end
-        rescue Timeout::Error
-          puts 'timed out while attempting to query the sensu api for a stash'
         end
       end
+    end
+
+    def stash_exists?(path)
+      stash_path = "/stashes/%s" % path
+      timeout(2) do
+        http_get(stash_path).code == 200
+      end
+    rescue Timeout::Error
+      puts 'timed out while attempting to query the sensu api for a stash'
     end
 
     def event_exists?(client, check)
-      api_request(:GET, '/event/' + client + '/' + check).code == '200'
+      timeout(2) do
+        http_get("/event/%s/%s" % [client, check]).code == 200
+      end
+    rescue Timeout::Error
+      puts 'timed out while attempting to query the sensu api for an event'
     end
 
     def filter_dependencies
-      if @event['check'].has_key?('dependencies')
-        if @event['check']['dependencies'].is_a?(Array)
-          @event['check']['dependencies'].each do |check|
-            begin
-              timeout(2) do
-                if event_exists?(@event['client']['name'], check)
-                  bail 'check dependency event exists'
-                end
+      @event['client']['dependencies'].each do |client, checks|
+        checks.each do |check|
+          if event_exists?(client, check)
+            if settings['auto_silence_dependencies']
+              unless stash_exists? @event['client']['name']
+                http_post "/stashes/silence/%s" % @event['client']['name']
               end
-            rescue Timeout::Error
-              puts 'timed out while attempting to query the sensu api for an event'
             end
+            bail "dependency event exists: %s/%s" % [client, check]
           end
         end
-      end
+      end if @event['client']['dependencies']
     end
 
   end
-
 end
