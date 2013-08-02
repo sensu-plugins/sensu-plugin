@@ -17,10 +17,10 @@ module Sensu
     # Implementation of the default filters is below.
 
     def filter
+      filter_dependencies
       filter_disabled
       filter_repeated
       filter_silenced
-      filter_dependencies
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -54,6 +54,8 @@ module Sensu
       if settings['api']['user'] && settings['api']['password']
         req.basic_auth(settings['api']['user'], settings['api']['password'])
       end
+
+      req.body = {}.to_json if method == :POST
       yield(req) if block_given?
       http.request(req)
     end
@@ -79,51 +81,58 @@ module Sensu
       end
     end
 
-    def stash_exists?(path)
-      api_request(:GET, '/stash' + path).code == '200'
-    end
-
     def filter_silenced
-      stashes = {
-        'client'       => '/silence/' + @event['client']['name'],
-        'client_check' => '/silence/' + @event['client']['name'] + '/' + @event['check']['name'],
-        'check'        => '/silence/all/' + @event['check']['name']
-      }
-      stashes.each do |scope, path|
-        begin
-          timeout(2) do
-            if stash_exists?(path)
-              bail scope + ' alerts silenced'
-            end
-          end
-        rescue Timeout::Error
-          puts 'timed out while attempting to query the sensu api for a stash'
-        end
+      stashes = [
+        mkpath("stashes", "silence", @event['client']['name']),
+        mkpath("stashes", "silence", @event['client']['name'], @event['check']['name']),
+        mkpath("stashes", "silence", "all", @event['check']['name'])
+      ]
+      stashes.each do |path|
+        bail "found %s" % path if exists? path
       end
     end
 
-    def event_exists?(client, check)
-      api_request(:GET, '/event/' + client + '/' + check).code == '200'
+    def exists?(path)
+      timeout(2) do
+        api_request(:GET, path).code == '200'
+      end
+    rescue Timeout::Error
+      puts 'timed out while attempting to query the sensu api'
+    end
+
+    def mkpath(*args)
+      "/%s" % args.compact.join("/")
+    end
+
+    def silence_dependant(check = nil)
+      if settings['auto_silence_dependencies']
+        path = mkpath("stashes", "silence", @event['client']['name'], check)
+        unless exists? path
+          puts "Adding %s" % path
+          api_request :POST, path
+        end
+      end
     end
 
     def filter_dependencies
-      if @event['check'].has_key?('dependencies')
-        if @event['check']['dependencies'].is_a?(Array)
-          @event['check']['dependencies'].each do |check|
-            begin
-              timeout(2) do
-                if event_exists?(@event['client']['name'], check)
-                  bail 'check dependency event exists'
-                end
-              end
-            rescue Timeout::Error
-              puts 'timed out while attempting to query the sensu api for an event'
-            end
+      @event['client']['dependencies'].each do |client, checks|
+        checks.each do |check|
+          path = mkpath("events", client, check)
+          if exists? path
+            silence_dependant
+            bail "bailing since I depend on %s " % path
           end
         end
-      end
+      end if @event['client']['dependencies']
+
+      @event['check']['dependencies'].each do |check|
+        path = mkpath("events", @event['client']['name'], check)
+        if exists? path
+          silence_dependant check
+          bail "bailing since I depend on %s " % path
+        end
+      end if @event['check']['dependencies']
     end
 
   end
-
 end
