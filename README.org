@@ -133,22 +133,22 @@ but is planned).
 
 The following example solves 2 types of problems:
 
-  - Silence events for node *foo* when node *bar* is unreachable
-  - Silence events for *service_b* checks when *service_a* checks fail
+  - Silence all events for node *foo* when node *bar* is unreachable
+  - Silence *check_2* events when *check_1* fails
 
 On the Sensu server
 #+BEGIN_EXAMPLE
 {
   "auto_silence_dependencies": true
   "checks": {
-    "service_a": {
+    "check_1": {
       "command": "exit 2"
       "subscribers": ["all"],
     },
-    "service_b": {
+    "check_2": {
       "command": "exit 2"
       "subscribers": ["all"],
-      "dependencies" ["service_a"]
+      "dependencies" ["check_1"]
     }
   }
 }

@@ -1,7 +1,6 @@
 require 'net/http'
 require 'json'
 require 'sensu-plugin/utils'
-require 'httparty'
 
 module Sensu
 
@@ -18,28 +17,10 @@ module Sensu
     # Implementation of the default filters is below.
 
     def filter
+      filter_dependencies
       filter_disabled
       filter_repeated
       filter_silenced
-      filter_dependencies
-    end
-
-    def api_url
-      "http://%s:%s" % [settings['api']['host'], settings['api']['port']]
-    end
-
-    def http_get(path)
-      HTTParty.get "%s/%s" % [api_url, path]
-    end
-
-    def http_post(path, data={})
-      HTTParty.post("%s/%s" % [api_url, path], {
-        body: data.to_json,
-        headers: {
-          'Accept' => 'application/json',
-          'Content-Type' => 'application/json'
-        }
-      })
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -67,6 +48,18 @@ module Sensu
       exit 0
     end
 
+    def api_request(method, path, &blk)
+      http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
+      req = net_http_req_class(method).new(path)
+      if settings['api']['user'] && settings['api']['password']
+        req.basic_auth(settings['api']['user'], settings['api']['password'])
+      end
+
+      req.body = {}.to_json if method == :POST
+      yield(req) if block_given?
+      http.request(req)
+    end
+
     def filter_disabled
       if @event['check']['alert'] == false
         bail 'alert disabled'
@@ -89,56 +82,55 @@ module Sensu
     end
 
     def filter_silenced
-      stashes = {
-        'client'       => '/silence/' + @event['client']['name'],
-        'client_check' => '/silence/' + @event['client']['name'] + '/' + @event['check']['name'],
-        'check'        => '/silence/all/' + @event['check']['name']
-      }
-      stashes.each do |scope, path|
-        timeout(2) do
-          if stash_exists? path
-            bail scope + ' alerts silenced'
-          end
+      stashes = [
+        mkpath("stashes", "silence", @event['client']['name']),
+        mkpath("stashes", "silence", @event['client']['name'], @event['check']['name']),
+        mkpath("stashes", "silence", "all", @event['check']['name'])
+      ]
+      stashes.each do |path|
+        bail "found %s" % path if exists? path
+      end
+    end
+
+    def exists?(path)
+      timeout(2) do
+        api_request(:GET, path).code == '200'
+      end
+    rescue Timeout::Error
+      puts 'timed out while attempting to query the sensu api'
+    end
+
+    def mkpath(*args)
+      "/%s" % args.compact.join("/")
+    end
+
+    def silence_dependant(check = nil)
+      if settings['auto_silence_dependencies']
+        path = mkpath("stashes", "silence", @event['client']['name'], check)
+        unless exists? path
+          puts "Adding %s" % path
+          api_request :POST, path
         end
       end
     end
 
-    def stash_exists?(path)
-      stash_path = "/stashes/%s" % path
-      timeout(2) do
-        http_get(stash_path).code == 200
-      end
-    rescue Timeout::Error
-      puts 'timed out while attempting to query the sensu api for a stash'
-    end
-
-    def event_exists?(client, check)
-      timeout(2) do
-        http_get("/event/%s/%s" % [client, check]).code == 200
-      end
-    rescue Timeout::Error
-      puts 'timed out while attempting to query the sensu api for an event'
-    end
-
-    def filter_dependency(client, check)
-      if event_exists?(client, check)
-        if settings['auto_silence_dependencies']
-          unless stash_exists?("%s/%s" % [client, check])
-            http_post "/stashes/silence/%s/%s" % [client, check]
-          end
-        end
-        bail "dependency event exists: %s/%s" % [client, check]
-      end
-    end
     def filter_dependencies
       @event['client']['dependencies'].each do |client, checks|
         checks.each do |check|
-          filter_dependency(client, check)
+          path = mkpath("events", client, check)
+          if exists? path
+            silence_dependant
+            bail "bailing since I depend on %s " % path
+          end
         end
       end if @event['client']['dependencies']
 
       @event['check']['dependencies'].each do |check|
-        filter_dependency(@event['client']['name'], check)
+        path = mkpath("events", @event['client']['name'], check)
+        if exists? path
+          silence_dependant check
+          bail "bailing since I depend on %s " % path
+        end
       end if @event['check']['dependencies']
     end
 
