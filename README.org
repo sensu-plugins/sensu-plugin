@@ -127,7 +127,9 @@ JSON file in =/etc/sensu/conf.d=, with a unique top-level key, like:
 Sensu checks already support dependencies. Now, the client can be configured to
 depend on events associated with other clients. Furthermore, it is now possible
 for handlers using this code to auto-silence events based on dependency
-matching.
+matching. By auto-silencing dependencies, we're positioning ourselves to
+refactor sensu-dashboard to hide silent events (this work has not been done yet
+but is planned).
 
 The following example solves 2 types of problems:
 
