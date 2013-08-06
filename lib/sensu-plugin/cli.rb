@@ -41,6 +41,11 @@ module Sensu
       # define two plugins in one script, the last one will 'win' in
       # terms of what gets auto-run.
 
+      # Disable run-on-exit behavior. For testing, etc
+      def self.disable_autorun
+        @@autorun = false
+      end
+
       @@autorun = self
       class << self
         def method_added(name)
@@ -51,15 +56,17 @@ module Sensu
       end
 
       at_exit do
-        begin
-          check = @@autorun.new
-          check.run
-        rescue SystemExit => e
-          exit e.status
-        rescue Exception => e
-          check.critical "Check failed to run: #{e.message}, #{e.backtrace}"
+        if autorun
+          begin
+            check = @@autorun.new
+            check.run
+          rescue SystemExit => e
+            exit e.status
+          rescue Exception => e
+            check.critical "Check failed to run: #{e.message}, #{e.backtrace}"
+          end
+          check.warning "Check did not exit! You should call an exit code method."
         end
-        check.warning "Check did not exit! You should call an exit code method."
       end
 
     end
