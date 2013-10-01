@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sensu-plugin (0.1.7)
+    sensu-plugin (0.2.0)
       json
       mixlib-cli (>= 1.1.0)
 
