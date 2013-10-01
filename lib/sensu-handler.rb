@@ -68,15 +68,13 @@ module Sensu
       occurrences = @event['check']['occurrences'] || 1
       interval    = @event['check']['interval']    || 30
       refresh     = @event['check']['refresh']     || 1800
-      if @event['action'] == 'create'
-        if @event['occurrences'] < occurrences
-          bail 'not enough occurrences'
-        end
-        if @event['occurrences'] > occurrences
-          number = refresh.fdiv(interval).to_i
-          unless number == 0 || @event['occurrences'] % number == 0
-            bail 'only handling every ' + number.to_s + ' occurrences'
-          end
+      if @event['occurrences'] < occurrences
+        bail 'not enough occurrences'
+      end
+      if @event['occurrences'] > occurrences && @event['action'] == 'create'
+        number = refresh.fdiv(interval).to_i
+        unless number == 0 || @event['occurrences'] % number == 0
+          bail 'only handling every ' + number.to_s + ' occurrences'
         end
       end
     end
