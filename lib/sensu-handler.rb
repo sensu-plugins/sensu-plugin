@@ -86,12 +86,12 @@ module Sensu
     end
 
     def filter_silenced
-      stashes = {
-        'client'       => '/silence/' + @event['client']['name'],
-        'client_check' => '/silence/' + @event['client']['name'] + '/' + @event['check']['name'],
-        'check'        => '/silence/all/' + @event['check']['name']
-      }
-      stashes.each do |scope, path|
+      stashes = [
+        ['client', '/silence/' + @event['client']['name']],
+        ['check', '/silence/' + @event['client']['name'] + '/' + @event['check']['name']],
+        ['check', '/silence/all/' + @event['check']['name']]
+      ]
+      stashes.each do |(scope, path)|
         begin
           timeout(2) do
             if stash_exists?(path)
