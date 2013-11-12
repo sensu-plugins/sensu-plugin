@@ -65,9 +65,9 @@ module Sensu
     end
 
     def filter_repeated
-      
       defaults = {
         'occurrences' => 1,
+        'interval'    => 30,
         'refresh'     => 1800
       }
       
@@ -76,7 +76,7 @@ module Sensu
       end
       
       occurrences = @event['check']['occurrences'] || defaults['occurrences']
-      interval    = @event['check']['interval']    || 30
+      interval    = @event['check']['interval']    || defaults['interval']
       refresh     = @event['check']['refresh']     || defaults['refresh']
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
