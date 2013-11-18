@@ -109,10 +109,11 @@ module Sensu
     def filter_dependencies
       if @event['check'].has_key?('dependencies')
         if @event['check']['dependencies'].is_a?(Array)
-          @event['check']['dependencies'].each do |check|
+          @event['check']['dependencies'].each do |dependency|
             begin
               timeout(2) do
-                if event_exists?(@event['client']['name'], check)
+                check, client = dependency.split('/').reverse
+                if event_exists?(client || @event['client']['name'], check)
                   bail 'check dependency event exists'
                 end
               end
