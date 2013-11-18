@@ -110,9 +110,16 @@ module Sensu
       if @event['check'].has_key?('dependencies')
         if @event['check']['dependencies'].is_a?(Array)
           @event['check']['dependencies'].each do |check|
+	    client = @event['client']['name']
+	    checklist = check.split('/')
+	    if checklist[1]
+	      client = checklist[0]
+	      check = checklist[1]
+	    end
+
             begin
               timeout(2) do
-                if event_exists?(@event['client']['name'], check)
+                if event_exists?(client, check)
                   bail 'check dependency event exists'
                 end
               end
