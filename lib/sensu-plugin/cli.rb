@@ -57,7 +57,9 @@ module Sensu
         rescue SystemExit => e
           exit e.status
         rescue Exception => e
-          check.critical "Check failed to run: #{e.message}, #{e.backtrace}"
+          # This can't call check.critical, as the check may have failed to construct
+          puts "Sensu::Plugin::CLI: Check failed to run: #{e.message}, #{e.backtrace}"
+          exit 2
         end
         check.warning "Check did not exit! You should call an exit code method."
       end
