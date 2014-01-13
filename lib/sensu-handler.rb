@@ -43,11 +43,17 @@ module Sensu
       end
     end
 
+    def self.disable_autorun
+      @@autorun = nil
+    end
+
     at_exit do
-      handler = @@autorun.new
-      handler.read_event(STDIN)
-      handler.filter
-      handler.handle
+      if @@autorun
+        handler = @@autorun.new
+        handler.read_event(STDIN)
+        handler.filter
+        handler.handle
+      end
     end
 
     # Helpers and filters.
