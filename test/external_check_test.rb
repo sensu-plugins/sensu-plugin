@@ -48,4 +48,8 @@ class TestCheckExternal < MiniTest::Unit::TestCase
     assert $?.exitstatus == 0 && output.include?('argv = foo')
   end
 
+  def test_bad_commandline
+    output = run_script '--doesnotexist'
+    assert $?.exitstatus == 2 && output.include?('doesnotexist') && output.include?('invalid option')
+  end
 end
