@@ -33,7 +33,7 @@ module Sensu
 
       def read_event(input)
         begin
-          @event = ::JSON.parse(file.respond?(:read) ? input.read : input)
+          @event = ::JSON.parse(input.respond?(:read) ? input.read : input)
           @event['occurrences'] ||= 1
           @event['check']       ||= Hash.new
           @event['client']      ||= Hash.new
