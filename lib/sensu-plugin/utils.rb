@@ -10,12 +10,15 @@ module Sensu
         end
       end
 
-      def load_config(filename)
-        JSON.parse(File.open(filename, 'r').read) rescue Hash.new
+      def load_config(filename, strict=false)
+        JSON.parse(File.open(filename, 'r').read)
+      rescue Errno::ENOENT => e
+        raise "Error reading JSON from #{filename}" if strict
+        Hash.new
       end
 
-      def settings
-        @settings ||= config_files.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
+      def settings(strict)
+        @settings ||= config_files.map {|f| load_config(f, strict) }.reduce {|a, b| a.deep_merge(b) }
       end
 
       def read_event(file)

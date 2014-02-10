@@ -37,6 +37,7 @@ module Sensu
     at_exit do
       handler = @@autorun.new
       handler.read_event(STDIN)
+      settings(true) # Validate settings
       handler.filter
       handler.handle
     end
