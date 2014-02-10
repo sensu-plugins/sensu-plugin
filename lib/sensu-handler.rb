@@ -36,7 +36,11 @@ module Sensu
 
     at_exit do
       handler = @@autorun.new
-      handler.read_event(STDIN)
+      event_string = handler.read_stdin
+      if event_string.nil?
+        print "You must pipe in data! URL FOR DOCS"
+      end
+      handler.read_event(event_string)
       handler.filter
       handler.handle
     end
