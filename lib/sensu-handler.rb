@@ -44,7 +44,7 @@ module Sensu
     end
 
     def self.disable_autorun
-      @@autorun = nil
+      @@autorun = false
     end
 
     at_exit do
