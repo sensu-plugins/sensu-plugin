@@ -1,5 +1,6 @@
 require 'sensu-plugin'
 require 'mixlib/cli'
+require 'json'
 
 module Sensu
   module Plugin
@@ -11,6 +12,10 @@ module Sensu
       def initialize(argv=ARGV)
         super()
         self.argv = self.parse_options(argv)
+      end
+
+      def settings
+        @settings ||= JSON.load(ENV["SENSU_CHECK_SETTINGS"])
       end
 
       # Implementing classes should override this to produce appropriate

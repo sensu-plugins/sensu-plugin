@@ -10,6 +10,7 @@ class TestCheck < Sensu::Plugin::Check::CLI
   option :unknown, :short => '-u'
   option :fail, :short => '-f'
   option :override, :short => '-O'
+  option :settings, :short => '-s'
 
   def run
     message "Testing, argv = #{argv.join(' ')}"
@@ -25,6 +26,8 @@ class TestCheck < Sensu::Plugin::Check::CLI
       raise RuntimeError
     elsif config[:override]
       ok "Overriding message"
+    elsif config[:settings]
+      ok settings.inspect
     end
   end
 
