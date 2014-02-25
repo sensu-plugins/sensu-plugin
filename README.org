@@ -122,6 +122,15 @@ JSON file in =/etc/sensu/conf.d=, with a unique top-level key, like:
 }
 #+END_EXAMPLE
 
+** Contributing
+
+ - Fork repository
+ - Add functionality and any applicable tests
+ - Ensure all tests pass by executing =bundle exec rake test=
+ - Open a pull request
+
+You may run individual tests by executing =bundle exec rake test TEST=test/external_handler_test.rb=
+
 * License
 
 Copyright 2011 Decklin Foster
