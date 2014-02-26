@@ -27,8 +27,7 @@ class TestCheck < Sensu::Plugin::Check::CLI
     elsif config[:override]
       ok "Overriding message"
     elsif config[:settings]
-      ok settings.inspect
+      ok config.inspect
     end
   end
-
 end

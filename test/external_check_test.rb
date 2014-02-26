@@ -33,11 +33,11 @@ class TestCheckExternal < MiniTest::Unit::TestCase
     assert $?.exitstatus == 0 && !output.include?('argv =')
   end
 
-  def test_settings_env
-    settings = [ "foobar" ]
-    ENV["SENSU_CHECK_SETTINGS"] = JSON.generate(settings)
+  def test_config_from_settings
+    ENV["SENSU_CHECK_NAME"] = "test1"
+    ENV["SENSU_CONFIG_FILES"] = "test/external/config.json"
     output = run_script '-s'
-    assert $?.exitstatus == 0 && output.include?(settings.first)
+    assert $?.exitstatus == 0 && output.include?("custom_value")
   end
 
   def test_fallthrough
