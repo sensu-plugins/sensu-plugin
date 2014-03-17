@@ -70,11 +70,11 @@ module Sensu
         'interval'    => 30,
         'refresh'     => 1800
       }
-      
-      if settings['sensu_plugin']
+
+      if settings['sensu_plugin'].is_a?(Hash)
         defaults.merge!(settings['sensu_plugin'])
       end
-      
+
       occurrences = @event['check']['occurrences'] || defaults['occurrences']
       interval    = @event['check']['interval']    || defaults['interval']
       refresh     = @event['check']['refresh']     || defaults['refresh']
