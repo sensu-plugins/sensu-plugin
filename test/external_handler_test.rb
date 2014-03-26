@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'minitest/autorun'
+require 'test_helper'
 require 'json'
 
 class TestHandlerExternal < MiniTest::Unit::TestCase

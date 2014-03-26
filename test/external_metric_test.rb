@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'minitest/autorun'
+require 'test_helper'
 
 class TestMetricExternal < MiniTest::Unit::TestCase
   include SensuPluginTestHelper
