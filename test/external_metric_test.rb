@@ -15,6 +15,20 @@ class TestMetricExternal < MiniTest::Unit::TestCase
 
 end
 
+class TestJsonArrayMetricExternal < MiniTest::Unit::TestCase
+  include SensuPluginTestHelper
+
+  def setup
+    set_script 'external/multi-json-output'
+  end
+
+  def test_multi_json
+    output = JSON.parse(run_script)
+    assert $?.exitstatus == 0 && output.all? { |metric| metric.has_key?('timestamp') }
+  end
+
+end
+
 class TestGraphiteMetricExternal < MiniTest::Unit::TestCase
   include SensuPluginTestHelper
 
