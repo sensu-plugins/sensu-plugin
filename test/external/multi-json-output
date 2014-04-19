@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'sensu-plugin/metric/cli'
+
+class TestMetric < Sensu::Plugin::Metric::CLI::JSON
+
+  def run
+    metrics = [
+      { 'test' => 1 },
+      { 'test2' => 1 }
+    ]
+    ok metrics
+  end
+
+end

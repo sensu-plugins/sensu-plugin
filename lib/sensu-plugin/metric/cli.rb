@@ -13,6 +13,11 @@ module Sensu
             elsif obj.is_a?(Hash)
               obj['timestamp'] ||= Time.now.to_i
               puts ::JSON.generate(obj)
+            elsif obj.is_a?(Array)
+              obj.each do |h|
+                h['timestamp'] ||= Time.now.to_i if h.is_a?(Hash)
+              end
+              puts ::JSON.generate(obj)
             end
           end
         end
