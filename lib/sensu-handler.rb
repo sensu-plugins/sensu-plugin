@@ -1,11 +1,20 @@
 require 'net/http'
 require 'json'
 require 'sensu-plugin/utils'
+require 'mixlib/cli'
 
 module Sensu
 
   class Handler
     include Sensu::Plugin::Utils
+    include Mixlib::CLI
+
+    attr_accessor :argv
+
+    def initialize(argv = ARGV)
+      super()
+      self.argv = parse_options(argv)
+    end
 
     # Implementing classes should override this.
 
