@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' if RUBY_VERSION < '1.9.0'
+require 'sensu-handler'
+
+class Argument < Sensu::Handler
+
+  option :test,
+    :description => 'An option to test Mixlib argument parsing',
+    :short => '-t TEST',
+    :long => '--test TEST',
+    :default => 'foo'
+
+  def filter
+  end
+
+  def handle
+    puts 'Value: ' + config[:test]
+  end
+
+end
