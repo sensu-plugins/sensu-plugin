@@ -74,9 +74,11 @@ module Sensu
     end
 
     def filter_repeated
-      occurrences = @event['check']['occurrences'] || 1
-      interval    = @event['check']['interval']    || 30
-      refresh     = @event['check']['refresh']     || 1800
+      
+      @event['check']['occurrences'] ? occurrences = @event['check']['occurrences'].to_i : occurrences = 1
+      @event['check']['interval'] ? interval = @event['check']['interval'].to_i : interval = 30
+      @event['check']['refresh'] ? refresh = @event['check']['refresh'] : refresh = 1800
+
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end
