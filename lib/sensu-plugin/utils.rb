@@ -18,9 +18,22 @@ module Sensu
         @settings ||= config_files.map {|f| load_config(f) }.reduce {|a, b| a.deep_merge(b) }
       end
 
-      def read_event(file)
+      def read_stdin
+        stdin_string = ''
         begin
-          @event = ::JSON.parse(file.read)
+          while nextbytes = STDIN.read_nonblock(4096)
+            stdin_string += nextbytes
+          end
+        rescue EOFError => e
+          return stdin_string
+        rescue Errno::EWOULDBLOCK => e
+          return nil
+        end
+      end
+
+      def read_event(input)
+        begin
+          @event = ::JSON.parse(input.respond?(:read) ? input.read : input)
           @event['occurrences'] ||= 1
           @event['check']       ||= Hash.new
           @event['client']      ||= Hash.new
