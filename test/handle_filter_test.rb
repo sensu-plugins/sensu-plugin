@@ -1,6 +1,4 @@
-require 'rubygems'
-require 'minitest/autorun'
-require 'json'
+require 'test_helper'
 
 class TestFilterExternal < MiniTest::Unit::TestCase
   include SensuPluginTestHelper
