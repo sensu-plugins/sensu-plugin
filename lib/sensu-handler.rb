@@ -94,17 +94,17 @@ module Sensu
     def filter_repeated
       defaults = {
         'occurrences' => 1,
-        'interval'    => 30,
-        'refresh'     => 1800
+        'interval' => 30,
+        'refresh' => 1800
       }
 
       if settings['sensu_plugin'].is_a?(Hash)
         defaults.merge!(settings['sensu_plugin'])
       end
 
-      occurrences = @event['check']['occurrences'] || defaults['occurrences']
-      interval    = @event['check']['interval']    || defaults['interval']
-      refresh     = @event['check']['refresh']     || defaults['refresh']
+      occurrences = (@event['check']['occurrences'] || defaults['occurrences']).to_i
+      interval = (@event['check']['interval'] || defaults['interval']).to_i
+      refresh = (@event['check']['refresh'] || defaults['refresh']).to_i
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end

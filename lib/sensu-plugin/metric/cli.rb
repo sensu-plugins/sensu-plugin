@@ -23,7 +23,7 @@ module Sensu
               puts args[0].to_s
             else
               args[2] ||= Time.now.to_i
-              puts args[0..2].join(" ")
+              puts args[0..2].join("\s")
             end
           end
         end
