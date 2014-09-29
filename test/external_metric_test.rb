@@ -23,7 +23,7 @@ class TestGraphiteMetricExternal < MiniTest::Unit::TestCase
 
   def test_multi
     lines = run_script.split("\n")
-    assert lines.size == 2 && lines.all? {|line| line.split(" ").size == 3 }
+    assert lines.size == 2 && lines.all? {|line| line.split("\s").size == 3 }
   end
 
 end
