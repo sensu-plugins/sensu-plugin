@@ -57,6 +57,7 @@ module Sensu
         rescue SystemExit => e
           exit e.status
         rescue OptionParser::InvalidOption => e
+          puts "Invalid check argument(s): #{e.message}, #{e.backtrace}"
           exit 1
         rescue Exception => e
           # This can't call check.critical, as the check may have failed to construct
