@@ -131,6 +131,23 @@ JSON file in =/etc/sensu/conf.d=, with a unique top-level key, like:
 
 You may run individual tests by executing =bundle exec rake test TEST=test/external_handler_test.rb=
 
+** Vagrant
+
+For that wish to develop in a separate environment a vagrantfile is provided in the root directory of the *sensu-community-plugins*.  This box is currently stock Centos6.5 sourced from [vagrantcloud](https://vagrantcloud.com/).  It is provisioned using an inline shell script to make it as self-contained as possible and has the following software packages added to it:
+
+- Vim and nano
+- RVM
+- Ruby 1.8.7, 1.9.3, 2.0.0, 2.1.4 (installed and managed through RVM)
+- Common development tools
+
+If enough people find this useful we can looking at creating a custom box using Packer that will require minimal provisioning.
+
+If you don't need all the versions of Ruby listed just comment out the line in the script, this should save time on initial booting.
+
+To use the vagrant box follow the initial setup steps in the *sensu-community-plugins* README.
+
+As time goes on and the testing gets built out custom rake tasks can be added allowing the testing of plugins against multiple versions of Ruby similtantiouly.
+
 * License
 
 Copyright 2011 Decklin Foster
