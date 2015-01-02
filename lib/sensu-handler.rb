@@ -79,7 +79,7 @@ module Sensu
     end
 
     def api_settings
-      if ENV['SENSU_API_URL']
+      @api_settings ||= if ENV['SENSU_API_URL']
         uri = URI(ENV['SENSU_API_URL'])
         {
           'host' => uri.host,
