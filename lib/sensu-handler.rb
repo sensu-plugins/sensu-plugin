@@ -1,4 +1,5 @@
 require 'net/http'
+require 'uri'
 require 'json'
 require 'sensu-plugin/utils'
 require 'mixlib/cli'
@@ -77,14 +78,25 @@ module Sensu
       exit 0
     end
 
-    def api_request(method, path, &blk)
-      if not settings.has_key?('api')
-        raise "api.json settings not found."
+    def api_settings
+      if ENV['SENSU_API_URL']
+        uri = URI(ENV['SENSU_API_URL'])
+        {
+          'host' => uri.host,
+          'port' => uri.port,
+          'user' => uri.user,
+          'password' => uri.password
+        }
+      else
+        settings['api']
       end
-      http = Net::HTTP.new(settings['api']['host'], settings['api']['port'])
+    end
+
+    def api_request(method, path, &blk)
       req = net_http_req_class(method).new(path)
-      if settings['api']['user'] && settings['api']['password']
-        req.basic_auth(settings['api']['user'], settings['api']['password'])
+      http = Net::HTTP.new(api_settings['host'], api_settings['port'])
+      if api_settings['user'] && api_settings['password']
+        req.basic_auth(api_settings['user'], api_settings['password'])
       end
       yield(req) if block_given?
       http.request(req)
