@@ -59,7 +59,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test' },
-      'occurrences' => 60,
+      'occurrences' => 63,
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
