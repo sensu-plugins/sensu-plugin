@@ -133,6 +133,8 @@ module Sensu
               bail scope + ' alerts silenced'
             end
           end
+        rescue Errno::ECONNREFUSED
+          puts 'connection refused attempting to query the sensu api for a stash'
         rescue Timeout::Error
           puts 'timed out while attempting to query the sensu api for a stash'
         end
@@ -154,6 +156,8 @@ module Sensu
                   bail 'check dependency event exists'
                 end
               end
+            rescue Errno::ECONNREFUSED
+              puts 'connection refused attempting to query the sensu api for an event'
             rescue Timeout::Error
               puts 'timed out while attempting to query the sensu api for an event'
             end
