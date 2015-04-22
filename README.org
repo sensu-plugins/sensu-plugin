@@ -1,3 +1,5 @@
+[ ![Codeship Status for sensu-plugins/sensu-plugin](https://codeship.com/projects/1437b410-cabe-0132-9801-22c60209e864/status?branch=master)](https://codeship.com/projects/75586)
+
 * Sensu Plugin
 
 This is a framework for writing your own Sensu plugins and handlers.
