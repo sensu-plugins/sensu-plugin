@@ -3,7 +3,9 @@ module Sensu
     module Utils
 
       def config_files
-        if ENV['SENSU_CONFIG_FILES']
+        if ENV['SENSU_LOADED_TEMPFILE']
+          IO.read(ENV['SENSU_LOADED_TEMPFILE']).split(':')
+        elsif ENV['SENSU_CONFIG_FILES']
           ENV['SENSU_CONFIG_FILES'].split(':')
         else
           ['/etc/sensu/config.json'] + Dir['/etc/sensu/conf.d/**/*.json']
