@@ -33,10 +33,10 @@ class TestFilterExternal < MiniTest::Unit::TestCase
 
   def test_resolve_not_enough_occurrences
     event = {
-      'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'occurrences' => 2 },
-      'occurrences' => 1,
-      'action' => 'resolve'
+        'client' => { 'name' => 'test' },
+        'check' => { 'name' => 'test', 'occurrences' => 3, 'history' => %w[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 2 1 1 1 0]},
+        'occurrences' => 10,
+        'action' => 'resolve'
     }
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $?.exitstatus)
@@ -46,13 +46,37 @@ class TestFilterExternal < MiniTest::Unit::TestCase
   def test_resolve_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'occurrences' => 2 },
+      'check' => { 'name' => 'test', 'occurrences' => 2, 'history' => %w[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0]},
       'occurrences' => 2,
       'action' => 'resolve'
     }
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
+  end
+
+  def test_state_changed_resolve_enough_occurrences
+    event = {
+        'client' => { 'name' => 'test' },
+        'check' => { 'name' => 'test', 'occurrences' => 3, 'history' => %w[2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 0]},
+        'occurrences' => 10,
+        'action' => 'resolve'
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/^Event:/, output)
+  end
+
+  def test_state_changed_resolve_not_enough_occurrences
+    event = {
+        'client' => { 'name' => 'test' },
+        'check' => { 'name' => 'test', 'occurrences' => 6, 'history' => %w[0 0 0 0 0 0 0 0 2 2 2 2 2 2 1 1 1 1 1 1 0]},
+        'occurrences' => 10,
+        'action' => 'resolve'
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/^not enough occurrences/, output)
   end
 
   def test_refresh_enough_occurrences
