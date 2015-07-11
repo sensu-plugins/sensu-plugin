@@ -1,5 +1,20 @@
 require 'test_helper'
-require 'json'
+begin
+  # Attempt to load the json.rb file if available
+  require 'json'
+rescue LoadError
+  # Look for a json ruby gem
+  require 'rubygems'
+  begin
+    require 'json_pure'
+  rescue LoadError
+    begin
+      require 'json-ruby'
+    rescue LoadError
+      require 'json'
+    end
+  end
+end
 
 class TestHandlerExternal < MiniTest::Unit::TestCase
   include SensuPluginTestHelper
