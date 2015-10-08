@@ -24,7 +24,6 @@ module Sensu
         begin
           @event = ::JSON.parse(file.read)
           @event['occurrences'] ||= 1
-          @event['nonzero_occurrences'] ||= 1
           @event['check']       ||= Hash.new
           @event['client']      ||= Hash.new
         rescue => e

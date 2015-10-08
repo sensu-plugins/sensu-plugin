@@ -79,6 +79,18 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     assert_match(/^only handling every/, output)
   end
 
+  def test_state_changed_resolve_enough_occurrences_ten
+    event = {
+    'client' => { 'name' => 'test' },
+    'check' => { 'name' => 'test', 'occurrences' => 3, 'history' => %w[2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 0]},
+    'occurrences' => 10,
+    'action' => 'resolve'
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/^Event:/, output)
+  end
+
   def test_refresh_bypass
     event = {
       'client' => { 'name' => 'test' },
