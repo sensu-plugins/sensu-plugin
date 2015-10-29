@@ -131,7 +131,7 @@ module Sensu
       ]
       stashes.each do |(scope, path)|
         begin
-          timeout(2) do
+          timeout(5) do
             if stash_exists?(path)
               bail scope + ' alerts silenced'
             end
