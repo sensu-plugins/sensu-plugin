@@ -71,7 +71,9 @@ module Sensu
     end
 
     def bail(msg)
-      puts msg + ': ' + @event['client']['name'] + '/' + @event['check']['name']
+      client_name = @event['client']['name'] || 'error:no-client-name'
+      check_name = @event['check']['name'] || 'error:no-check-name'
+      puts "#{msg}: #{client_name}/#{check_name}"
       exit 0
     end
 
