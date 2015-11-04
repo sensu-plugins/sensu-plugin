@@ -59,7 +59,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test' },
-      'occurrences' => 60,
+      'occurrences' => 61,
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
@@ -71,7 +71,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test' },
-      'occurrences' => 59,
+      'occurrences' => 60,
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
@@ -83,7 +83,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test', 'refresh' => 0 },
-      'occurrences' => 59,
+      'occurrences' => 60,
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
@@ -95,7 +95,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test', 'refresh' => 30 },
-      'occurrences' => 59,
+      'occurrences' => 60,
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
