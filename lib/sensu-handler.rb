@@ -93,6 +93,10 @@ module Sensu
     end
 
     def api_request(method, path, &blk)
+      if api_settings.nil?
+        raise "api.json settings not found."
+      end
+
       req = net_http_req_class(method).new(path)
       http = Net::HTTP.new(api_settings['host'], api_settings['port'])
       if api_settings['user'] && api_settings['password']
