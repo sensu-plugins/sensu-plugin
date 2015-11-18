@@ -96,14 +96,16 @@ module Sensu
       if api_settings.nil?
         raise "api.json settings not found."
       end
-
-      req = net_http_req_class(method).new(path)
-      http = Net::HTTP.new(api_settings['host'], api_settings['port'])
-      if api_settings['user'] && api_settings['password']
-        req.basic_auth(api_settings['user'], api_settings['password'])
+      uri = URI("#{settings['api']['host']}:#{settings['api']['port']}#{path}")
+      req = net_http_req_class(method).new(uri)
+      if settings['api']['user'] && settings['api']['password']
+        req.basic_auth(settings['api']['user'], settings['api']['password'])
       end
       yield(req) if block_given?
-      http.request(req)
+      res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+        http.request(req)
+      end
+      res
     end
 
     def filter_disabled
