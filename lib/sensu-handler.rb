@@ -96,7 +96,8 @@ module Sensu
       if api_settings.nil?
         raise "api.json settings not found."
       end
-      uri = URI("#{api_settings['host']}:#{api_settings['port']}#{path}")
+      domain = api_settings['host'].start_with?('http') ? api_settings['host'] : 'http://' + api_settings['host']
+      uri = URI("#{domain}:#{api_settings['port']}#{path}") 
       req = net_http_req_class(method).new(uri)
       if api_settings['user'] && api_settings['password']
         req.basic_auth(api_settings['user'], api_settings['password'])
