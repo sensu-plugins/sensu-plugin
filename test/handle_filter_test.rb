@@ -31,7 +31,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     assert_match(/^Event:/, output)
   end
 
-  def test_resolve_not_enough_occurrences
+  def test_resolve_ignore_not_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test', 'occurrences' => 2 },
@@ -40,7 +40,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
     }
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $?.exitstatus)
-    assert_match(/^not enough occurrences/, output)
+    assert_match(/^Event:/, output)
   end
 
   def test_resolve_enough_occurrences
