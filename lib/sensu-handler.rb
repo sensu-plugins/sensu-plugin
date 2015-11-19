@@ -126,7 +126,7 @@ module Sensu
       occurrences = (@event['check']['occurrences'] || defaults['occurrences']).to_i
       interval = (@event['check']['interval'] || defaults['interval']).to_i
       refresh = (@event['check']['refresh'] || defaults['refresh']).to_i
-      if @event['occurrences'] < occurrences
+      if @event['occurrences'] < occurrences && @event['action'] != 'resolve'
         bail 'not enough occurrences'
       end
       if @event['occurrences'] > occurrences && @event['action'] == 'create'
