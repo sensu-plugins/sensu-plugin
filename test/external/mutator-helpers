@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'sensu-mutator'
+
+class Helper < Sensu::Mutator
+  def mutate
+    @event.merge!(:mutated => true)
+  end
+end
