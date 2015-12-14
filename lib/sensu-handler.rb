@@ -129,12 +129,26 @@ module Sensu
       occurrences = (@event['check']['occurrences'] || defaults['occurrences']).to_i
       interval = (@event['check']['interval'] || defaults['interval']).to_i
       refresh = (@event['check']['refresh'] || defaults['refresh']).to_i
-      if @event['occurrences'] < occurrences
+
+
+      occurrence_limit = (@event['check']['occurrences'] || defaults['occurrences']).to_i
+      incident_occurrences = @event['occurrences']
+      if @event['check']['history']
+        history_s = @event['check']['history'].join("_")
+        if history_s =~/([1-9]+[0-9]*_)\1{#{occurrence_limit-1}}([1-9]+[0-9]*_)\2{0,#{occurrence_limit-2}}0$/ and not $1 === $2
+          # for sequences like 1 1 1 2 0, where the 2 obscures the 0:
+          #   ignore trailing sequences of (neither 1 nor 0) which are shorter than the occurence limit
+          #   NOTE: this is a bandaid, and doesn't fix sequences like 1 1 1 2 3 0
+          incident_occurrences = occurrence_limit
+        end
+      end
+
+      if incident_occurrences < occurrence_limit
         bail 'not enough occurrences'
       end
-      if @event['occurrences'] > occurrences && @event['action'] == 'create'
+      if incident_occurrences > occurrence_limit && @event['action'] == 'create'
         number = refresh.fdiv(interval).to_i
-        unless number == 0 || (@event['occurrences'] - occurrences) % number == 0
+        unless number == 0 || (incident_occurrences - occurrence_limit) % number == 0
           bail 'only handling every ' + number.to_s + ' occurrences'
         end
       end
