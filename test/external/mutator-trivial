@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'sensu-mutator'
+
+class Helper < Sensu::Mutator
+end
