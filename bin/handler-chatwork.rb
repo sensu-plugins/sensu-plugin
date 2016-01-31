@@ -18,12 +18,11 @@
 # NOTES:
 #
 # LICENSE:
-#   Tsubasa Hirota  tsubasa11@marble.ocn.ne.jp
+#   Tsubasa Hirota  tsubasa1173@gmail.com
 #   Released under the same terms as Sensu (the MIT license); see     LICENSE
 #   for details.
 #
 
-require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'sensu-handler'
 require 'net/http'
 require 'net/https'
