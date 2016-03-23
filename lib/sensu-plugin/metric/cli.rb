@@ -19,11 +19,13 @@ module Sensu
 
         class Graphite < Sensu::Plugin::CLI
           def output(*args)
-            if args[0].is_a?(Exception) || args[1].nil?
-              puts args[0].to_s
-            else
-              args[2] ||= Time.now.to_i
-              puts args[0..2].join("\s")
+            unless args.empty?
+              if args[0].is_a?(Exception) || args[1].nil?
+                puts args[0].to_s
+              else
+                args[2] ||= Time.now.to_i
+                puts args[0..2].join("\s")
+              end
             end
           end
         end
