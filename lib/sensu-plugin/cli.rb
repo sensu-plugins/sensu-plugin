@@ -51,20 +51,22 @@ module Sensu
       end
 
       at_exit do
-        begin
-          check = @@autorun.new
-          check.run
-        rescue SystemExit => e
-          exit e.status
-        rescue OptionParser::InvalidOption => e
-          puts "Invalid check argument(s): #{e.message}, #{e.backtrace}"
-          exit 1
-        rescue Exception => e
-          # This can't call check.critical, as the check may have failed to construct
-          puts "Check failed to run: #{e.message}, #{e.backtrace}"
-          exit 2
+        if @@autorun
+          begin
+            check = @@autorun.new
+            check.run
+          rescue SystemExit => e
+            exit e.status
+          rescue OptionParser::InvalidOption => e
+            puts "Invalid check argument(s): #{e.message}, #{e.backtrace}"
+            exit 1
+          rescue Exception => e
+            # This can't call check.critical, as the check may have failed to construct
+            puts "Check failed to run: #{e.message}, #{e.backtrace}"
+            exit 2
+          end
+          check.warning "Check did not exit! You should call an exit code method."
         end
-        check.warning "Check did not exit! You should call an exit code method."
       end
 
     end
