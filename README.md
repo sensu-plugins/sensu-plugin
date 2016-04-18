@@ -1,4 +1,4 @@
-* Sensu Plugin
+# Sensu Plugin
 
 [![Build Status](https://travis-ci.org/sensu-plugins/sensu-plugin.svg?branch=master)](https://travis-ci.org/sensu-plugins/sensu-plugin)
 [![Gem Version](https://badge.fury.io/rb/sensu-plugin.svg)](http://badge.fury.io/rb/sensu-plugin)
@@ -9,14 +9,14 @@ It's not required to write a plugin (most Nagios plugins will work
 without modification); it just makes it easier.
 
 Examples of plugins written with and without it can be found in
-the =sensu-plugins= organization.
+the `sensu-plugins` organization.
 
-** Checks and Metrics
+## Checks and Metrics
 
-To implement your own check, subclass =Sensu::Plugin::Check::CLI=, like
+To implement your own check, subclass `Sensu::Plugin::Check::CLI`, like
 this:
 
-#+BEGIN_SRC ruby
+```ruby
 require 'sensu-plugin/check/cli'
 
 class MyCheck < Sensu::Plugin::Check::CLI
@@ -29,28 +29,28 @@ class MyCheck < Sensu::Plugin::Check::CLI
   end
 
 end
-#+END_SRC
+```
 
 This will output the string "my_awesome_check OK: All is well" (like a
 Nagios plugin), and exit with a code of 0. The available exit methods,
 which will immediately end the process, are:
 
-  - =ok=
-  - =warning=
-  - =critical=
-  - =unknown=
+ * `ok`
+ * `warning`
+ * `critical`
+ * `unknown`
 
-You can also call =message= first to set the message, then call an exit
+You can also call `message` first to set the message, then call an exit
 method without any arguments (for example, if you want to choose between
 WARNING and CRITICAL based on a threshold, but use the same message in
 both cases).
 
-For a metric, you can subclass either =Sensu::Plugin::Metric::CLI::JSON=
-or =Sensu::Plugin::Metric::CLI::Graphite=. Instead of outputting a
+For a metric, you can subclass either `Sensu::Plugin::Metric::CLI::JSON`
+or `Sensu::Plugin::Metric::CLI::Graphite`. Instead of outputting a
 Nagios-style line of text, these classes will output JSON-serialized
 objects or Graphite messages.
 
-#+BEGIN_SRC ruby
+```ruby
 require 'sensu-plugin/metric/cli'
 
 class MyJSONMetric < Sensu::Plugin::Metric::CLI::JSON
@@ -60,9 +60,9 @@ class MyJSONMetric < Sensu::Plugin::Metric::CLI::JSON
   end
 
 end
-#+END_SRC
+```
 
-#+BEGIN_SRC ruby
+```ruby
 require 'sensu-plugin/metric/cli'
 
 class MyGraphiteMetric < Sensu::Plugin::Metric::CLI::Graphite
@@ -72,85 +72,85 @@ class MyGraphiteMetric < Sensu::Plugin::Metric::CLI::Graphite
   end
 
 end
-#+END_SRC
+```
 
 JSON output takes one argument (the object), and adds a 'timestamp' key
 if missing. Graphite output takes two arguments, the metric path and the
-value, and optionally the timestamp as a third argument. =Time.now.to_i=
+value, and optionally the timestamp as a third argument. `Time.now.to_i`
 is used for the timestamp if it is not specified.
 
 Exit codes do not affect metric output, but they can still be used by
 your handlers.
 
 Some metrics may want to output multiple values in a run. To do this,
-use the =output= method, with the same arguments as the exit methods, as
+use the `output` method, with the same arguments as the exit methods, as
 many times as you want, then call an exit method without any arguments.
 
-For either checks or metrics, you can override =output= if you want
+For either checks or metrics, you can override `output` if you want
 something other than these formats.
 
-*** Options
+### Options
 
-For help on setting up options, see the =mixlib-cli= documentation.
+For help on setting up options, see the `mixlib-cli` documentation.
 Command line arguments that are not parsed as options are available via
-the =argv= method.
+the `argv` method.
 
-*** Utilities
+### Utilities
 
 Various utility methods will be collected under Sensu::Plugin::Util.
 These won't depend on any extra gems or include actual CLI checks; it's
 just for common things that many checks might want to do.
 
-** Handlers
+## Handlers
 
-For your own handler, subclass =Sensu::Handler=. It looks much like
-checks and metrics; see the =handlers= directory for examples. Your class
-should implement =handle=. The instance variable =@event= will be set
+For your own handler, subclass `Sensu::Handler`. It looks much like
+checks and metrics; see the `handlers` directory for examples. Your class
+should implement `handle`. The instance variable `@event` will be set
 for you if a JSON event can be read from stdin; otherwise, the handler
 will abort. Output to stdout will go to the log.
 
 You can decide if you want to handle the event by overriding the
-=filter= method; but this also isn't documented yet (see the source; the
+`filter` method; but this also isn't documented yet (see the source; the
 built in method does some important filtering, so you probably want to
-call it with =super=).
+call it with `super`).
 
-Sensu's configuration settings are available with the =settings= method
+Sensu's configuration settings are available with the `settings` method
 (they will be loaded on first use). We recommend you put your settings in a
-JSON file in =/etc/sensu/conf.d=, with a unique top-level key, like:
+JSON file in `/etc/sensu/conf.d`, with a unique top-level key, like:
 
-#+BEGIN_EXAMPLE
+```
 {
   "mycheck": {
     "foo": true
   }
 }
-#+END_EXAMPLE
+```
 
-** Mutator
+## Mutator
 
-For your own mutator, subclass =Sensu::Mutator=. It looks much like
-checks and metrics; Your class should implement =mutate=. The instance variable
-=@event= will be set for you if a JSON event can be read from stdin; otherwise,
+For your own mutator, subclass `Sensu::Mutator`. It looks much like
+checks and metrics; Your class should implement `mutate`. The instance variable
+`@event` will be set for you if a JSON event can be read from stdin; otherwise,
 the mutator will abort. Output to stdout will then be piped through to the
 handler.  As described in the docs if a mutator fails to run the event will
 not be handled.
 
-Sensu's configuration settings are available with the =settings= method
+Sensu's configuration settings are available with the `settings` method
 (they will be loaded on first use). We recommend you put your settings in a
-JSON file in =/etc/sensu/conf.d=, with a unique top-level key, like:
+JSON file in `/etc/sensu/conf.d`, with a unique top-level key, like:
 
-#+BEGIN_EXAMPLE
+```
 {
   "mymutator": {
     "foo": true
   }
 }
-#+END_EXAMPLE
+```
 
-The example mutator found [[https://sensuapp.org/docs/latest/mutators][here]] will
+The example mutator found [here](https://sensuapp.org/docs/latest/mutators) will
 look like so:
 
-#+BEGIN_SRC ruby
+```ruby
 require 'sensu-mutator'
 
 class MyMutator < Sensu::Mutator
@@ -160,18 +160,18 @@ class MyMutator < Sensu::Mutator
   end
 
 end
-#+END_SRC
+```
 
-** Contributing
+## Contributing
 
- - Fork repository
- - Add functionality and any applicable tests
- - Ensure all tests pass by executing =bundle exec rake test=
- - Open a pull request
+ * Fork repository
+ * Add functionality and any applicable tests
+ * Ensure all tests pass by executing `bundle exec rake test`
+ * Open a pull request
 
-You may run individual tests by executing =bundle exec rake test TEST=test/external_handler_test.rb=
+You may run individual tests by executing `bundle exec rake test TEST=test/external_handler_test.rb`
 
-* License
+# License
 
 Copyright 2011 Decklin Foster
 
