@@ -1,4 +1,5 @@
 require 'net/http'
+require 'timeout'
 require 'uri'
 require 'json'
 require 'sensu-plugin/utils'
@@ -152,7 +153,7 @@ module Sensu
       ]
       stashes.each do |(scope, path)|
         begin
-          timeout(5) do
+          Timeout.timeout(5) do
             if stash_exists?(path)
               bail scope + ' alerts silenced'
             end
@@ -174,7 +175,7 @@ module Sensu
         if @event['check']['dependencies'].is_a?(Array)
           @event['check']['dependencies'].each do |dependency|
             begin
-              timeout(2) do
+              Timeout.timeout(2) do
                 check, client = dependency.split('/').reverse
                 if event_exists?(client || @event['client']['name'], check)
                   bail 'check dependency event exists'
