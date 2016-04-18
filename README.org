@@ -1,5 +1,9 @@
 * Sensu Plugin
 
+[![Build Status](https://travis-ci.org/sensu-plugins/sensu-plugin.svg?branch=master)](https://travis-ci.org/sensu-plugins/sensu-plugin)
+[![Gem Version](https://badge.fury.io/rb/sensu-plugin.svg)](http://badge.fury.io/rb/sensu-plugin)
+[![Dependency Status](https://gemnasium.com/sensu-plugins/sensu-plugin.svg)](https://gemnasium.com/sensu-plugins/sensu-plugin)
+
 This is a framework for writing your own Sensu plugins and handlers.
 It's not required to write a plugin (most Nagios plugins will work
 without modification); it just makes it easier.
