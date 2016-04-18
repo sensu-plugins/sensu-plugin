@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.authors       = ['Decklin Foster', 'Sean Porter']
   s.email         = ['decklin@red-bean.com', 'portertech@gmail.com']
-  s.homepage      = 'https://github.com/sonian/sensu-plugin'
+  s.homepage      = 'https://github.com/sensu-plugins/sensu-plugin'
   s.summary       = 'Sensu Plugins'
   s.description   = 'Plugins and helper libraries for Sensu, a monitoring framework'
   s.license       = 'MIT'
