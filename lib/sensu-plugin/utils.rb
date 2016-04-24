@@ -44,6 +44,12 @@ module Sensu
           Net::HTTP::Put
         end
       end
+
+      # probably, something like "platform" in ohai will be needed.
+      # cf. lib/ohai/plugins/linux/platform.rb
+      def os
+        RUBY_PLATFORM.split("-")[1].sub(/\d+$/, '').downcase
+      end
     end
   end
 end
