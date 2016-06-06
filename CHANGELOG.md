@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Update `Sensu::Handler` class to use `Timeout.timeout` in lieu of `Object#timeout` deprecated in ruby 2.3.0 (#117 from @ab)
 
 ### Added
-- When set, value of SENSU_API_URL environment variable will supercede `api` settings when construcing API URL (#81 from @zbintliff)
+- When set, value of SENSU_API_URL environment variable will supercede `api` settings when construcing API URL (#81 from @AlexisMontagne)
 - `api_request` method now supports https and http URLs as the value of `api.host`, backward compatible with non-url values (#102 from @zbintliff ).
 - New `Sensu::Mutator` base class for writing mutator plugins (#106 from @zbintliff)
 
