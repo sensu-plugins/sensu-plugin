@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - `bail` method now properly returns error message in certain failure cases (#78 from @quodlibetor)
+- `Sensu::Plugin::CLI::Graphite` no longer appends unnecessary line endings to output which cause graphite to drop metrics (#114 from @petecheslock)
 
 ## v1.2.0 and earlier
 - The changes in these releases are not presently documented
