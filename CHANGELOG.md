@@ -13,7 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Timeout for API requests in `stash_exists?` method increased from 2 seconds to 5 seconds. (3e9ac7e from @analytically, see #99)
 
 ### Added
-- When set, value of SENSU_API_URL environment variable will supercede `api` settings when construcing API URL (#81 from @AlexisMontagne)
+- When set, value of SENSU_API_URL environment variable will supersede `api` settings when constructing API URL (#81 from @AlexisMontagne)
 - `api_request` method now supports https and http URLs as the value of `api.host`, backward compatible with non-url values (#102 from @zbintliff ).
 - New `Sensu::Mutator` base class for writing mutator plugins (#106 from @zbintliff)
 - Checks now only run at_exit when @@autorun is not false.  This allows for easier rspec testing of checks and is how handlers currently work.(#116 from @zbintliff)
