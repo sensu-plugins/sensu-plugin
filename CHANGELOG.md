@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - When set, value of SENSU_API_URL environment variable will supercede `api` settings when construcing API URL (#81 from @AlexisMontagne)
 - `api_request` method now supports https and http URLs as the value of `api.host`, backward compatible with non-url values (#102 from @zbintliff ).
 - New `Sensu::Mutator` base class for writing mutator plugins (#106 from @zbintliff)
+- Checks now only run at_exit when @@autorun is not false.  This allows for easier rspec testing of checks and is how handlers currently work.(#116 from @zbintliff)
 
 ### Fixed
 - `bail` method now properly returns error message in certain failure cases (#78 from @quodlibetor)
