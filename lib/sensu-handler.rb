@@ -110,6 +110,24 @@ module Sensu
       res
     end
 
+   def stash_request(method, path, data = '', &blk)
+     if api_settings.nil?
+       raise "api.json settings not found."
+     end
+     domain = api_settings['host'].start_with?('http') ? api_settings['host'] : 'http://' + api_settings['host']
+     uri = URI("#{domain}:#{api_settings['port']}#{path}")
+     req = net_http_req_class(method).new(uri, initheader = {'Content-Type' =>'application/json'})
+     req.body = data
+     if api_settings['user'] && api_settings['password']
+       req.basic_auth(api_settings['user'], api_settings['password'])
+     end
+     yield(req) if block_given?
+     res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+       http.request(req)
+     end
+     res
+   end
+
     def filter_disabled
       if @event['check']['alert'] == false
         bail 'alert disabled'
