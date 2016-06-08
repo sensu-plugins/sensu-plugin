@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestHandleHelpers < MiniTest::Unit::TestCase
+class TestHandleHelpers < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup

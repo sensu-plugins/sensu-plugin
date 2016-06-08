@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestCheckExternal < MiniTest::Unit::TestCase
+class TestCheckExternal < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup

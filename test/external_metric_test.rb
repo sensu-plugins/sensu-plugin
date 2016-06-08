@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestMetricExternal < MiniTest::Unit::TestCase
+class TestMetricExternal < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup
@@ -14,7 +14,7 @@ class TestMetricExternal < MiniTest::Unit::TestCase
 
 end
 
-class TestGraphiteMetricExternal < MiniTest::Unit::TestCase
+class TestGraphiteMetricExternal < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup
@@ -28,7 +28,7 @@ class TestGraphiteMetricExternal < MiniTest::Unit::TestCase
 
 end
 
-class TestStatsdMetricExternal < MiniTest::Unit::TestCase
+class TestStatsdMetricExternal < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup

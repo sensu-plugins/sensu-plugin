@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'json'
 
-class TestHandlerExternal < MiniTest::Unit::TestCase
+class TestHandlerExternal < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup
