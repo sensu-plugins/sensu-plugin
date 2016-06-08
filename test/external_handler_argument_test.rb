@@ -2,7 +2,7 @@ require 'rubygems'
 require 'minitest/autorun'
 require 'json'
 
-class TestHandlerArgumentExternal < MiniTest::Unit::TestCase
+class TestHandlerArgumentExternal < MiniTest::Test
   include SensuPluginTestHelper
 
   def test_default
