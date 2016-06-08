@@ -6,7 +6,7 @@
 # DESCRIPTION:
 #   Base mutator class.  All you need to do is extend this class and implement a
 #   #mutate function.  Uses the autorun feature just like sensu-handler and sensu-plugin/cli
-# 
+#
 # Example Implementation: described https://sensuapp.org/docs/latest/mutators#example-mutator-plugin
 #
 # class Helper < Sensu::Mutator
@@ -26,7 +26,7 @@
 #
 # Released under the same terms as Sensu (the MIT license); see LICENSE
 # for details.
-require 'json'
+require 'sensu/json'
 require 'sensu-plugin/utils'
 require 'mixlib/cli'
 
@@ -48,7 +48,7 @@ module Sensu
     end
 
     def dump
-      puts JSON.dump(@event)
+      puts Sensu::JSON.dump(@event)
     end
 
     # This works just like Plugin::CLI's autorun.

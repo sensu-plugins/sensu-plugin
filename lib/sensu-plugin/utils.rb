@@ -13,7 +13,7 @@ module Sensu
       end
 
       def load_config(filename)
-        JSON.parse(File.open(filename, 'r').read) rescue Hash.new
+        JSON.load(File.open(filename, 'r').read) rescue Hash.new
       end
 
       def settings
@@ -22,10 +22,10 @@ module Sensu
 
       def read_event(file)
         begin
-          @event = ::JSON.parse(file.read)
-          @event['occurrences'] ||= 1
-          @event['check']       ||= Hash.new
-          @event['client']      ||= Hash.new
+          @event = Sensu::JSON.load(file.read)
+          @event[:occurrences] ||= 1
+          @event[:check]       ||= Hash.new
+          @event[:client]      ||= Hash.new
         rescue => e
           puts 'error reading event: ' + e.message
           exit 0

@@ -14,7 +14,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 1,
       'action' => 'create'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^not enough occurrences/, output)
   end
@@ -26,7 +26,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 2,
       'action' => 'create'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
   end
@@ -38,7 +38,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 1,
       'action' => 'resolve'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^not enough occurrences/, output)
   end
@@ -50,7 +50,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 2,
       'action' => 'resolve'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
   end
@@ -62,7 +62,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 61,
       'action' => 'create'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
   end
@@ -74,7 +74,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 60,
       'action' => 'create'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^only handling every/, output)
   end
@@ -86,7 +86,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 60,
       'action' => 'create'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
   end
@@ -98,7 +98,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'occurrences' => 60,
       'action' => 'create'
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/^Event:/, output)
   end
@@ -109,7 +109,7 @@ class TestFilterExternal < MiniTest::Unit::TestCase
       'check' => { 'name' => 'test', 'dependencies' => ['foo', 'bar'] },
       'occurrences' => 1
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert_equal(0, $?.exitstatus)
     assert_match(/dependency event exists/, output)
   end
