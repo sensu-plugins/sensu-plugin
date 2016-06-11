@@ -24,14 +24,21 @@ module Sensu
       puts 'ignoring event -- no handler defined'
     end
 
-    # Filters exit the proccess if the event should not be handled.
-    # Implementation of the default filters is below.
 
+    # Filters exit the proccess if the event should not be handled.
+    #
+    # Filtering in this library is deprecated and will be removed
+    # in a future release.
+    #
     def filter
-      filter_disabled
-      filter_repeated
-      filter_silenced
-      filter_dependencies
+      filtering_enabled = @event['check']['use_deprecated_filtering']
+      if filtering_enabled.nil? || filtering_enabled == true
+        puts 'warning: sensu-plugin event filtering is deprecated'
+        filter_disabled
+        filter_repeated
+        filter_silenced
+        filter_dependencies
+      end
     end
 
     # This works just like Plugin::CLI's autorun.

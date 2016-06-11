@@ -113,4 +113,36 @@ class TestFilterExternal < MiniTest::Test
     assert_equal(0, $?.exitstatus)
     assert_match(/dependency event exists/, output)
   end
+
+  def filter_deprecation_string
+    'warning: sensu-plugin event filtering is deprecated'
+  end
+
+  def test_filter_deprecation_warning_exists
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => { 'name' => 'test', 'refresh' => 30 },
+      'occurrences' => 60,
+      'action' => 'create'
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    assert_match(/#{filter_deprecation_string}/, output)
+  end
+
+  def test_filter_deprecation_warning_does_not_exist_when_disabled
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => {
+        'name' => 'unfiltered test',
+        'refresh' => 30,
+        'use_deprecated_filtering' => false
+      },
+      'occurrences' => 60,
+      'action' => 'create',
+    }
+    output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    refute_match(/#{filter_deprecation_string}/, output)
+  end
 end
