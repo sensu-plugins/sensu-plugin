@@ -6,10 +6,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - The `deep_merge` implementation has changed to mirror that of Sensu Core (#123 via @amdprophet):
-> Previously, if there were two conflicting data types in the same namespace (e.g. a Hash in one file, and an Array in another), sensu-plugin would throw an exception. It will now only use whatever loaded first, which is how Sensu Core handles this problem.
+
+ > Previously, if there were two conflicting data types in the same namespace (e.g. a Hash in one file, and an Array in another), sensu-plugin would throw an exception. It will now only use whatever loaded first, which is how Sensu Core handles this problem.
 
 ### Fixed
 - Project tests updated to silence warnings by using `Minitest::Test` (#132 via @amdprophet).
+- Now exiting with return code `3` when plugin `require` statements raise an exception. Previously this would cause plugins to exit with status `0`. (#121 via @fessyfoo)
 
 ## v1.3.0 (2016-06-06)
 
