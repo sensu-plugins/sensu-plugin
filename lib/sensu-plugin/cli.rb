@@ -51,6 +51,7 @@ module Sensu
       end
 
       at_exit do
+        exit 3 if $!
         if @@autorun
           begin
             check = @@autorun.new

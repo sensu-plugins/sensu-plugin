@@ -51,4 +51,11 @@ class TestCheckExternal < MiniTest::Test
     output = run_script '--doesnotexist'
     assert $?.exitstatus == 1 && output.include?('doesnotexist') && output.include?('invalid option')
   end
+
+  def test_bad_require
+    set_script 'external/bad-require' # TODO better way to switch scripts?
+    output = run_script '2>&1'
+    assert_equal($?.exitstatus, 3)
+    assert_match(/LoadError/, output)
+  end
 end
