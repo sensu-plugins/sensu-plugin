@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'json'
+require 'sensu/json'
 
 class TestHandlerExternal < MiniTest::Test
   include SensuPluginTestHelper
@@ -14,13 +14,13 @@ class TestHandlerExternal < MiniTest::Test
       'check' => { 'name' => 'test' },
       'occurrences' => 1,
     }
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert $?.exitstatus == 0 && output =~ /Event:.*test/
   end
 
   def test_missing_keys
     event = {}
-    output = run_script_with_input(JSON.generate(event))
+    output = run_script_with_input(Sensu::JSON.dump(event))
     assert $?.exitstatus == 0 && output =~ /Event:/
   end
 

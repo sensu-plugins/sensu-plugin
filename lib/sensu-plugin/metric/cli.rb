@@ -1,5 +1,5 @@
 require 'sensu-plugin/cli'
-require 'json'
+require 'sensu/json'
 
 module Sensu
   module Plugin
@@ -12,7 +12,7 @@ module Sensu
               puts obj.to_s
             elsif obj.is_a?(Hash)
               obj['timestamp'] ||= Time.now.to_i
-              puts ::JSON.generate(obj)
+              puts Sensu::JSON.dump(obj)
             end
           end
         end
