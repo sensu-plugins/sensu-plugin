@@ -115,7 +115,7 @@ class TestFilterExternal < MiniTest::Test
   end
 
   def filter_deprecation_string
-    'warning: sensu-plugin event filtering is deprecated'
+    'warning: occurrence filtering is deprecated, see http://bit.ly/sensu-plugin'
   end
 
   def test_filter_deprecation_warning_exists

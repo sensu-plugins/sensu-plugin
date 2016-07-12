@@ -27,18 +27,25 @@ module Sensu
 
     # Filters exit the proccess if the event should not be handled.
     #
-    # Filtering in this library is deprecated and will be removed
+    # Filtering repeated events is deprecated and will be removed
     # in a future release.
     #
     def filter
-      filtering_enabled = @event['check']['use_deprecated_filtering']
-      if filtering_enabled.nil? || filtering_enabled == true
-        puts 'warning: sensu-plugin event filtering is deprecated'
-        filter_disabled
+      filter_disabled
+      filter_silenced
+      filter_dependencies
+      if deprecated_filtering_enabled?
+        puts 'warning: occurrence filtering is deprecated, see http://bit.ly/sensu-plugin'
         filter_repeated
-        filter_silenced
-        filter_dependencies
       end
+    end
+
+    # Evaluates whether the check definition for the event explicitly disables
+    # deprecated occurrence filtering behavior. Defaults to true
+    #
+    # @return [TrueClass, FalseClass]
+    def deprecated_filtering_enabled?
+      @event['check']['use_deprecated_filtering'].nil? || @event['check']['use_deprecated_filtering'] == true
     end
 
     # This works just like Plugin::CLI's autorun.
