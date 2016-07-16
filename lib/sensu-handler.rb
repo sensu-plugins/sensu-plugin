@@ -117,6 +117,10 @@ module Sensu
     end
 
     def filter_repeated
+
+      # never filter the resolve event.
+      return if @event['action'] == 'resolve'
+
       defaults = {
         'occurrences' => 1,
         'interval' => 30,
@@ -133,7 +137,7 @@ module Sensu
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end
-      if @event['occurrences'] > occurrences && @event['action'] == 'create'
+      if @event['occurrences'] > occurrences
         number = refresh.fdiv(interval).to_i
         unless number == 0 || (@event['occurrences'] - occurrences) % number == 0
           bail 'only handling every ' + number.to_s + ' occurrences'

@@ -40,7 +40,7 @@ class TestFilterExternal < MiniTest::Test
     }
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $?.exitstatus)
-    assert_match(/^not enough occurrences/, output)
+    assert_match(/^Event:/, output)
   end
 
   def test_resolve_enough_occurrences
