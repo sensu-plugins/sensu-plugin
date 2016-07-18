@@ -85,6 +85,7 @@ module Sensu
     #
     # @return [Hash]
     def api_settings
+      return @api_settings if @api_settings
       case
       when ENV['SENSU_API_URL']
         uri = URI(ENV['SENSU_API_URL'])
@@ -99,6 +100,8 @@ module Sensu
         @api_settings['host'] ||= '127.0.0.1'
         @api_settings['port'] ||= 4567
       end
+
+      @api_settings
     end
 
     def api_request(method, path, &blk)
