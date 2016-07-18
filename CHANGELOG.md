@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [Unreleased]
 
 ### Changed
 - The `deep_merge` implementation has changed to mirror that of Sensu Core (#123 via @amdprophet):
@@ -10,10 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
  > Previously, if there were two conflicting data types in the same namespace (e.g. a Hash in one file, and an Array in another), sensu-plugin would throw an exception. It will now only use whatever loaded first, which is how Sensu Core handles this problem.
 
 ### Fixed
+- Now explicitly requiring 'json' in sensu-plugin/utils to avoid empty settings confusion (#141 via @zroger)
 - Project tests updated to silence warnings by using `Minitest::Test` (#132 via @amdprophet).
-- Now exiting with return code `3` when plugin `require` statements raise an exception. Previously this would cause plugins to exit with status `0`. (#121 via @fessyfoo)
+- Now exiting with return code `3` (UNKNOWN) when plugin `require` statements raise an exception. Previously this would cause plugins to exit with status `0`. (#121 via @fessyfoo)
 
-## v1.3.0 (2016-06-06)
+## [v1.3.0] - 2016-06-06
 
 ### Changed
 - Refresh logic changed to subtract occurrences threshold before comparison; this changes alerting behavior in certain cases. (#82 from @ghicks-rmn)
@@ -31,5 +32,34 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - `bail` method now properly returns error message in certain failure cases (#78 from @quodlibetor)
 - `Sensu::Plugin::CLI::Graphite` no longer appends unnecessary line endings to output which cause graphite to drop metrics (#114 from @petecheslock)
 
-## v1.2.0 and earlier
-- The changes in these releases are not presently documented
+## Earlier versions
+
+The changes in earlier releases are not fully documented but comparison links are available:
+
+* [v1.2.0]
+* [v1.1.0]
+* [v1.0.0]
+* [v0.3.0]
+* [v0.1.7]
+* [v0.1.6]
+* [v0.1.5]
+* [v0.1.4]
+* [v0.1.3]
+* [v0.1.2]
+* [v0.1.1]
+* [v0.1.0]
+
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.3.0...HEAD
+[v1.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.2.0...v1.3.0
+[v1.2.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.1.0...v1.2.0
+[v1.1.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.0.0...v1.1.0
+[v1.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.3.0...v1.0.0
+[v0.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.7...v0.3.0
+[v0.1.7]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.6...v0.1.7
+[v0.1.6]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.5...v0.1.6
+[v0.1.5]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.4...v0.1.5
+[v0.1.4]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.3...v0.1.4
+[v0.1.3]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.2...v0.1.3
+[v0.1.2]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.1...v0.1.2
+[v0.1.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.1.0...v0.1.1
+[v0.1.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v0.0.6...v0.1.0
