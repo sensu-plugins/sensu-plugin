@@ -24,14 +24,38 @@ module Sensu
       puts 'ignoring event -- no handler defined'
     end
 
-    # Filters exit the proccess if the event should not be handled.
-    # Implementation of the default filters is below.
 
+    # Filters exit the proccess if the event should not be handled.
+    #
+    # Filtering events is deprecated and will be removed in a future release.
+    #
     def filter
-      filter_disabled
-      filter_repeated
-      filter_silenced
-      filter_dependencies
+      if deprecated_filtering_enabled?
+        puts 'warning: event filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
+        filter_disabled
+        filter_silenced
+        filter_dependencies
+        if deprecated_occurrence_filtering_enabled?
+          puts 'warning: occurrence filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
+          filter_repeated
+        end
+      end
+    end
+
+    # Evaluates whether the event should be processed by any of the filter methods in
+    # this library. Defaults to true (i.e. deprecated filters are run by default.)
+    #
+    # @return [TrueClass, FalseClass]
+    def deprecated_filtering_enabled?
+      @event['check']['enable_deprecated_filtering'].nil? || @event['check']['enable_deprecated_filtering'] == true
+    end
+
+    # Evaluates whether the event should be processed by the filter_repeated method. Defaults to true (i.e.
+    # filter_repeated will filter events by default)
+    #
+    # @return [TrueClass, FalseClass]
+    def deprecated_occurrence_filtering_enabled?
+      @event['check']['enable_deprecated_occurrence_filtering'].nil? || @event['check']['enable_deprecated_occurrence_filtering'] == true
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -98,7 +122,7 @@ module Sensu
         raise "api.json settings not found."
       end
       domain = api_settings['host'].start_with?('http') ? api_settings['host'] : 'http://' + api_settings['host']
-      uri = URI("#{domain}:#{api_settings['port']}#{path}") 
+      uri = URI("#{domain}:#{api_settings['port']}#{path}")
       req = net_http_req_class(method).new(uri)
       if api_settings['user'] && api_settings['password']
         req.basic_auth(api_settings['user'], api_settings['password'])
