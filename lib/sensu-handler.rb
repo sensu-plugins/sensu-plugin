@@ -100,7 +100,6 @@ module Sensu
         @api_settings['host'] ||= '127.0.0.1'
         @api_settings['port'] ||= 4567
       end
-
       @api_settings
     end
 
