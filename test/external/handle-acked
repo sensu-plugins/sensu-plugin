@@ -35,7 +35,7 @@ class TestHandleAcked < Sensu::Handler
 
       obj.define_singleton_method(:body) do
         if config[:acked]
-          '{"type":"acknowledgment","reason":"because"}'
+          '{"expire_on_resolve":true,"reason":"because"}'
         elsif config[:stashed]
           '{"reason":"because"}'
         else

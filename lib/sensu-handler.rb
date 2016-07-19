@@ -159,7 +159,7 @@ module Sensu
 
       return false unless @stash.code == '200'
 
-      if event_resolved? && stash_is_acknowledgement?
+      if event_resolved? && expire_on_resolve?
         delete_stash(path)
         false
       else
@@ -168,8 +168,8 @@ module Sensu
     end
 
     # uses most recent stash from get_stash()
-    def stash_is_acknowledgement?
-      JSON.parse(@stash.body)['type'] == 'acknowledgment'
+    def expire_on_resolve?
+      JSON.parse(@stash.body)['expire_on_resolve'] == true
     rescue JSON::ParserError
       false
     end
