@@ -9,6 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
  > Previously, if there were two conflicting data types in the same namespace (e.g. a Hash in one file, and an Array in another), sensu-plugin would throw an exception. It will now only use whatever loaded first, which is how Sensu Core handles this problem.
 
+- The api_request method now defaults `api` configuration host 127.0.0.1 and port 4567 when configuration has not been provided via `SENSU_API_URL` environment variable nor Sensu JSON configuration.
+
 ### Fixed
 - Now explicitly requiring 'json' in sensu-plugin/utils to avoid empty settings confusion (#141 via @zroger)
 - Project tests updated to silence warnings by using `Minitest::Test` (#132 via @amdprophet).

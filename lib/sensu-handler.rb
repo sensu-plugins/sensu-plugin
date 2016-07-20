@@ -103,18 +103,28 @@ module Sensu
       exit 0
     end
 
+    # Return a hash of API settings derived first from ENV['SENSU_API_URL'] if set,
+    # then Sensu config `api` scope if configured, and finally falling back to
+    # to ipv4 localhost address on default API port.
+    #
+    # @return [Hash]
     def api_settings
-      @api_settings ||= if ENV['SENSU_API_URL']
+      return @api_settings if @api_settings
+      case
+      when ENV['SENSU_API_URL']
         uri = URI(ENV['SENSU_API_URL'])
-        {
+        @api_settings = {
           'host' => uri.host,
           'port' => uri.port,
           'user' => uri.user,
           'password' => uri.password
         }
       else
-        settings['api']
+        @api_settings = settings['api'] || {}
+        @api_settings['host'] ||= '127.0.0.1'
+        @api_settings['port'] ||= 4567
       end
+      @api_settings
     end
 
     def api_request(method, path, &blk)
