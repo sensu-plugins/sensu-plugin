@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.4.0] - 2016-07-20
+
 ### Important
 - Filtering of events is now deprecated in `Sensu::Handler` and will be removed in a future release. See [this blog post](https://sensuapp.org/blog/2016/07/07/sensu-plugin-filter-deprecation.html) for more detail.
 
