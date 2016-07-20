@@ -59,7 +59,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.0...HEAD
+[v1.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.1.0...v1.2.0
 [v1.1.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.0.0...v1.1.0
