@@ -4,7 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Important
+- Filtering of events is now deprecated in `Sensu::Handler` and will be removed in a future release. See [this blog post](https://sensuapp.org/blog/2016/07/07/sensu-plugin-filter-deprecation.html) for more detail.
+
 ### Changed
+- Warnings are now visible in handler output when deprecated event filtering is used, as it is by default. (#139 via @cwjohnston)
+- Filtering of events can now be disabled on a per-check basis by setting value of custom attribute `deprecated_filtering_enabled` to `false` (#139 via @cwjohnston)
+- Filtering of events based on occurrences can now be disabled on a per-check basis by setting value of custom attribute `deprecated_occurrence_filtering_enabled` to `false`  (#139 via @cwjohnston)
 - The `deep_merge` implementation has changed to mirror that of Sensu Core (#123 via @amdprophet):
 
  > Previously, if there were two conflicting data types in the same namespace (e.g. a Hash in one file, and an Array in another), sensu-plugin would throw an exception. It will now only use whatever loaded first, which is how Sensu Core handles this problem.
