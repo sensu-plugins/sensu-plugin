@@ -209,6 +209,9 @@ module Sensu
         if @event['check']['dependencies'].is_a?(Array)
           @event['check']['dependencies'].each do |dependency|
             begin
+              if(dependency == "")
+                next
+              end
               Timeout.timeout(2) do
                 check, client = dependency.split('/').reverse
                 if event_exists?(client || @event['client']['name'], check)
