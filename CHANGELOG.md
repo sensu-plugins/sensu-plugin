@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [v1.4.1] - 2016-08-03
 
 ### Changed
-- Actually fix dependency loading problems in Ruby 1.9 environments by changing 'json' dependency from `<= 2.0.0` to `< 2.0.0`.
+- Actually fix dependency loading problems in Ruby 1.9 environments by changing 'json' dependency from `<= 2.0.0` to `< 2.0.0`. (#149 via @cwjohnston)
 
 ## [v1.4.0] - 2016-07-20
 
