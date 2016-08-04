@@ -4,8 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Changed
 
+## [v1.4.1] - 2016-08-03
+
+### Changed
 - Actually fix dependency loading problems in Ruby 1.9 environments by changing 'json' dependency from `<= 2.0.0` to `< 2.0.0`.
 
 ## [v1.4.0] - 2016-07-20
@@ -64,7 +66,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.1...HEAD
+[v1.4.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.0...v1.4.1
 [v1.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.2.0...v1.3.0
 [v1.2.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.1.0...v1.2.0
