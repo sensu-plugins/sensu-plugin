@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.4.2] - 2016-08-08
+
+- Fixed a condition in which empty strings in check `dependencies` attribute values would cause an exception. (#147 via @rs-mrichmond)
 
 ## [v1.4.1] - 2016-08-03
 
@@ -66,7 +69,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.2...HEAD
+[v1.4.2]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.1...v1.4.2
 [v1.4.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.0...v1.4.1
 [v1.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.3.0...v1.4.0
 [v1.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.2.0...v1.3.0
