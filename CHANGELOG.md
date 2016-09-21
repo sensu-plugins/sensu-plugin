@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Fixed an incompatability with Ruby 1.9 introduced in Sensu::Handler api_request circa sensu-plugin 1.3.0
+
 ## [v1.4.2] - 2016-08-08
 
 - Fixed a condition in which empty strings in check `dependencies` attribute values would cause an exception. (#147 via @rs-mrichmond)
