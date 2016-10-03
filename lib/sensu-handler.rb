@@ -201,7 +201,7 @@ module Sensu
     end
 
     def event_exists?(client, check)
-      api_request(:GET, '/event/' + client + '/' + check).code == '200'
+      api_request(:GET, '/events/' + client + '/' + check).code == '200'
     end
 
     def filter_dependencies
