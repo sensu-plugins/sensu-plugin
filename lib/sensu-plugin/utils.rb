@@ -5,7 +5,7 @@ module Sensu
     module Utils
 
       def config_files
-        if ENV['SENSU_LOADED_TEMPFILE']
+        if ENV['SENSU_LOADED_TEMPFILE'] && File.file?(ENV['SENSU_LOADED_TEMPFILE'])
           IO.read(ENV['SENSU_LOADED_TEMPFILE']).split(':')
         elsif ENV['SENSU_CONFIG_FILES']
           ENV['SENSU_CONFIG_FILES'].split(':')
