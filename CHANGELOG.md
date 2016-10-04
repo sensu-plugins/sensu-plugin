@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.4.3] - 2016-10-04
+
 - Fixed an incompatibility with Ruby 1.9 introduced in Sensu::Handler api_request circa sensu-plugin 1.3.0
 - Fixed Sensu::Handler check dependency filtering by using plural form `events` API endpoint, instead of singular-form `event`.
 - Fixed a condition where `config_files` method may attempt to read from a non-existent file.
@@ -73,7 +75,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.2...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.3...HEAD
+[v1.4.3]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.2...v1.4.3
 [v1.4.2]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.1...v1.4.2
 [v1.4.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.0...v1.4.1
 [v1.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.3.0...v1.4.0

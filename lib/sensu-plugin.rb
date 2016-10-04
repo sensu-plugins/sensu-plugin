@@ -1,6 +1,6 @@
 module Sensu
   module Plugin
-    VERSION = "1.4.2"
+    VERSION = "1.4.3"
     EXIT_CODES = {
       'OK'       => 0,
       'WARNING'  => 1,
