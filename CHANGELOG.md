@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+- Fixed an incompatibility with later Ruby versions introduced with the Ruby 1.9 fix in the Sensu::Handler, introduced in 1.4.3 (#155)
+
 ## [v1.4.3] - 2016-10-04
 
 - Fixed an incompatibility with Ruby 1.9 introduced in Sensu::Handler api_request circa sensu-plugin 1.3.0
