@@ -133,7 +133,11 @@ module Sensu
       end
       domain = api_settings['host'].start_with?('http') ? api_settings['host'] : 'http://' + api_settings['host']
       uri = URI("#{domain}:#{api_settings['port']}#{path}")
-      req = net_http_req_class(method).new(uri.to_s)
+      if RUBY_VERSION > '1.9'
+        req = net_http_req_class(method).new(uri)
+      else
+        req = net_http_req_class(method).new(uri.to_s)
+      end
       if api_settings['user'] && api_settings['password']
         req.basic_auth(api_settings['user'], api_settings['password'])
       end
