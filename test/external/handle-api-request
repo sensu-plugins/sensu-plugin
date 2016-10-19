@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+require 'rubygems' if RUBY_VERSION < '1.9.0'
+
+require 'sensu-handler'
+require 'webmock'
+
+class TestAPI < Sensu::Handler
+
+  include WebMock::API
+  WebMock.enable!
+
+  def api_request(method, path, &blk)
+    WebMock.stub_request(
+      :get,
+      "http://192.168.11.12:4567/stash/silence/test"
+    ).to_return(
+      :body => "{ \"owner\": \"#{path}\" }", :status => 200
+    )
+    puts "Path: #{path}"
+    super(method, path, &blk)
+  end
+
+  def handle
+    puts "Event: #{@event.inspect}"
+  end
+
+  def event_exists?(*args)
+    true
+  end
+
+end
