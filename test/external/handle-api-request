@@ -14,7 +14,7 @@ class TestAPI < Sensu::Handler
   def api_request(method, path, &blk)
     WebMock.stub_request(
       :get,
-      "http://192.168.11.12:4567/stash/silence/test"
+      "http://127.0.0.1:4567/stash/silence/test"
     ).to_return(
       :body => "{ \"owner\": \"#{path}\" }", :status => 200
     )
