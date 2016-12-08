@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.4.4] - 2016-12-08
+
 - Fixed a regression in Sensu::Handler `api_request` method, introduced in
   v1.4.3, which broke silence stashes and check dependencies on Ruby 2.x.
 
@@ -78,7 +80,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.3...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.4...HEAD
+[v1.4.4]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.3...v1.4.4
 [v1.4.3]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.2...v1.4.3
 [v1.4.2]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.1...v1.4.2
 [v1.4.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.0...v1.4.1
