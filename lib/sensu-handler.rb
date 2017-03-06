@@ -164,7 +164,19 @@ module Sensu
       occurrences = (@event['check']['occurrences'] || defaults['occurrences']).to_i
       interval = (@event['check']['interval'] || defaults['interval']).to_i
       refresh = (@event['check']['refresh'] || defaults['refresh']).to_i
-      if @event['occurrences'] < occurrences
+
+      if @event['occurrences'] > occurrences && @event['action'] == 'resolve'
+        critical_occurrences, warning_occurrences = 0 ,0
+        @event['check']['history'][0...-1].each do |e|
+          critical_occurrences = critical_occurrences + 1 if e.to_i == 2
+          warning_occurrences = warning_occurrences + 1 if e.to_i == 1
+          break if e.to_i == 0
+        end
+        unless  critical_occurrences >  @event['occurrences'] || warning_occurrences >  @event['occurrences']
+          bail 'not enough occurrences'
+        end
+      end
+      if @event['occurrences'] < occurrences && @event['action'] == 'create'
         bail 'not enough occurrences'
       end
       if @event['occurrences'] > occurrences && @event['action'] == 'create'
