@@ -42,20 +42,38 @@ module Sensu
       end
     end
 
-    # Evaluates whether the event should be processed by any of the filter methods in
-    # this library. Defaults to true (i.e. deprecated filters are run by default.)
+    # Evaluates whether deprecated filtering is explicitly disabled
+    # via global Sensu configuration. Defaults to false,
+    # i.e. deprecated filters are run by default.
+    #
+    # @return [TrueClass, FalseClass]
+    def deprecated_filtering_globally_disabled?
+      global_settings = settings.fetch('sensu_plugin', {})
+      global_settings['disable_deprecated_filtering'].to_s == "true"
+    end
+
+    # Evaluates whether the event should be processed by any of the
+    # filter methods in this library. Defaults to true,
+    # i.e. deprecated filters are run by default.
     #
     # @return [TrueClass, FalseClass]
     def deprecated_filtering_enabled?
-      @event['check']['enable_deprecated_filtering'].nil? || @event['check']['enable_deprecated_filtering'] == true
+      if deprecated_filtering_globally_disabled?
+        return false
+      else
+        @event['check']['enable_deprecated_filtering'].nil? || \
+        @event['check']['enable_deprecated_filtering'].to_s == "true"
+      end
     end
 
-    # Evaluates whether the event should be processed by the filter_repeated method. Defaults to true (i.e.
-    # filter_repeated will filter events by default)
+    # Evaluates whether the event should be processed by the
+    # filter_repeated method. Defaults to true, i.e. filter_repeated
+    # will filter events by default.
     #
     # @return [TrueClass, FalseClass]
     def deprecated_occurrence_filtering_enabled?
-      @event['check']['enable_deprecated_occurrence_filtering'].nil? || @event['check']['enable_deprecated_occurrence_filtering'] == true
+      @event['check']['enable_deprecated_occurrence_filtering'].nil? || \
+      @event['check']['enable_deprecated_occurrence_filtering'].to_s == "true"
     end
 
     # This works just like Plugin::CLI's autorun.
