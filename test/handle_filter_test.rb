@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'tempfile'
 
 class TestFilterExternal < MiniTest::Test
   include SensuPluginTestHelper
@@ -154,6 +155,27 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create',
     }
     output = run_script_with_input(JSON.generate(event))
+    assert_equal(0, $?.exitstatus)
+    refute_match(/#{filter_deprecation_string}/, output)
+  end
+
+  def test_filter_deprecation_warning_does_not_exist_when_globaly_disabled
+    event = {
+      'client' => { 'name' => 'test' },
+      'check' => {
+        'name' => 'globaly unfiltered test',
+        'refresh' => 30
+      },
+      'occurrences' => 60,
+      'action' => 'create',
+    }
+
+    settings_file = Tempfile.new('global_filter_disable')
+    settings_file.write('{"sensu_plugin": { "disable_deprecated_filtering": true }}')
+    settings_file.close
+    ENV['SENSU_CONFIG_FILES'] = settings_file.path
+    output = run_script_in_env_with_input(JSON.generate(event), ENV)
+    ENV['SENSU_CONFIG_FILES'] = nil
     assert_equal(0, $?.exitstatus)
     refute_match(/#{filter_deprecation_string}/, output)
   end

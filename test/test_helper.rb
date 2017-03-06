@@ -21,6 +21,14 @@ module SensuPluginTestHelper
     end
   end
 
+  def run_script_in_env_with_input(input, env, *args)
+    IO.popen(env, ([@script] + args).join(' '), 'r+') do |child|
+      child.puts input
+      child.close_write
+      child.read
+    end
+  end
+
   def fixture_path
     File.expand_path('../fixtures', __FILE__)
   end
