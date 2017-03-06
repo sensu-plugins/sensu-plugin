@@ -120,6 +120,18 @@ Filtering of events is now deprecated in `Sensu::Handler` and will be removed
 in a future release. See [this blog post](https://sensuapp.org/blog/2016/07/07/sensu-plugin-filter-deprecation.html)
 for more detail.
 
+Event filtering in this library may be globally disabled via the
+`sensu_plugin` configuration scope, e.g.:
+
+  ``` json
+  # /etc/sensu/conf.d/sensu_plugin.json
+  {
+    "sensu_plugin": {
+      "disable_deprecated_filtering": true
+    }
+  }
+  ```
+
 Event filtering in this library may be disabled on a per-check basis by setting
 the value of the check's `enable_deprecated_filtering` attribute to `false`.
 
