@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Added support for globally disabling deprecated filtering methods via the
+  `sensu_plugin` configuration scope. See README for example.
+
 ## [v1.4.4] - 2016-12-08
 
 - Fixed a regression in Sensu::Handler `api_request` method, introduced in
