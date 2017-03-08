@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Plugins now exit with status `3` (unknown) when encountering an
   exception or being run with bad arguments.
+- Removed support for Ruby 1.9 and earlier.
 
 ## [v1.4.5] - 2017-03-07
 
