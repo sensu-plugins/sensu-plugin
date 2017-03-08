@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Plugins now exit with status `3` (unknown) when encountering an
+  exception or being run with bad arguments.
+
 ## [v1.4.5] - 2017-03-07
 
 - Added support for globally disabling deprecated filtering methods via the
