@@ -39,7 +39,7 @@ class TestCheckExternal < MiniTest::Test
 
   def test_exception
     output = run_script '-f'
-    assert $?.exitstatus == 2 && output.include?('failed')
+    assert $?.exitstatus == 3 && output.include?('failed')
   end
 
   def test_argv
@@ -49,7 +49,7 @@ class TestCheckExternal < MiniTest::Test
 
   def test_bad_commandline
     output = run_script '--doesnotexist'
-    assert $?.exitstatus == 1 && output.include?('doesnotexist') && output.include?('invalid option')
+    assert $?.exitstatus == 3 && output.include?('doesnotexist') && output.include?('invalid option')
   end
 
   def test_bad_require
