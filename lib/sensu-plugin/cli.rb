@@ -60,11 +60,11 @@ module Sensu
             exit e.status
           rescue OptionParser::InvalidOption => e
             puts "Invalid check argument(s): #{e.message}, #{e.backtrace}"
-            exit 1
+            exit 3
           rescue Exception => e
             # This can't call check.critical, as the check may have failed to construct
             puts "Check failed to run: #{e.message}, #{e.backtrace}"
-            exit 2
+            exit 3
           end
           check.warning "Check did not exit! You should call an exit code method."
         end

@@ -4,6 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v2.0.0] - 2017-03-29
+
+IMPORTANT! This release includes the following potentially breaking changes:
+
+- Plugins now exit with status `3` (unknown) when encountering an
+  exception or being run with bad arguments.
+- Removed support for Ruby 1.9 and earlier.
+- Deprecated filtering methods in this library are now disabled by default.
+
 ## [v1.4.5] - 2017-03-07
 
 - Added support for globally disabling deprecated filtering methods via the
@@ -85,7 +94,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.5...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.0...HEAD
+[v2.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.5...v2.0.0
 [v1.4.5]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.4...v1.4.5
 [v1.4.4]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.3...v1.4.4
 [v1.4.3]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.2...v1.4.3
