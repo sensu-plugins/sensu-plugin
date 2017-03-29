@@ -14,7 +14,8 @@ class TestFilterExternal < MiniTest::Test
       'check' => {
         'name' => 'test',
         'occurrences' => 2,
-        'enable_deprecated_filtering' => true
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
       },
       'occurrences' => 1,
       'action' => 'create'
@@ -30,7 +31,8 @@ class TestFilterExternal < MiniTest::Test
       'check' => {
         'name' => 'test',
         'occurrences' => 2,
-        'enable_deprecated_filtering' => true
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
       },
       'occurrences' => 2,
       'action' => 'create'
@@ -46,7 +48,8 @@ class TestFilterExternal < MiniTest::Test
       'check' => {
         'name' => 'test',
         'occurrences' => 2,
-        'enable_deprecated_filtering' => true
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
       },
       'occurrences' => 1,
       'action' => 'resolve'
@@ -77,7 +80,8 @@ class TestFilterExternal < MiniTest::Test
       'client' => { 'name' => 'test' },
       'check' => {
         'name' => 'test',
-        'enable_deprecated_filtering' => true
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
       },
       'occurrences' => 61,
       'action' => 'create'
@@ -92,7 +96,8 @@ class TestFilterExternal < MiniTest::Test
       'client' => { 'name' => 'test' },
       'check' => {
         'name' => 'test',
-        'enable_deprecated_filtering' => true
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
       },
       'occurrences' => 60,
       'action' => 'create'
