@@ -48,7 +48,7 @@ module Sensu
     #
     # @return [TrueClass, FalseClass]
     def deprecated_filtering_enabled?
-      @event['check']['enable_deprecated_filtering'].to_s == "true"
+      @event['check'].fetch('enable_deprecated_filtering', false).to_s == "true"
     end
 
     # Evaluates whether the event should be processed by the
@@ -57,8 +57,7 @@ module Sensu
     #
     # @return [TrueClass, FalseClass]
     def deprecated_occurrence_filtering_enabled?
-      @event['check']['enable_deprecated_occurrence_filtering'].nil? || \
-      @event['check']['enable_deprecated_occurrence_filtering'].to_s == "true"
+      @event['check'].fetch('enable_deprecated_occurrence_filtering', false).to_s == "true"
     end
 
     # This works just like Plugin::CLI's autorun.
