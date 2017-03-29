@@ -11,7 +11,12 @@ class TestFilterExternal < MiniTest::Test
   def test_create_not_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'occurrences' => 2 },
+      'check' => {
+        'name' => 'test',
+        'occurrences' => 2,
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
+      },
       'occurrences' => 1,
       'action' => 'create'
     }
@@ -23,7 +28,12 @@ class TestFilterExternal < MiniTest::Test
   def test_create_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'occurrences' => 2 },
+      'check' => {
+        'name' => 'test',
+        'occurrences' => 2,
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
+      },
       'occurrences' => 2,
       'action' => 'create'
     }
@@ -35,7 +45,12 @@ class TestFilterExternal < MiniTest::Test
   def test_resolve_not_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'occurrences' => 2 },
+      'check' => {
+        'name' => 'test',
+        'occurrences' => 2,
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
+      },
       'occurrences' => 1,
       'action' => 'resolve'
     }
@@ -47,7 +62,11 @@ class TestFilterExternal < MiniTest::Test
   def test_resolve_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'occurrences' => 2 },
+      'check' => {
+        'name' => 'test',
+        'occurrences' => 2,
+        'enable_deprecated_filtering' => true
+      },
       'occurrences' => 2,
       'action' => 'resolve'
     }
@@ -59,7 +78,11 @@ class TestFilterExternal < MiniTest::Test
   def test_refresh_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test' },
+      'check' => {
+        'name' => 'test',
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
+      },
       'occurrences' => 61,
       'action' => 'create'
     }
@@ -71,7 +94,11 @@ class TestFilterExternal < MiniTest::Test
   def test_refresh_not_enough_occurrences
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test' },
+      'check' => {
+        'name' => 'test',
+        'enable_deprecated_filtering' => true,
+        'enable_deprecated_occurrence_filtering' => true
+      },
       'occurrences' => 60,
       'action' => 'create'
     }
@@ -107,7 +134,11 @@ class TestFilterExternal < MiniTest::Test
   def test_dependency_event_exists
     event = {
       'client' => { 'name' => 'test' },
-      'check' => { 'name' => 'test', 'dependencies' => ['foo', 'bar'] },
+      'check' => {
+        'name' => 'test',
+        'dependencies' => ['foo', 'bar'],
+        'enable_deprecated_filtering' => true
+      },
       'occurrences' => 1
     }
     output = run_script_with_input(JSON.generate(event))
@@ -119,7 +150,7 @@ class TestFilterExternal < MiniTest::Test
     'warning: event filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
   end
 
-  def test_filter_deprecation_warning_exists_by_default
+  def test_filter_deprecation_warning_is_not_present_by_default
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test', 'refresh' => 30 },
@@ -128,7 +159,7 @@ class TestFilterExternal < MiniTest::Test
     }
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $?.exitstatus)
-    assert_match(/#{filter_deprecation_string}/, output)
+    refute_match(/#{filter_deprecation_string}/, output)
   end
 
   def test_filter_deprecation_warning_exists_when_explicitly_enabled
@@ -184,7 +215,7 @@ class TestFilterExternal < MiniTest::Test
     'warning: occurrence filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
   end
 
-  def test_occurrence_filter_deprecation_warning_exists_by_default
+  def test_occurrence_filter_deprecation_warning_not_present_by_default
     event = {
       'client' => { 'name' => 'test' },
       'check' => { 'name' => 'test', 'refresh' => 30 },
@@ -193,15 +224,16 @@ class TestFilterExternal < MiniTest::Test
     }
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $?.exitstatus)
-    assert_match(/#{occurrence_filter_deprecation_string}/, output)
+    refute_match(/#{occurrence_filter_deprecation_string}/, output)
   end
 
-  def test_occurrence_filter_deprecation_warning_exists_when_explicitly_enabled
+  def test_occurrence_filter_deprecation_warning_present_when_explicitly_enabled
     event = {
       'client' => { 'name' => 'test' },
       'check' => {
         'name' => 'test',
         'refresh' => 30,
+        'enable_deprecated_filtering' => true,
         'enable_deprecated_occurrence_filtering' => true
       },
       'occurrences' => 60,
@@ -212,12 +244,13 @@ class TestFilterExternal < MiniTest::Test
     assert_match(/#{occurrence_filter_deprecation_string}/, output)
   end
 
-  def test_occurrence_filter_deprecation_warning_does_not_exist_when_explicitly_disabled
+  def test_occurrence_filter_deprecation_warning_not_present_when_explicitly_disabled
     event = {
       'client' => { 'name' => 'test' },
       'check' => {
         'name' => 'unfiltered test',
         'refresh' => 30,
+        'enable_deprecated_filtering' => true,
         'enable_deprecated_occurrence_filtering' => false
       },
       'occurrences' => 60,
