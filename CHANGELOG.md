@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Update json module requirement to < 3.0.0
+
 ## [v2.0.0] - 2017-03-29
 
 IMPORTANT! This release includes the following potentially breaking changes:
