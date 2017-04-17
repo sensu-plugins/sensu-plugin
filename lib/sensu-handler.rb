@@ -164,8 +164,15 @@ module Sensu
       end
 
       occurrences = (@event['check']['occurrences'] || defaults['occurrences']).to_i
+
       interval = (@event['check']['interval'] || defaults['interval']).to_i
       refresh = (@event['check']['refresh'] || defaults['refresh']).to_i
+
+      history_s = @event['check']['history'].join("_")
+      if history_s =~/([1-9]+[0-9]*_)\1{#{occurrences-1}}([1-9]+[0-9]*_)\2{0,#{occurrences-2}}0$/
+        @event['occurrences'] = occurrences
+      end
+
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end
