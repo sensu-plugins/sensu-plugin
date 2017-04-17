@@ -155,6 +155,7 @@ module Sensu
     def filter_repeated
       defaults = {
         'occurrences' => 1,
+        'nonzero_occurrences' => 1,
         'interval' => 30,
         'refresh' => 1800
       }
@@ -164,9 +165,11 @@ module Sensu
       end
 
       occurrences = (@event['check']['occurrences'] || defaults['occurrences']).to_i
+      nonzero_occurrences = (@event['check']['nonzero_occurrences'] || defaults['nonzero_occurrences']).to_i
+
       interval = (@event['check']['interval'] || defaults['interval']).to_i
       refresh = (@event['check']['refresh'] || defaults['refresh']).to_i
-      if @event['occurrences'] < occurrences
+      if @event['nonzero_occurrences'] < nonzero_occurrences
         bail 'not enough occurrences'
       end
       if @event['occurrences'] > occurrences && @event['action'] == 'create'
