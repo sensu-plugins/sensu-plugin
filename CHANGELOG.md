@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v2.0.1] - 2017-04-28
+
 - Update json module requirement to < 3.0.0
 
 ## [v2.0.0] - 2017-03-29
@@ -96,7 +98,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.1...HEAD
+[v2.0.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.0...v2.0.1
 [v2.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.5...v2.0.0
 [v1.4.5]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.4...v1.4.5
 [v1.4.4]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.3...v1.4.4
