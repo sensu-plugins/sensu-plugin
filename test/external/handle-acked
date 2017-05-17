@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' if RUBY_VERSION < '1.9.0'
+
+require 'sensu-handler'
+
+class TestHandleAcked < Sensu::Handler
+
+  option :acked, long: '--acked'
+  option :stashed, long: '--stashed'
+
+  def handle
+    puts "handled"
+  end
+
+  def api_request(*args)
+    throw "shouldn't be called"
+  end
+
+  def get_stash(path)
+    @stash ||= duck_mock_stash
+  end
+
+  # note all stashes treated the same
+  def duck_mock_stash
+    config = self.config # add to local scope for capture in blocks below
+    Object.new.tap do |obj|
+      obj.define_singleton_method(:code) do
+        if config[:acked] || config[:stashed]
+          '200'
+        else
+          '404'
+        end
+      end
+
+      obj.define_singleton_method(:body) do
+        if config[:acked]
+          '{"expire_on_resolve":true,"reason":"because"}'
+        elsif config[:stashed]
+          '{"reason":"because"}'
+        else
+          ""
+        end
+      end
+    end
+  end
+
+  def delete_stash(path)
+    puts "deleting stash #{path}"
+  end
+
+end

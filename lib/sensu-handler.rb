@@ -177,8 +177,37 @@ module Sensu
       end
     end
 
+    def get_stash(path)
+      @stash = api_request(:GET, '/stash' + path)
+    end
+
+    def delete_stash(path)
+      # TODO: proper way handle error?
+      api_request(:DELETE, '/stash' + path)
+    end
+
+    def event_resolved?
+      @event['action'] == 'resolve'
+    end
+
     def stash_exists?(path)
-      api_request(:GET, '/stash' + path).code == '200'
+      get_stash(path)
+
+      return false unless @stash.code == '200'
+
+      if event_resolved? && expire_on_resolve?
+        delete_stash(path)
+        false
+      else
+        true
+      end
+    end
+
+    # uses most recent stash from get_stash()
+    def expire_on_resolve?
+      JSON.parse(@stash.body)['expire_on_resolve'] == true
+    rescue JSON::ParserError
+      false
     end
 
     def filter_silenced
