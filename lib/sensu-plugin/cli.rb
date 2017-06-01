@@ -1,16 +1,28 @@
 require 'sensu-plugin'
+require 'sensu-plugin/utils'
 require 'mixlib/cli'
+require 'json'
 
 module Sensu
   module Plugin
     class CLI
       include Mixlib::CLI
+      include Sensu::Plugin::Utils
 
       attr_accessor :argv
 
       def initialize(argv=ARGV)
         super()
         self.argv = self.parse_options(argv)
+        config.merge!(check_settings.symbolize_keys!) {|key, v1, v2| v1 }
+      end
+
+      def check_name
+        ENV["SENSU_CHECK_NAME"]
+      end
+
+      def check_settings
+        @check_settings ||= settings["checks"] ? settings["checks"][check_name] : {}
       end
 
       # Implementing classes should override this to produce appropriate

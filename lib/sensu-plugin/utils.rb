@@ -63,4 +63,8 @@ module Sensu
       end
     end
   end
+
+  def symbolize_keys!
+    Hash[self.map{|(k,v)| [k.to_sym,v]}]
+  end
 end

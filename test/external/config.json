@@ -1,0 +1,7 @@
+{
+  "checks": {
+    "test1": {
+      "custom_value": "custom_key"
+    }
+  }
+}
