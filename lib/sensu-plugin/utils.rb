@@ -64,9 +64,9 @@ module Sensu
 
       def cast_bool_values_int(value)
         case value
-        when true
+        when 'true'
           1
-        when false
+        when 'false'
           0
         else
           value
