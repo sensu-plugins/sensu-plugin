@@ -61,6 +61,17 @@ module Sensu
         end
         merged
       end
+
+      def cast_bool_values_int(value)
+        case value
+        when true
+          1
+        when false
+          0
+        else
+          value
+        end
+      end
     end
   end
 end

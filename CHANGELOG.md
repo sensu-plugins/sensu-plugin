@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added cast_bool_values_int helper method to convert boolean values to integers
 
 ## [v2.0.1] - 2017-04-28
 
