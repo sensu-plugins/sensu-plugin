@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [v2.1.0] - 2017-07-06
 - Added cast_bool_values_int helper method to convert boolean values to integers
 
 ## [v2.0.1] - 2017-04-28
@@ -99,7 +101,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.1.0...HEAD
+[v2.1.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.1...v2.1.0
 [v2.0.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.0...v2.0.1
 [v2.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.5...v2.0.0
 [v1.4.5]: https://github.com/sensu-plugins/sensu-plugin/compare/v1.4.4...v1.4.5
