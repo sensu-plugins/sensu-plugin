@@ -3,11 +3,9 @@
 require 'sensu-plugin/metric/cli'
 
 class TestMetric < Sensu::Plugin::Metric::CLI::Graphite
-
   def run
     output 'a', 1
     output 'b', 2
     ok
   end
-
 end

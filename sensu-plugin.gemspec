@@ -20,5 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency('mixlib-cli', '>= 1.5.0')
 
   s.add_development_dependency('rake')
+  s.add_development_dependency('rubocop')
   s.add_development_dependency('minitest')
 end

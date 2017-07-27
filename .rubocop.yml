@@ -1,0 +1,45 @@
+
+MethodLength:
+  Max: 200
+
+LineLength:
+  Max: 160
+
+AbcSize:
+  Max: 100
+
+FileName:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+ClassLength:
+  Enabled: false
+
+IfUnlessModifier:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Style/AccessorMethodName:
+  Enabled: false
+
+Style/TrivialAccessors:
+  Enabled: false

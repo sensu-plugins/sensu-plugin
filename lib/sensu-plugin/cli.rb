@@ -8,9 +8,9 @@ module Sensu
 
       attr_accessor :argv
 
-      def initialize(argv=ARGV)
+      def initialize(argv = ARGV)
         super()
-        self.argv = self.parse_options(argv)
+        self.argv = parse_options(argv)
       end
 
       # Implementing classes should override this to produce appropriate
@@ -34,7 +34,7 @@ module Sensu
       # Implementing classes must override this.
 
       def run
-        unknown "Not implemented! You should override Sensu::Plugin::CLI#run."
+        unknown 'Not implemented! You should override Sensu::Plugin::CLI#run.'
       end
 
       # Behind-the-scenes stuff below. If you do something crazy like
@@ -44,14 +44,12 @@ module Sensu
       @@autorun = self
       class << self
         def method_added(name)
-          if name == :run
-            @@autorun = self
-          end
+          @@autorun = self if name == :run
         end
       end
 
       at_exit do
-        exit 3 if $!
+        exit 3 if $ERROR_INFO
         if @@autorun
           begin
             check = @@autorun.new
@@ -61,15 +59,14 @@ module Sensu
           rescue OptionParser::InvalidOption => e
             puts "Invalid check argument(s): #{e.message}, #{e.backtrace}"
             exit 3
-          rescue Exception => e
+          rescue Exception => e # rubocop:disable Lint/RescueException
             # This can't call check.critical, as the check may have failed to construct
             puts "Check failed to run: #{e.message}, #{e.backtrace}"
             exit 3
           end
-          check.warning "Check did not exit! You should call an exit code method."
+          check.warning 'Check did not exit! You should call an exit code method.'
         end
       end
-
     end
   end
 end

@@ -2,20 +2,19 @@
 require 'sensu-handler'
 
 class Helpers < Sensu::Handler
-
   def handle
     puts event_summary
   end
 
-  def api_request(*args)
+  def api_request(*)
     nil
   end
 
-  def stash_exists?(*args)
+  def stash_exists?(*)
     nil
   end
 
-  def event_exists?(*args)
+  def event_exists?(*)
     true
   end
 end

@@ -7,7 +7,7 @@ module SensuPluginTestHelper
   end
 
   def run_script(*args)
-    IO.popen(([@script] + args).join(' '), 'r+') do |child|
+    IO.popen(([@script] + args).join(' '), 'r+') do |child| # rubocop:disable Style/SymbolProc
       child.read
     end
   end

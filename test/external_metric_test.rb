@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'English'
 
 class TestMetricExternal < MiniTest::Test
   include SensuPluginTestHelper
@@ -9,9 +10,8 @@ class TestMetricExternal < MiniTest::Test
 
   def test_ok
     output = JSON.parse(run_script)
-    assert $?.exitstatus == 0 && output.key?('timestamp')
+    assert $CHILD_STATUS.success? && output.key?('timestamp')
   end
-
 end
 
 class TestGraphiteMetricExternal < MiniTest::Test
@@ -23,9 +23,8 @@ class TestGraphiteMetricExternal < MiniTest::Test
 
   def test_multi
     lines = run_script.split("\n")
-    assert lines.size == 2 && lines.all? {|line| line.split("\s").size == 3 }
+    assert lines.size == 2 && lines.all? { |line| line.split("\s").size == 3 }
   end
-
 end
 
 class TestStatsdMetricExternal < MiniTest::Test
@@ -43,6 +42,4 @@ class TestStatsdMetricExternal < MiniTest::Test
       assert line.split('|').first.split(':').size == 2
     end
   end
-
 end
-

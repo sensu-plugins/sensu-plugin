@@ -6,12 +6,12 @@
 # DESCRIPTION:
 #   Base mutator class.  All you need to do is extend this class and implement a
 #   #mutate function.  Uses the autorun feature just like sensu-handler and sensu-plugin/cli
-# 
+#
 # Example Implementation: described https://sensuapp.org/docs/latest/mutators#example-mutator-plugin
 #
 # class Helper < Sensu::Mutator
 #   def mutate
-#     @event.merge!(:mutated => true)
+#     @event.merge!(mutated: true)
 #   end
 # end
 #
@@ -55,9 +55,7 @@ module Sensu
     @@autorun = self
     class << self
       def method_added(name)
-        if name == :mutate
-          @@autorun = self
-        end
+        @@autorun = self if name == :mutate
       end
     end
 
@@ -66,12 +64,11 @@ module Sensu
     end
 
     at_exit do
-      if @@autorun
-        mutator = @@autorun.new
-        mutator.read_event(STDIN)
-        mutator.mutate
-        mutator.dump
-      end
+      return unless @@autorun
+      mutator = @@autorun.new
+      mutator.read_event(STDIN)
+      mutator.mutate
+      mutator.dump
     end
   end
 end

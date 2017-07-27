@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'English'
 require 'tempfile'
 
 class TestFilterExternal < MiniTest::Test
@@ -21,7 +22,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^not enough occurrences/, output)
   end
 
@@ -38,7 +39,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^Event:/, output)
   end
 
@@ -55,7 +56,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'resolve'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^not enough occurrences/, output)
   end
 
@@ -71,7 +72,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'resolve'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^Event:/, output)
   end
 
@@ -87,7 +88,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^Event:/, output)
   end
 
@@ -103,7 +104,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^only handling every/, output)
   end
 
@@ -115,7 +116,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^Event:/, output)
   end
 
@@ -127,7 +128,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/^Event:/, output)
   end
 
@@ -142,7 +143,7 @@ class TestFilterExternal < MiniTest::Test
       'occurrences' => 1
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/dependency event exists/, output)
   end
 
@@ -158,7 +159,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     refute_match(/#{filter_deprecation_string}/, output)
   end
 
@@ -170,7 +171,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/#{filter_deprecation_string}/, output)
   end
 
@@ -183,10 +184,10 @@ class TestFilterExternal < MiniTest::Test
         'enable_deprecated_filtering' => false
       },
       'occurrences' => 60,
-      'action' => 'create',
+      'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     refute_match(/#{filter_deprecation_string}/, output)
   end
 
@@ -198,7 +199,7 @@ class TestFilterExternal < MiniTest::Test
         'refresh' => 30
       },
       'occurrences' => 60,
-      'action' => 'create',
+      'action' => 'create'
     }
 
     settings_file = Tempfile.new('global_filter_disable')
@@ -207,7 +208,7 @@ class TestFilterExternal < MiniTest::Test
     ENV['SENSU_CONFIG_FILES'] = settings_file.path
     output = run_script_in_env_with_input(JSON.generate(event), ENV)
     ENV['SENSU_CONFIG_FILES'] = nil
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     refute_match(/#{filter_deprecation_string}/, output)
   end
 
@@ -223,7 +224,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     refute_match(/#{occurrence_filter_deprecation_string}/, output)
   end
 
@@ -240,7 +241,7 @@ class TestFilterExternal < MiniTest::Test
       'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(/#{occurrence_filter_deprecation_string}/, output)
   end
 
@@ -254,10 +255,10 @@ class TestFilterExternal < MiniTest::Test
         'enable_deprecated_occurrence_filtering' => false
       },
       'occurrences' => 60,
-      'action' => 'create',
+      'action' => 'create'
     }
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     refute_match(/#{occurrence_filter_deprecation_string}/, output)
   end
 end
