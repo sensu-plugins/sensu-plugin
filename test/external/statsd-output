@@ -3,11 +3,9 @@
 require 'sensu-plugin/metric/cli'
 
 class TestMetric < Sensu::Plugin::Metric::CLI::Statsd
-
   def run
     output 'a', 1, 'ms'
     output 'b.c.d', 15
     ok
   end
-
 end

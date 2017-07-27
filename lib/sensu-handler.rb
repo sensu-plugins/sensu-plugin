@@ -6,7 +6,6 @@ require 'sensu-plugin/utils'
 require 'mixlib/cli'
 
 module Sensu
-
   class Handler
     include Sensu::Plugin::Utils
     include Mixlib::CLI
@@ -24,22 +23,19 @@ module Sensu
       puts 'ignoring event -- no handler defined'
     end
 
-
     # Filters exit the proccess if the event should not be handled.
     #
     # Filtering events is deprecated and will be removed in a future release.
     #
     def filter
-      if deprecated_filtering_enabled?
-        puts 'warning: event filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
-        filter_disabled
-        filter_silenced
-        filter_dependencies
-        if deprecated_occurrence_filtering_enabled?
-          puts 'warning: occurrence filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
-          filter_repeated
-        end
-      end
+      return unless deprecated_filtering_enabled?
+      puts 'warning: event filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
+      filter_disabled
+      filter_silenced
+      filter_dependencies
+      return unless deprecated_occurrence_filtering_enabled?
+      puts 'warning: occurrence filtering in sensu-plugin is deprecated, see http://bit.ly/sensu-plugin'
+      filter_repeated
     end
 
     # Evaluates whether the event should be processed by any of the
@@ -48,7 +44,7 @@ module Sensu
     #
     # @return [TrueClass, FalseClass]
     def deprecated_filtering_enabled?
-      @event['check'].fetch('enable_deprecated_filtering', false).to_s == "true"
+      @event['check'].fetch('enable_deprecated_filtering', false).to_s == 'true'
     end
 
     # Evaluates whether the event should be processed by the
@@ -57,7 +53,7 @@ module Sensu
     #
     # @return [TrueClass, FalseClass]
     def deprecated_occurrence_filtering_enabled?
-      @event['check'].fetch('enable_deprecated_occurrence_filtering', false).to_s == "true"
+      @event['check'].fetch('enable_deprecated_occurrence_filtering', false).to_s == 'true'
     end
 
     # This works just like Plugin::CLI's autorun.
@@ -65,9 +61,7 @@ module Sensu
     @@autorun = self
     class << self
       def method_added(name)
-        if name == :handle
-          @@autorun = self
-        end
+        @@autorun = self if name == :handle
       end
     end
 
@@ -86,7 +80,7 @@ module Sensu
 
     # Helpers and filters.
 
-    def event_summary(trim_at=100)
+    def event_summary(trim_at = 100)
       summary = @event['check']['notification'] || @event['check']['description']
       if summary.nil?
         source = @event['check']['source'] || @event['client']['name']
@@ -112,8 +106,7 @@ module Sensu
     # @return [Hash]
     def api_settings
       return @api_settings if @api_settings
-      case
-      when ENV['SENSU_API_URL']
+      if ENV['SENSU_API_URL']
         uri = URI(ENV['SENSU_API_URL'])
         @api_settings = {
           'host' => uri.host,
@@ -129,9 +122,9 @@ module Sensu
       @api_settings
     end
 
-    def api_request(method, path, &blk)
+    def api_request(method, path)
       if api_settings.nil?
-        raise "api.json settings not found."
+        raise 'api.json settings not found.'
       end
       domain = api_settings['host'].start_with?('http') ? api_settings['host'] : 'http://' + api_settings['host']
       uri = URI("#{domain}:#{api_settings['port']}#{path}")
@@ -140,16 +133,14 @@ module Sensu
         req.basic_auth(api_settings['user'], api_settings['password'])
       end
       yield(req) if block_given?
-      res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
         http.request(req)
       end
       res
     end
 
     def filter_disabled
-      if @event['check']['alert'] == false
-        bail 'alert disabled'
-      end
+      bail 'alert disabled' if @event['check']['alert'] == false
     end
 
     def filter_repeated
@@ -169,12 +160,10 @@ module Sensu
       if @event['occurrences'] < occurrences
         bail 'not enough occurrences'
       end
-      if @event['occurrences'] > occurrences && @event['action'] == 'create'
-        number = refresh.fdiv(interval).to_i
-        unless number == 0 || (@event['occurrences'] - occurrences) % number == 0
-          bail 'only handling every ' + number.to_s + ' occurrences'
-        end
-      end
+      return unless @event['occurrences'] > occurrences && @event['action'] == 'create'
+      number = refresh.fdiv(interval).to_i
+      return if number.zero? || ((@event['occurrences'] - occurrences) % number).zero?
+      bail 'only handling every ' + number.to_s + ' occurrences'
     end
 
     def stash_exists?(path)
@@ -207,27 +196,23 @@ module Sensu
     end
 
     def filter_dependencies
-      if @event['check'].has_key?('dependencies')
-        if @event['check']['dependencies'].is_a?(Array)
-          @event['check']['dependencies'].each do |dependency|
-            begin
-              next if dependency.to_s.empty?
-              Timeout.timeout(2) do
-                check, client = dependency.split('/').reverse
-                if event_exists?(client || @event['client']['name'], check)
-                  bail 'check dependency event exists'
-                end
-              end
-            rescue Errno::ECONNREFUSED
-              puts 'connection refused attempting to query the sensu api for an event'
-            rescue Timeout::Error
-              puts 'timed out while attempting to query the sensu api for an event'
+      return unless @event['check'].key?('dependencies')
+      return unless @event['check']['dependencies'].is_a?(Array)
+      @event['check']['dependencies'].each do |dependency|
+        begin
+          next if dependency.to_s.empty?
+          Timeout.timeout(2) do
+            check, client = dependency.split('/').reverse
+            if event_exists?(client || @event['client']['name'], check)
+              bail 'check dependency event exists'
             end
           end
+        rescue Errno::ECONNREFUSED
+          puts 'connection refused attempting to query the sensu api for an event'
+        rescue Timeout::Error
+          puts 'timed out while attempting to query the sensu api for an event'
         end
       end
     end
-
   end
-
 end

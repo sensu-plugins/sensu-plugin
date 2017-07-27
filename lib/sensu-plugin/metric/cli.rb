@@ -5,9 +5,8 @@ module Sensu
   module Plugin
     class Metric
       class CLI
-
         class JSON < Sensu::Plugin::CLI
-          def output(obj=nil)
+          def output(obj = nil)
             if obj.is_a?(String) || obj.is_a?(Exception)
               puts obj.to_s
             elsif obj.is_a?(Hash)
@@ -19,13 +18,12 @@ module Sensu
 
         class Graphite < Sensu::Plugin::CLI
           def output(*args)
-            unless args.empty?
-              if args[0].is_a?(Exception) || args[1].nil?
-                puts args[0].to_s
-              else
-                args[2] ||= Time.now.to_i
-                puts args[0..2].join("\s")
-              end
+            return '' if args.empty?
+            if args[0].is_a?(Exception) || args[1].nil?
+              puts args[0].to_s
+            else
+              args[2] ||= Time.now.to_i
+              puts args[0..2].join("\s")
             end
           end
         end
@@ -40,7 +38,6 @@ module Sensu
             end
           end
         end
-
       end
     end
   end

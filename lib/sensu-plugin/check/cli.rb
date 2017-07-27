@@ -4,13 +4,12 @@ module Sensu
   module Plugin
     class Check
       class CLI < Sensu::Plugin::CLI
-
         class << self
-          def check_name(name=nil)
+          def check_name(name = nil)
             if name
               @check_name = name
             else
-              @check_name || self.to_s
+              @check_name || to_s
             end
           end
         end
@@ -19,10 +18,9 @@ module Sensu
           @message = msg
         end
 
-        def output(msg=@message)
-          puts "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : "")
+        def output(msg = @message)
+          puts "#{self.class.check_name} #{@status}" + (msg ? ": #{msg}" : '')
         end
-
       end
     end
   end

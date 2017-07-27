@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'English'
 
 require 'test_helper'
 
@@ -9,7 +10,7 @@ class TestMutatorHelpers < MiniTest::Test
     set_script 'external/mutator-trivial'
     event = JSON.parse(fixture('basic_event.json').read)
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_equal(event, JSON.parse(output))
   end
 
@@ -17,7 +18,7 @@ class TestMutatorHelpers < MiniTest::Test
     set_script 'external/mutator-helpers'
     event = JSON.parse(fixture('basic_event.json').read)
     output = run_script_with_input(JSON.generate(event))
-    assert_equal(0, $?.exitstatus)
+    assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_equal(true, JSON.parse(output)['mutated'])
   end
 end
