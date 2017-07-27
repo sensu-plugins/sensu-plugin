@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added rubocop test to the Rakefile
 
 ## [v2.1.0] - 2017-07-06
 - Added cast_bool_values_int helper method to convert boolean values to integers
