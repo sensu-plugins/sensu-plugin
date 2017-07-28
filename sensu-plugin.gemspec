@@ -16,10 +16,10 @@ Gem::Specification.new do |s|
   s.test_files            = Dir['test/*.rb']
   s.required_ruby_version = '~> 2.0'
 
-  s.add_dependency('json',       '< 3.0.0')
-  s.add_dependency('mixlib-cli', '>= 1.5.0')
+  s.add_dependency 'json',       '< 3.0.0'
+  s.add_dependency 'mixlib-cli', '>= 1.5.0'
 
-  s.add_development_dependency('rake')
-  s.add_development_dependency('rubocop')
-  s.add_development_dependency('minitest')
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rubocop', '~> 0.49.0'
+  s.add_development_dependency 'minitest'
 end

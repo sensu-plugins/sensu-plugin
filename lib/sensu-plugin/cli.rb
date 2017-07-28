@@ -1,5 +1,6 @@
 require 'sensu-plugin'
 require 'mixlib/cli'
+require 'English'
 
 module Sensu
   module Plugin

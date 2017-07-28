@@ -6,15 +6,15 @@ class Filter < Sensu::Handler
     puts "Event: #{@event.inspect}"
   end
 
-  def api_request(*)
+  def api_request(*_args)
     nil
   end
 
-  def stash_exists?(*)
+  def stash_exists?(*_args)
     nil
   end
 
-  def event_exists?(*)
+  def event_exists?(*_args)
     true
   end
 end

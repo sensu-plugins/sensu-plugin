@@ -122,7 +122,7 @@ module Sensu
       @api_settings
     end
 
-    def api_request(method, path)
+    def api_request(method, path, &_blk)
       if api_settings.nil?
         raise 'api.json settings not found.'
       end

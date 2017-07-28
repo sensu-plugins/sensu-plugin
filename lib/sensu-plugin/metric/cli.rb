@@ -18,7 +18,7 @@ module Sensu
 
         class Graphite < Sensu::Plugin::CLI
           def output(*args)
-            return '' if args.empty?
+            return if args.empty?
             if args[0].is_a?(Exception) || args[1].nil?
               puts args[0].to_s
             else
