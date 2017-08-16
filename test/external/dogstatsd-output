@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'sensu-plugin/metric/cli'
+
+class TestMetric < Sensu::Plugin::Metric::CLI::Dogstatsd
+  def run
+    output 'a', 1, 'ms'
+    output 'b.c.d', 15, 'g', 'env:test,dummy'
+    ok
+  end
+end

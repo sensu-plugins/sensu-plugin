@@ -45,10 +45,16 @@ method without any arguments (for example, if you want to choose between
 WARNING and CRITICAL based on a threshold, but use the same message in
 both cases).
 
-For a metric, you can subclass either `Sensu::Plugin::Metric::CLI::JSON`
-or `Sensu::Plugin::Metric::CLI::Graphite`. Instead of outputting a
-Nagios-style line of text, these classes will output JSON-serialized
-objects or Graphite messages.
+For a metric, you can subclass one of the following:
+
+ * `Sensu::Plugin::Metric::CLI::JSON`
+ * `Sensu::Plugin::Metric::CLI::Graphite`
+ * `Sensu::Plugin::Metric::CLI::Statsd`
+ * `Sensu::Plugin::Metric::CLI::Dogstatsd`
+ * `Sensu::Plugin::Metric::CLI::Influxdb`
+
+Instead of outputting a Nagios-style line of text, these classes will output
+differently formated messages depending on the class you chose.
 
 ```ruby
 require 'sensu-plugin/metric/cli'
@@ -56,7 +62,7 @@ require 'sensu-plugin/metric/cli'
 class MyJSONMetric < Sensu::Plugin::Metric::CLI::JSON
 
   def run
-    ok "foo" => 1, "bar" => "anything"
+    ok 'foo' => 1, 'bar' => 'anything'
   end
 
 end
@@ -68,7 +74,43 @@ require 'sensu-plugin/metric/cli'
 class MyGraphiteMetric < Sensu::Plugin::Metric::CLI::Graphite
 
   def run
-    ok "sensu.baz", 42
+    ok 'sensu.baz', 42
+  end
+
+end
+```
+
+```ruby
+require 'sensu-plugin/metric/cli'
+
+class MyStatsdMetric < Sensu::Plugin::Metric::CLI::Statsd
+
+  def run
+    ok 'sensu.baz', 42, 'g'
+  end
+
+end
+```
+
+```ruby
+require 'sensu-plugin/metric/cli'
+
+class MyDogstatsdMetric < Sensu::Plugin::Metric::CLI::Dogstatsd
+
+  def run
+    ok 'sensu.baz', 42, 'g', 'env:prod,myservice,location:us-midwest'
+  end
+
+end
+```
+
+```ruby
+require 'sensu-plugin/metric/cli'
+
+class MyInfluxdbMetric < Sensu::Plugin::Metric::CLI::Influxdb
+
+  def run
+    ok 'sensu', 'baz=42', 'env=prod,location=us-midwest'
   end
 
 end
@@ -77,7 +119,14 @@ end
 JSON output takes one argument (the object), and adds a 'timestamp' key
 if missing. Graphite output takes two arguments, the metric path and the
 value, and optionally the timestamp as a third argument. `Time.now.to_i`
-is used for the timestamp if it is not specified.
+is used for the timestamp if it is not specified. Statsd output takes three
+arguments, the metric path, the value and the type. Dogstatsd output takes
+three arguments, the metric path, the value, the type and optionally a comma
+separated list of tags, use colons for key/value tags, i.e. `env:prod`.
+Influxdb output takes two arguments, the measurement name and the value or a
+comma separated list of values, use `=` for field/value, i.e. `value=42`,
+optionally you can also pass a comma separated list of tags and a timestamp
+`Time.now.to_i` is used for the timestamp if it is not specified.
 
 Exit codes do not affect metric output, but they can still be used by
 your handlers.
@@ -159,7 +208,7 @@ when the plugin runs). We recommend you put your custom plugin settings
 in a JSON file in `/etc/sensu/conf.d`, with a unique top-level key,
 e.g. `my_custom_plugin`:
 
-```
+```json
 {
   "my_custom_plugin": {
     "foo": true,
