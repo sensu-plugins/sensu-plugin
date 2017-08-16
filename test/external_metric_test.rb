@@ -43,3 +43,38 @@ class TestStatsdMetricExternal < MiniTest::Test
     end
   end
 end
+
+class TestDogstatsdMetricExternal < MiniTest::Test
+  include SensuPluginTestHelper
+
+  def setup
+    set_script 'external/dogstatsd-output'
+  end
+
+  def test_dogstatsd
+    lines = run_script.split("\n")
+    assert lines.size == 2
+    assert lines.last.split('|').last.split(',').size == 2
+    lines.each do |line|
+      assert line.split('|').size >= 2
+      assert line.split('|').first.split(':').size == 2
+    end
+  end
+end
+
+class TestInfluxdbMetricExternal < MiniTest::Test
+  include SensuPluginTestHelper
+
+  def setup
+    set_script 'external/influxdb-output'
+  end
+
+  def test_dogstatsd
+    lines = run_script.split("\n")
+    assert lines.size == 3
+    lines.each do |line|
+      assert line.split(' ').size == 3
+      assert line.split(' ').first.split(',').size == 3
+    end
+  end
+end

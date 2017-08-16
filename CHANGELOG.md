@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added subclass for InfluxDB output
+- Added subclass for DogStatsD output
 
 ## [2.2.0] - 2017-08-15
 - Added rubocop test to the Rakefile (@luisdavim)
