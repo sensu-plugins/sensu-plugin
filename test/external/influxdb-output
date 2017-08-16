@@ -6,7 +6,7 @@ class TestMetric < Sensu::Plugin::Metric::CLI::Influxdb
   def run
     output 'sensu', 'baz=42', 'env=prod,location=us-midwest'
     output 'sensu', 50, 'env=prod,location=us-midwest'
-    output 'sensu', 'foo=100', 'env=prod,location=us-midwest'
+    output 'sensu', 'foo=100', 'env=prod,location=us-midwest', Time.now.to_i
     ok
   end
 end

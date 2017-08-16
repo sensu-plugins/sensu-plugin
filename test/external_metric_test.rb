@@ -23,7 +23,10 @@ class TestGraphiteMetricExternal < MiniTest::Test
 
   def test_multi
     lines = run_script.split("\n")
-    assert lines.size == 2 && lines.all? { |line| line.split("\s").size == 3 }
+    assert lines.size == 2
+    lines.each do |line|
+      assert line.split("\s").size == 3
+    end
   end
 end
 
@@ -73,8 +76,8 @@ class TestInfluxdbMetricExternal < MiniTest::Test
     lines = run_script.split("\n")
     assert lines.size == 3
     lines.each do |line|
-      assert line.split(' ').size == 3
-      assert line.split(' ').first.split(',').size == 3
+      assert line.split("\s").size == 3
+      assert line.split("\s").first.split(',').size == 3
     end
   end
 end
