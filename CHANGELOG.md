@@ -3,22 +3,29 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.3.0] - 2017-08-17
 ### Added
-- Added subclass for InfluxDB output
-- Added subclass for DogStatsD output
+- Added subclass for InfluxDB output (@luisdavim)
+- Added subclass for DogStatsD output (@luisdavim)
+
+### Changed
+- updated changelog to be more inline with current standard for plugins (@majormoses)
 
 ## [2.2.0] - 2017-08-15
+### Added
 - Added rubocop test to the Rakefile (@luisdavim)
 
 ## [v2.1.0] - 2017-07-06
+### Added
 - Added cast_bool_values_int helper method to convert boolean values to integers
 
 ## [v2.0.1] - 2017-04-28
-
+### Changed
 - Update json module requirement to < 3.0.0
 
 ## [v2.0.0] - 2017-03-29
-
+### Breaking Change
 IMPORTANT! This release includes the following potentially breaking changes:
 
 - Plugins now exit with status `3` (unknown) when encountering an
@@ -27,33 +34,33 @@ IMPORTANT! This release includes the following potentially breaking changes:
 - Deprecated filtering methods in this library are now disabled by default.
 
 ## [v1.4.5] - 2017-03-07
-
+### Added
 - Added support for globally disabling deprecated filtering methods via the
   `sensu_plugin` configuration scope. See README for example.
 
+### Fixed
 ## [v1.4.4] - 2016-12-08
 
 - Fixed a regression in Sensu::Handler `api_request` method, introduced in
   v1.4.3, which broke silence stashes and check dependencies on Ruby 2.x.
 
 ## [v1.4.3] - 2016-10-04
-
+### Fixed
 - Fixed an incompatibility with Ruby 1.9 introduced in Sensu::Handler api_request circa sensu-plugin 1.3.0
 - Fixed Sensu::Handler check dependency filtering by using plural form `events` API endpoint, instead of singular-form `event`.
 - Fixed a condition where `config_files` method may attempt to read from a non-existent file.
 
 ## [v1.4.2] - 2016-08-08
-
+### Fixed
 - Fixed a condition in which empty strings in check `dependencies` attribute values would cause an exception. (#147 via @rs-mrichmond)
 
 ## [v1.4.1] - 2016-08-03
-
-### Changed
+### Fixed
 - Actually fix dependency loading problems in Ruby 1.9 environments by changing 'json' dependency from `<= 2.0.0` to `< 2.0.0`. (#149 via @cwjohnston)
 
 ## [v1.4.0] - 2016-07-20
 
-### Important
+### Breaking Change
 - Filtering of events is now deprecated in `Sensu::Handler` and will be removed in a future release. See [this blog post](https://sensuapp.org/blog/2016/07/07/sensu-plugin-filter-deprecation.html) for more detail.
 
 ### Changed
@@ -107,7 +114,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.2.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.1.0...2.2.0
 [v2.1.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.1...v2.1.0
 [v2.0.1]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.0...v2.0.1
