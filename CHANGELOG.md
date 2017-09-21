@@ -31,7 +31,7 @@ IMPORTANT! This release includes the following potentially breaking changes:
 - Plugins now exit with status `3` (unknown) when encountering an
   exception or being run with bad arguments.
 - Removed support for Ruby 1.9 and earlier.
-- Deprecated filtering methods in this library are now disabled by default.
+- Deprecated filtering methods in this library are now disabled by default. For more information read this [blog post](https://blog.sensuapp.org/deprecating-event-filtering-in-sensu-plugin-b60c7c500be3)
 
 ## [v1.4.5] - 2017-03-07
 ### Added
