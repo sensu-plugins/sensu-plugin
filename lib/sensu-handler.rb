@@ -167,14 +167,14 @@ module Sensu
     end
 
     def stash_exists?(path)
-      api_request(:GET, '/stash' + path).code == '200'
+      api_request(:GET, path).code == '200'
     end
 
     def filter_silenced
       stashes = [
-        ['client', '/silence/' + @event['client']['name']],
-        ['check', '/silence/' + @event['client']['name'] + '/' + @event['check']['name']],
-        ['check', '/silence/all/' + @event['check']['name']]
+        ['client', '/silenced/' + @event['client']['name']],
+        ['check', '/silenced/' + @event['client']['name'] + '/' + @event['check']['name']],
+        ['check', '/silenced/all/' + @event['check']['name']]
       ]
       stashes.each do |(scope, path)|
         begin
