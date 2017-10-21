@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.3.1] - 2017-10-19
+### Added
+- Updated silenced api endpoints
 
 ## [2.3.0] - 2017-08-17
 ### Added
