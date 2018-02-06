@@ -52,6 +52,7 @@ For a metric, you can subclass one of the following:
  * `Sensu::Plugin::Metric::CLI::Statsd`
  * `Sensu::Plugin::Metric::CLI::Dogstatsd`
  * `Sensu::Plugin::Metric::CLI::Influxdb`
+ * `Sensu::Plugin::Metric::CLI::Generic`
 
 Instead of outputting a Nagios-style line of text, these classes will output
 differently formated messages depending on the class you chose.
@@ -116,17 +117,33 @@ class MyInfluxdbMetric < Sensu::Plugin::Metric::CLI::Influxdb
 end
 ```
 
-JSON output takes one argument (the object), and adds a 'timestamp' key
-if missing. Graphite output takes two arguments, the metric path and the
-value, and optionally the timestamp as a third argument. `Time.now.to_i`
-is used for the timestamp if it is not specified. Statsd output takes three
-arguments, the metric path, the value and the type. Dogstatsd output takes
-three arguments, the metric path, the value, the type and optionally a comma
-separated list of tags, use colons for key/value tags, i.e. `env:prod`.
-Influxdb output takes two arguments, the measurement name and the value or a
-comma separated list of values, use `=` for field/value, i.e. `value=42`,
-optionally you can also pass a comma separated list of tags and a timestamp
-`Time.now.to_i` is used for the timestamp if it is not specified.
+```ruby
+require 'sensu-plugin/metric/cli'
+
+class MyInfluxdbMetric < Sensu::Plugin::Metric::CLI::Generic
+
+  def run
+    ok metric_name: 'metric.name', value: 0
+  end
+
+end
+```
+
+**JSON output** takes one argument (the object), and adds a 'timestamp'
+key if missing. **Graphite output** takes two arguments, the metric path
+and the value, and optionally the timestamp as a third argument.
+`Time.now.to_i` is used for the timestamp if it is not
+specified. **Statsd output** takes three arguments, the metric path, the
+value and the type.  **Dogstatsd output** takes three arguments, the
+metric path, the value, the type and optionally a comma separated list
+of tags, use colons for key/value tags, i.e.  `env:prod`.  **Influxdb
+output** takes two arguments, the measurement name and the value or a
+comma separated list of values, use `=` for field/value,
+i.e. `value=42`, optionally you can also pass a comma separated list of
+tags and a timestamp `Time.now.to_i` is used for the timestamp if it is
+not specified.  **Generic output** takes a dictionary and can provide
+requested output format with same logic. And inherited class will have a
+`--metric_format` option to switch between different output formats.
 
 Exit codes do not affect metric output, but they can still be used by
 your handlers.
