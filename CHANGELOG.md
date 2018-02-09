@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.4.0] - 2018-02-08
 ### Added
 - Added subclass for Generic metrics output to support multiple metrics output formats (@bergerx)
 
@@ -119,7 +121,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.3.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.4.0...HEAD
+[2.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.1.0...2.2.0
 [v2.1.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.0.1...v2.1.0
