@@ -108,7 +108,9 @@ module Sensu
       return @api_settings if @api_settings
       if ENV['SENSU_API_URL']
         uri = URI(ENV['SENSU_API_URL'])
+        ssl = uri.scheme == 'https' ? {} : nil
         @api_settings = {
+          'ssl' => ssl,
           'host' => uri.host,
           'port' => uri.port,
           'user' => uri.user,
@@ -126,14 +128,15 @@ module Sensu
       if api_settings.nil?
         raise 'api.json settings not found.'
       end
-      domain = api_settings['host'].start_with?('http') ? api_settings['host'] : 'http://' + api_settings['host']
-      uri = URI("#{domain}:#{api_settings['port']}#{path}")
-      req = net_http_req_class(method).new(uri.path)
+      use_ssl = api_settings['ssl'].is_a?(Hash) ||
+                api_settings['host'].start_with?('https')
+      hostname = api_settings['host'].gsub(/https?:\/\//, '')
+      req = net_http_req_class(method).new(path)
       if api_settings['user'] && api_settings['password']
         req.basic_auth(api_settings['user'], api_settings['password'])
       end
       yield(req) if block_given?
-      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
+      res = Net::HTTP.start(hostname, api_settings['port'], use_ssl: use_ssl) do |http|
         http.request(req)
       end
       res
