@@ -99,6 +99,14 @@ module Sensu
       exit 0
     end
 
+    # Override API settings (for testing purposes)
+    #
+    # @param api_settings [Hash]
+    # @return [Hash]
+    def api_settings=(api_settings)
+      @api_settings = api_settings
+    end
+
     # Return a hash of API settings derived first from ENV['SENSU_API_URL'] if set,
     # then Sensu config `api` scope if configured, and finally falling back to
     # to ipv4 localhost address on default API port.

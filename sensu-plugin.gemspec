@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rubocop', '~> 0.49.0'
   s.add_development_dependency 'minitest'
+  s.add_development_dependency 'webmock'
 end
