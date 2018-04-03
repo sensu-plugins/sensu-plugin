@@ -3,8 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.5.0] - 2018-04-03
 ### Added
-- Added Handler Sensu API HTTPS support through API configuration (e.g. `{"api": {"ssl": {}}`.
+- Added Handler Sensu API HTTPS support through API configuration (e.g. `{"api": {"ssl": {}}` (@portertech).
 
 ## [2.4.0] - 2018-02-08
 ### Added
@@ -123,7 +125,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.4.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.5.0...HEAD
+[2.5.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/sensu-plugins/sensu-plugin/compare/v2.1.0...2.2.0
