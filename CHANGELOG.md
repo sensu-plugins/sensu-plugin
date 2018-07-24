@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added event_2to1 method to Utils and --enable-2.0-event option to base Handler class. New option makes it possible to use sensu-plugin based handlers with Sensu 2.0 events until handlers provide native 2.0 event support.
 
 ## [2.5.0] - 2018-04-03
 ### Added

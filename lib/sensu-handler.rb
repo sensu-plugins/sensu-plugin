@@ -9,6 +9,10 @@ module Sensu
   class Handler
     include Sensu::Plugin::Utils
     include Mixlib::CLI
+    option :legacy,
+         description: 'Use 2.0 to 1.4 event mapping',
+         boolean: true,
+         long: '--enable-2.0-event'
 
     attr_accessor :argv
 
@@ -72,7 +76,8 @@ module Sensu
     at_exit do
       if @@autorun
         handler = @@autorun.new
-        handler.read_event(STDIN)
+        handler.read_event(STDIN) 
+        handler.event_2to1  if handler.config[:legacy]
         handler.filter
         handler.handle
       end
