@@ -40,7 +40,7 @@ module Sensu
       ##
       def event_2to1
         if @event.key?('entity') && @event['client'].empty?
-          ## 
+          ##
           # First create the client hash from the entity hash
           ##
           @event['client'] = @event['entity']
@@ -54,7 +54,7 @@ module Sensu
 
           ##
           # Fill in missing check attributes
-          ## 
+          ##
           @event['check']['subscribers'] ||= @event['check']['subscriptions']
           @event['check']['source'] ||= @event['check']['proxy_entity_id'] unless
             @event['check']['proxy_entity_id'].nil? || @event['check']['proxy_entity_id'].empty?
