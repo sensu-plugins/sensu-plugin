@@ -39,7 +39,8 @@ module Sensu
       #    until they natively support 2.0
       ##
       def event_2to1
-        if @event.key?('entity') && @event['client'].empty?
+        client_missing = @event['client'].nil? || @event['client'].empty?
+        if @event.key?('entity') && client_missing
           ##
           # First create the client hash from the entity hash
           ##
