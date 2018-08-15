@@ -46,6 +46,31 @@ module Sensu
         end
       end
 
+
+      # Use API query parameters to paginate HTTP GET requests,
+      # iterating over the results until an empty set is returned.
+      #
+      # @param path [String]
+      # @param options [Hash]
+      # @return [Array]
+      def paginated_get(path, options = {})
+        limit = options.fetch('limit', 500)
+        offset = 0
+        results = []
+        loop do
+          query_path = "#{path}?limit=#{limit}&offset=#{offset}"
+          response = api_request(:GET, query_path)
+          unless response.is_a?(Net::HTTPOK)
+            unknown("Non-OK response from API query: #{get_uri(query_path)}")
+          end
+          data = JSON.parse(response.body)
+          break if data.empty?
+          results << data
+          offset += limit
+        end
+        results.flatten
+      end
+
       def deep_merge(hash_one, hash_two)
         merged = hash_one.dup
         hash_two.each do |key, value|
