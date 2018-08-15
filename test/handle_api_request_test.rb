@@ -40,11 +40,11 @@ class TestHandleAPIRequest < MiniTest::Test
       .to_return(status: 200, headers: {}, body: JSON.dump([sample_check_result]))
 
     stub_request(:get, 'http://127.0.0.1:4567/results?limit=1&offset=2')
-      .to_return(status: 200, headers: {}, body: JSON.dump([])
+      .to_return(status: 200, headers: {}, body: JSON.dump([]))
 
     handler = Sensu::Handler.new([])
     response = handler.paginated_get('/results', 'limit' => 1)
-    assert_equal(response, JSON.dump([sample_check_result,sample_check_result])
+    assert_equal(response, JSON.dump([sample_check_result, sample_check_result]))
   end
 
   def test_https_request
