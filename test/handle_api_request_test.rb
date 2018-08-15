@@ -44,7 +44,10 @@ class TestHandleAPIRequest < MiniTest::Test
 
     handler = Sensu::Handler.new([])
     response = handler.paginated_get('/results', 'limit' => 1)
-    assert_equal(response, JSON.dump([sample_check_result, sample_check_result]))
+
+    # we expect the combined results to be an array containing two instances of the sample check result
+    combined_results = JSON.parse("[ #{JSON.dump(sample_check_result)} , #{JSON.dump(sample_check_result)} ]")
+    assert_equal(response, combined_results)
   end
 
   def test_https_request
