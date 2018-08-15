@@ -46,13 +46,13 @@ module Sensu
         end
       end
 
-
       # Use API query parameters to paginate HTTP GET requests,
       # iterating over the results until an empty set is returned.
       #
       # @param path [String]
       # @param options [Hash]
       # @return [Array]
+
       def paginated_get(path, options = {})
         limit = options.fetch('limit', 500)
         offset = 0
