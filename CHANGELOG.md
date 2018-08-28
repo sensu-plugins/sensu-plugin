@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.6.0] - 2018-08-28
 ### Added
 - Added utils method `paginated_get` for iteratively retrieving API responses (@cwjohnston).
 
@@ -127,7 +129,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.5.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.6.0...HEAD
+[2.6.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.5.0...2.6.0
 [2.5.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.2.0...2.3.0
