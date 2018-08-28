@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fix `paginated_get` for backward compatibility with Sensu API < 1.4 (@cwjohnston).
 
 ## [2.6.0] - 2018-08-28
 ### Added
