@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added utils method `paginated_get` for iteratively retrieving API responses (@cwjohnston).
 
 ## [2.5.0] - 2018-04-03
 ### Added
