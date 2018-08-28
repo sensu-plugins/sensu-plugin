@@ -33,11 +33,17 @@ class TestHandleAPIRequest < MiniTest::Test
   end
 
   def test_http_paginated_get
+    result_two = sample_check_result.dup
+    result_two[:client] = 'haproxy01'
+    result_two[:name]   = 'check_haproxy'
+    result_two[:output] = 'haproxy is fubar'
+    result_two[:status] = 2
+
     stub_request(:get, 'http://127.0.0.1:4567/results?limit=1&offset=0')
       .to_return(status: 200, headers: {}, body: JSON.dump([sample_check_result]))
 
     stub_request(:get, 'http://127.0.0.1:4567/results?limit=1&offset=1')
-      .to_return(status: 200, headers: {}, body: JSON.dump([sample_check_result]))
+      .to_return(status: 200, headers: {}, body: JSON.dump([result_two]))
 
     stub_request(:get, 'http://127.0.0.1:4567/results?limit=1&offset=2')
       .to_return(status: 200, headers: {}, body: JSON.dump([]))
@@ -46,7 +52,7 @@ class TestHandleAPIRequest < MiniTest::Test
     response = handler.paginated_get('/results', 'limit' => 1)
 
     # we expect the combined results to be an array containing two instances of the sample check result
-    combined_results = JSON.parse("[ #{JSON.dump(sample_check_result)} , #{JSON.dump(sample_check_result)} ]")
+    combined_results = JSON.parse("[ #{JSON.dump(sample_check_result)} , #{JSON.dump(result_two)} ]")
     assert_equal(response, combined_results)
   end
 
