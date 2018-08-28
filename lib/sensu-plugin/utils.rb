@@ -115,7 +115,11 @@ module Sensu
             unknown("Non-OK response from API query: #{get_uri(query_path)}")
           end
           data = JSON.parse(response.body)
+          # when the data is empty, we have hit the end
           break if data.empty?
+          # If API lacks pagination support, it will
+          # return same data on subsequent iterations
+          break if results.any? { |r| r == data }
           results << data
           offset += limit
         end
