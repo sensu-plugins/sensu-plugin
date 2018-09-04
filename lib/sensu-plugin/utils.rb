@@ -23,6 +23,14 @@ module Sensu
         @settings ||= config_files.map { |f| load_config(f) }.reduce { |a, b| deep_merge(a, b) }
       end
 
+      def event
+        @event
+      end
+
+      def event=(value)
+        @event = value
+      end
+
       def read_event(file)
         @event = ::JSON.parse(file.read)
         @event['occurrences'] ||= 1
@@ -37,63 +45,82 @@ module Sensu
       #  Helper method to convert Sensu 2.0 event into Sensu 1.4 event
       #    This is here to help keep Sensu Plugin community handlers working
       #    until they natively support 2.0
+      #    Takes 2.0 event json object as argument
+      #    Returns event with 1.4 mapping included
+      #
+      #    Note:
+      #      The 1.4 mapping overwrites some attributes so the resulting event cannot 
+      #      be used in a 2.0 workflow. The top level boolean attribute "2to1" 
+      #      will be set to true as a hint to indicate this is a mapped event object.
+      #
       ##
-      def event_2to1
-        client_missing = @event['client'].nil? || @event['client'].empty?
-        if @event.key?('entity') && client_missing
+      def event_2to1(orig_event=nil)
+        orig_event||=@event
+        # Deep copy of orig_event
+        event = Marshal::load(Marshal.dump(orig_event))
+        # Trigger mapping code iff enity exists and client does not 
+        client_missing = event['client'].nil? || event['client'].empty?
+        if event.key?('entity') && client_missing
           ##
-          # First create the client hash from the entity hash
+          # create the client hash from the entity hash
           ##
-          @event['client'] = @event['entity']
+          event['client'] = event['entity']
 
           ##
           # Fill in missing client attributes
           ##
-          @event['client']['name']        ||= @event['entity']['id']
-          @event['client']['subscribers'] ||= @event['entity']['subscriptions']
-          @event['client']['timestamp']   ||= @event['timestamp']
+          # 
+          event['client']['name']        ||= event['entity']['id']
+          event['client']['subscribers'] ||= event['entity']['subscriptions']
 
           ##
           # Fill in missing check attributes
+          #   subscribers, source, total_state_change
           ##
-          @event['check']['subscribers'] ||= @event['check']['subscriptions']
-          @event['check']['source'] ||= @event['check']['proxy_entity_id'] unless
-            @event['check']['proxy_entity_id'].nil? || @event['check']['proxy_entity_id'].empty?
+          event['check']['subscribers'] ||= event['check']['subscriptions'] 
+          event['check']['source'] ||= event['check']['proxy_entity_id'] unless
+            event['check']['proxy_entity_id'].nil? || event['check']['proxy_entity_id'].empty?
 
+         
           ##
           # This maybe an oops in the 2.0 event codebase, adding it for now.
           #   Ref: https://github.com/sensu/sensu-go/issues/1869
           ##
-          @event['check']['total_state_change'] ||= @event['check']['total_state-change']
+          event['check']['total_state_change'] ||= event['check']['total_state-change'] unless
+            event['check']['total_state-change'].nil? || event['check']['total_state-change'].empty?
+
 
           ##
           # Mimic 1.4 event action based on 2.0 event state
-          #  action used in logs and fluentd plugins
+          #  action used in logs and fluentd plugins     
           ##
-          state = @event['check']['state'] || 'unknown::2.0_event'
-          @event['action'] ||= 'flapping' if state.casecmp('flapping')
-          @event['action'] ||= 'resolve' if state.casecmp('passing')
-          @event['action'] ||= 'create' if state.casecmp('failing')
-          @event['action'] ||= state
+          state = event['check']['state'] || 'unknown::2.0_event'
+          event['action'] ||= 'flapping' if state.casecmp('flapping') == 0
+          event['action'] ||= 'resolve' if state.casecmp('passing') == 0
+          event['action'] ||= 'create' if state.casecmp('failing') == 0
+          event['action'] ||= state
 
           ##
           # Mimic 1.4 event history based on 2.0 event history
+          #  Note: This overwrites the same history attribute
+          #    2.x history is an array of hashes, each hash includes status
+          #    1.x history is an array of statuses
           ##
-          if @event['check']['history']
+          if event['check']['history']
             legacy_history = []
-            @event['check']['history'].each do |h|
+            event['check']['history'].each do |h|
               legacy_history << h['status'].to_s || '3'
             end
-            @event['check']['history'] = legacy_history
+            event['check']['history'] = legacy_history
           end
 
           ##
-          # set unmappable entity attribute explicitly via agent or sensuctl
-          ##
-          @event['client']['address'] ||= 'unknown::2.0-event' # Used in several plugins
-
+          # Setting flag indicating this function has already been called
+          ## 
+          event['2to1'] = true
         end
-        puts @event
+        # return the updated event 
+        return event
       end
 
       def net_http_req_class(method)
