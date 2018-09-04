@@ -5,6 +5,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Added event_2to1 method to Utils and --enable-2.0-event option to base Handler class. New option makes it possible to use sensu-plugin based handlers with Sensu 2.0 events until handlers provide native 2.0 event support.
 
+## [2.6.0] - 2018-08-28
+### Fixed
+- Fix `paginated_get` for backward compatibility with Sensu API < 1.4 (@cwjohnston).
+
+## [2.6.0] - 2018-08-28
+### Added
+- Added utils method `paginated_get` for iteratively retrieving API responses (@cwjohnston).
+
 ## [2.5.0] - 2018-04-03
 ### Added
 - Added Handler Sensu API HTTPS support through API configuration (e.g. `{"api": {"ssl": {}}` (@portertech).
@@ -126,7 +134,9 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.5.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/2.6.1...HEAD
+[2.6.1]: https://github.com/sensu-plugins/sensu-plugin/compare/2.6.0...2.6.1
+[2.6.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.5.0...2.6.0
 [2.5.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.2.0...2.3.0

@@ -107,57 +107,6 @@ module Sensu
       exit 0
     end
 
-    # Override API settings (for testing purposes)
-    #
-    # @param api_settings [Hash]
-    # @return [Hash]
-    def api_settings=(api_settings)
-      @api_settings = api_settings
-    end
-
-    # Return a hash of API settings derived first from ENV['SENSU_API_URL'] if set,
-    # then Sensu config `api` scope if configured, and finally falling back to
-    # to ipv4 localhost address on default API port.
-    #
-    # @return [Hash]
-    def api_settings
-      return @api_settings if @api_settings
-      if ENV['SENSU_API_URL']
-        uri = URI(ENV['SENSU_API_URL'])
-        ssl = uri.scheme == 'https' ? {} : nil
-        @api_settings = {
-          'ssl' => ssl,
-          'host' => uri.host,
-          'port' => uri.port,
-          'user' => uri.user,
-          'password' => uri.password
-        }
-      else
-        @api_settings = settings['api'] || {}
-        @api_settings['host'] ||= '127.0.0.1'
-        @api_settings['port'] ||= 4567
-      end
-      @api_settings
-    end
-
-    def api_request(method, path, &_blk)
-      if api_settings.nil?
-        raise 'api.json settings not found.'
-      end
-      use_ssl = api_settings['ssl'].is_a?(Hash) ||
-                api_settings['host'].start_with?('https')
-      hostname = api_settings['host'].gsub(/https?:\/\//, '')
-      req = net_http_req_class(method).new(path)
-      if api_settings['user'] && api_settings['password']
-        req.basic_auth(api_settings['user'], api_settings['password'])
-      end
-      yield(req) if block_given?
-      res = Net::HTTP.start(hostname, api_settings['port'], use_ssl: use_ssl) do |http|
-        http.request(req)
-      end
-      res
-    end
-
     def filter_disabled
       bail 'alert disabled' if @event['check']['alert'] == false
     end
