@@ -12,7 +12,6 @@ class TestMutatorHelpers < MiniTest::Test
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_equal(event['entity']['id'], JSON.parse(output)['client']['name'])
-    #assert_equal(event, JSON.parse(output))
   end
 
   def test_external_2to1_mutator
