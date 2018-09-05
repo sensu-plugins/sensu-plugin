@@ -5,7 +5,7 @@ class TestHandle2to1 < MiniTest::Test
   include SensuPluginTestHelper
 
   def setup
-    set_script 'external/handle-2to1 --enable-2to1-mapping'
+    set_script 'external/handle-2to1 --map-v2-event-into-v1'
   end
 
   def test_2to1_enabled
