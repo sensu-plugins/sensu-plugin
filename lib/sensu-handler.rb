@@ -78,8 +78,8 @@ module Sensu
         handler = @@autorun.new
         handler.read_event(STDIN)
         if handler.config[:event_2to1]
-          new_event=handler.event_2to1 
-          handler.event=new_event
+          new_event = handler.event_2to1
+          handler.event = new_event
         end
         handler.filter
         handler.handle
