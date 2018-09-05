@@ -34,6 +34,10 @@ module Sensu
   class Mutator
     include Sensu::Plugin::Utils
     include Mixlib::CLI
+    option :map_v2_event_into_v1,
+           description: 'Enable 2.x to 1.4 event mapping. Alternatively set envvar SENSU_MAP_V2_EVENT_INTO_V1=1.',
+           boolean:     true,
+           long:        '--map-v2-event-into-v1'
 
     attr_accessor :argv
 
@@ -67,6 +71,15 @@ module Sensu
       return unless @@autorun
       mutator = @@autorun.new
       mutator.read_event(STDIN)
+
+      TRUTHY_VALUES = %w[1 t true yes y].freeze
+      automap = ENV['SENSU_MAP_V2_EVENT_INTO_V1'].to_s.downcase
+
+      if mutator.config[:map_v2_event_into_v1,] || TRUTHY_VALUES.include?(automap)
+        new_event = mutator.map_v2_event_into_v1
+        mutator.event = new_event
+      end
+
       mutator.mutate
       mutator.dump
     end
