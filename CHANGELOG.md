@@ -4,7 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Added event_2to1 method to Utils and --enable-2.0-event option to base Handler class. New option makes it possible to use sensu-plugin based handlers with Sensu 2.0 events until handlers provide native 2.0 event support.
+- Added map_v2_event_into_v1 method to Utils for all plugin classes to use. 
+- Added --map-v2-event-into-v1 runtime commandline option to base Handler class. 
+- Alternatively set envvar SENSU_MAP_V2_EVENT_INTO_V1=1 and handlers will automatically attempt to map 2.x event data. 
+- New handler class option/envvar makes it possible to use sensu-plugin based handlers with Sensu 2.0 events until handlers provide native 2.0 event support internally.
 
 ## [2.6.0] - 2018-08-28
 ### Fixed
