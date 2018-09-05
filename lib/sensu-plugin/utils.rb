@@ -57,6 +57,9 @@ module Sensu
       def map_v2_event_into_v1(orig_event = nil)
         orig_event ||= @event
 
+        # return orig_event if already mapped
+        return orig_event if orig_event['v2_event_mapped_into_v1']
+
         # Deep copy of orig_event
         event = Marshal.load(Marshal.dump(orig_event))
 
