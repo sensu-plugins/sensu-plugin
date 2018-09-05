@@ -77,10 +77,11 @@ module Sensu
       if @@autorun
         handler = @@autorun.new
         handler.read_event(STDIN)
-        TRUTHY_VALUES = %w(1 t true yes y).freeze
-        automap=ENV['SENSU_MAP_V2_EVENT_INTO_V1'].to_s.downcase
-        
-        if handler.config[:map_v2_event_into_v1,] || TRUTHY_VALUES.include?(automap) 
+
+        TRUTHY_VALUES = %w[1 t true yes y].freeze
+        automap = ENV['SENSU_MAP_V2_EVENT_INTO_V1'].to_s.downcase
+
+        if handler.config[:map_v2_event_into_v1,] || TRUTHY_VALUES.include?(automap)
           new_event = handler.map_v2_event_into_v1
           handler.event = new_event
         end
