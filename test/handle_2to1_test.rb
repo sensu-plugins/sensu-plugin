@@ -19,7 +19,8 @@ class TestHandle2to1 < MiniTest::Test
         'output' => 'test_output',
         'subscriptions' => ['sub1', 'sub2', 'sub3'],
         'proxy_entity_id' => 'test_proxy',
-        'total_state-change' => 1,
+        'total_state_change' => 1,
+        'state' => 'failing',
         'status' => 0
       },
       'occurrences' => 1,
