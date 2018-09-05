@@ -50,11 +50,11 @@ module Sensu
       #
       #    Note:
       #      The 1.4 mapping overwrites some attributes so the resulting event cannot
-      #      be used in a 2.0 workflow. The top level boolean attribute "2to1"
+      #      be used in a 2.0 workflow. The top level boolean attribute "v2_event_mapped_into_v1"
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def event_2to1(orig_event = nil)
+      def map_v2_event_into_v1(orig_event = nil)
         orig_event ||= @event
 
         # Deep copy of orig_event
@@ -76,7 +76,7 @@ module Sensu
 
           ##
           # Fill in missing check attributes
-          #   subscribers, source, total_state_change
+          #   subscribers, source
           ##
           event['check']['subscribers'] ||= event['check']['subscriptions']
           event['check']['source'] ||= event['check']['proxy_entity_id'] unless
@@ -84,7 +84,7 @@ module Sensu
 
           ##
           # Mimic 1.4 event action based on 2.0 event state
-          #  action used in logs and fluentd plugins
+          #  action used in logs and fluentd plugins handlers
           ##
           state = event['check']['state'] || 'unknown::2.0_event'
           event['action'] ||= 'flapping' if state.casecmp('flapping').zero?
@@ -109,7 +109,7 @@ module Sensu
           ##
           # Setting flag indicating this function has already been called
           ##
-          event['2to1'] = true
+          event['v2_event_mapped_into_v1'] = true
         end
         # return the updated event
         event

@@ -9,10 +9,10 @@ module Sensu
   class Handler
     include Sensu::Plugin::Utils
     include Mixlib::CLI
-    option :event_2to1,
+    option :map_v2_event_into_v1,
            description: 'Enable 2.x to 1.4 event mapping',
            boolean:     true,
-           long:        '--enable-2to1-mapping'
+           long:        '--map-v2-event-into-v1'
 
     attr_accessor :argv
 
@@ -77,8 +77,8 @@ module Sensu
       if @@autorun
         handler = @@autorun.new
         handler.read_event(STDIN)
-        if handler.config[:event_2to1]
-          new_event = handler.event_2to1
+        if handler.config[:map_v2_event_into_v1,]
+          new_event = handler.map_v2_event_into_v1
           handler.event = new_event
         end
         handler.filter
