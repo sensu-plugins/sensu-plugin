@@ -83,13 +83,6 @@ module Sensu
             event['check']['proxy_entity_id'].nil? || event['check']['proxy_entity_id'].empty?
 
           ##
-          # This maybe an oops in the 2.0 event codebase, adding it for now.
-          #   Ref: https://github.com/sensu/sensu-go/issues/1869
-          ##
-          event['check']['total_state_change'] ||= event['check']['total_state-change'] unless
-            event['check']['total_state-change'].nil?
-
-          ##
           # Mimic 1.4 event action based on 2.0 event state
           #  action used in logs and fluentd plugins
           ##
