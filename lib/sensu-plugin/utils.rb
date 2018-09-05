@@ -87,7 +87,7 @@ module Sensu
           #   Ref: https://github.com/sensu/sensu-go/issues/1869
           ##
           event['check']['total_state_change'] ||= event['check']['total_state-change'] unless
-            event['check']['total_state-change'].nil? || event['check']['total_state-change'].empty?
+            event['check']['total_state-change'].nil? 
 
 
           ##
