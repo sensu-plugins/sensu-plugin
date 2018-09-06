@@ -78,12 +78,11 @@ module Sensu
           event['client']['subscribers'] ||= event['entity']['subscriptions']
 
           ##
-          # Fill in missing check attributes
+          # Fill in renamed check attributes expected in 1.4 event
           #   subscribers, source
           ##
           event['check']['subscribers'] ||= event['check']['subscriptions']
-          event['check']['source'] ||= event['check']['proxy_entity_id'] unless
-            event['check']['proxy_entity_id'].nil? || event['check']['proxy_entity_id'].empty?
+          event['check']['source'] ||= event['check']['proxy_entity_id'] 
 
           ##
           # Mimic 1.4 event action based on 2.0 event state
