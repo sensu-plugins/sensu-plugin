@@ -82,7 +82,7 @@ module Sensu
           #   subscribers, source
           ##
           event['check']['subscribers'] ||= event['check']['subscriptions']
-          event['check']['source'] ||= event['check']['proxy_entity_id'] 
+          event['check']['source'] ||= event['check']['proxy_entity_id']
 
           ##
           # Mimic 1.4 event action based on 2.0 event state
