@@ -88,18 +88,18 @@ module Sensu
           # Mimic 1.4 event action based on 2.0 event state
           #  action used in logs and fluentd plugins handlers
           ##
-          action_state_mapping={ 
+          action_state_mapping = {
             'flapping' => 'flapping',
             'passing' => 'resolve',
             'failing' => 'create'
           }
 
-          state = event['check']['state'] || 'unknown::2.0_event'          
+          state = event['check']['state'] || 'unknown::2.0_event'
 
-          # Attempt to map 2.0 event state to 1.4 event action 
+          # Attempt to map 2.0 event state to 1.4 event action
           event['action'] ||= action_state_mapping[state.downcase]
           # Fallback action is 2.0 event state
-          event['action'] ||= state 
+          event['action'] ||= state
 
           ##
           # Mimic 1.4 event history based on 2.0 event history
