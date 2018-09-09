@@ -75,7 +75,7 @@ module Sensu
       TRUTHY_VALUES = %w[1 t true yes y].freeze
       automap = ENV['SENSU_MAP_V2_EVENT_INTO_V1'].to_s.downcase
 
-      if mutator.config[:map_v2_event_into_v1,] || TRUTHY_VALUES.include?(automap)
+      if mutator.config[:map_v2_event_into_v1] || TRUTHY_VALUES.include?(automap)
         new_event = mutator.map_v2_event_into_v1
         mutator.event = new_event
       end
