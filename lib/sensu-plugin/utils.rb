@@ -108,9 +108,12 @@ module Sensu
           #    1.x history is an array of statuses
           ##
           if event['check']['history']
+            # Let's save the original history
+            history_v2 = Marshal.load(Marshal.dump(event['check']['history']))
+            event['check']['history_v2'] = history_v2
             legacy_history = []
             event['check']['history'].each do |h|
-              legacy_history << h['status'].to_s || '3'
+              legacy_history << h['status'].to_i.to_s || '3'
             end
             event['check']['history'] = legacy_history
           end
