@@ -27,6 +27,7 @@ class Helpers < Sensu::Handler
     action = @event['action']
     client_subscribers = @event['client']['subscribers'].join('|')
     check_subscribers = @event['client']['subscribers'].join('^')
-    [client_name, check_name, source, output, total_state_change, action, client_subscribers, check_subscribers].join(' : ')
+    history = @event['check']['history'].join('')
+    [client_name, check_name, source, output, total_state_change, action, client_subscribers, check_subscribers, history].join(' : ')
   end
 end
