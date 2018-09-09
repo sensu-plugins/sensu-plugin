@@ -63,7 +63,7 @@ module Sensu
         # Deep copy of orig_event
         event = Marshal.load(Marshal.dump(orig_event))
 
-        # Trigger mapping code iff enity exists and client does not
+        # Trigger mapping code if enity exists and client does not
         client_missing = event['client'].nil? || event['client'].empty?
         if event.key?('entity') && client_missing
           ##
@@ -88,11 +88,18 @@ module Sensu
           # Mimic 1.4 event action based on 2.0 event state
           #  action used in logs and fluentd plugins handlers
           ##
-          state = event['check']['state'] || 'unknown::2.0_event'
-          event['action'] ||= 'flapping' if state.casecmp('flapping').zero?
-          event['action'] ||= 'resolve' if state.casecmp('passing').zero?
-          event['action'] ||= 'create' if state.casecmp('failing').zero?
-          event['action'] ||= state
+          action_state_mapping={ 
+            'flapping' => 'flapping',
+            'passing' => 'resolve',
+            'failing' => 'create'
+          }
+
+          state = event['check']['state'] || 'unknown::2.0_event'          
+
+          # Attempt to map 2.0 event state to 1.4 event action 
+          event['action'] ||= action_state_mapping[state.downcase]
+          # Fallback action is 2.0 event state
+          event['action'] ||= state 
 
           ##
           # Mimic 1.4 event history based on 2.0 event history
