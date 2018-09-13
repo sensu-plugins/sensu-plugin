@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added map_v2_event_into_v1 method to Utils for all plugin classes to use. 
+- Added --map-v2-event-into-v1 runtime commandline option to base Handler and Mutator classes. 
+- Alternatively set envvar SENSU_MAP_V2_EVENT_INTO_V1=1 and handlers/mutators will automatically attempt to map 2.x event data. 
+- New cli option/envvar makes it possible to use sensu-plugin based handlers/mutators 
+  with Sensu 2.0 events until they provide native 2.0 event support internally.
+- Mapping function sets and checks for boolean event attribute 'v2_event_mapped_into_v1', 
+  to prevent mapping from running multiple times in same pipeline.
 
 ## [2.6.0] - 2018-08-28
 ### Fixed

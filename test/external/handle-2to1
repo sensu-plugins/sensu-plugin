@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require 'sensu-handler'
+
+class Helpers < Sensu::Handler
+  def handle
+    puts event_summary
+  end
+
+  def api_request(*_args)
+    nil
+  end
+
+  def stash_exists?(*_args)
+    nil
+  end
+
+  def event_exists?(*_args)
+    true
+  end
+
+  def event_summary
+    client_name = @event['client']['name']
+    check_name = @event['check']['name']
+    source = @event['check']['source']
+    output = @event['check']['output']
+    total_state_change = @event['check']['total_state_change']
+    action = @event['action']
+    client_subscribers = @event['client']['subscribers'].join('|')
+    check_subscribers = @event['client']['subscribers'].join('^')
+    history = @event['check']['history'].join('')
+    [client_name, check_name, source, output, total_state_change, action, client_subscribers, check_subscribers, history].join(' : ')
+  end
+end

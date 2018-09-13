@@ -23,6 +23,14 @@ module Sensu
         @settings ||= config_files.map { |f| load_config(f) }.reduce { |a, b| deep_merge(a, b) }
       end
 
+      def event
+        @event
+      end
+
+      def event=(value)
+        @event = value
+      end
+
       def read_event(file)
         @event = ::JSON.parse(file.read)
         @event['occurrences'] ||= 1
@@ -31,6 +39,92 @@ module Sensu
       rescue => e
         puts 'error reading event: ' + e.message
         exit 0
+      end
+
+      ##
+      #  Helper method to convert Sensu 2.0 event into Sensu 1.4 event
+      #    This is here to help keep Sensu Plugin community handlers working
+      #    until they natively support 2.0
+      #    Takes 2.0 event json object as argument
+      #    Returns event with 1.4 mapping included
+      #
+      #    Note:
+      #      The 1.4 mapping overwrites some attributes so the resulting event cannot
+      #      be used in a 2.0 workflow. The top level boolean attribute "v2_event_mapped_into_v1"
+      #      will be set to true as a hint to indicate this is a mapped event object.
+      #
+      ##
+      def map_v2_event_into_v1(orig_event = nil)
+        orig_event ||= @event
+
+        # return orig_event if already mapped
+        return orig_event if orig_event['v2_event_mapped_into_v1']
+
+        # Deep copy of orig_event
+        event = Marshal.load(Marshal.dump(orig_event))
+
+        # Trigger mapping code if enity exists and client does not
+        client_missing = event['client'].nil? || event['client'].empty?
+        if event.key?('entity') && client_missing
+          ##
+          # create the client hash from the entity hash
+          ##
+          event['client'] = event['entity']
+
+          ##
+          # Fill in missing client attributes
+          ##
+          event['client']['name']        ||= event['entity']['id']
+          event['client']['subscribers'] ||= event['entity']['subscriptions']
+
+          ##
+          # Fill in renamed check attributes expected in 1.4 event
+          #   subscribers, source
+          ##
+          event['check']['subscribers'] ||= event['check']['subscriptions']
+          event['check']['source'] ||= event['check']['proxy_entity_id']
+
+          ##
+          # Mimic 1.4 event action based on 2.0 event state
+          #  action used in logs and fluentd plugins handlers
+          ##
+          action_state_mapping = {
+            'flapping' => 'flapping',
+            'passing' => 'resolve',
+            'failing' => 'create'
+          }
+
+          state = event['check']['state'] || 'unknown::2.0_event'
+
+          # Attempt to map 2.0 event state to 1.4 event action
+          event['action'] ||= action_state_mapping[state.downcase]
+          # Fallback action is 2.0 event state
+          event['action'] ||= state
+
+          ##
+          # Mimic 1.4 event history based on 2.0 event history
+          #  Note: This overwrites the same history attribute
+          #    2.x history is an array of hashes, each hash includes status
+          #    1.x history is an array of statuses
+          ##
+          if event['check']['history']
+            # Let's save the original history
+            history_v2 = Marshal.load(Marshal.dump(event['check']['history']))
+            event['check']['history_v2'] = history_v2
+            legacy_history = []
+            event['check']['history'].each do |h|
+              legacy_history << h['status'].to_i.to_s || '3'
+            end
+            event['check']['history'] = legacy_history
+          end
+
+          ##
+          # Setting flag indicating this function has already been called
+          ##
+          event['v2_event_mapped_into_v1'] = true
+        end
+        # return the updated event
+        event
       end
 
       def net_http_req_class(method)
