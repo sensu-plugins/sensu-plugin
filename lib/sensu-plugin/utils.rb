@@ -54,7 +54,7 @@ module Sensu
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def map_v2_event_into_v1(orig_event = nil)
+      def map_v2_event_into_v1(orig_event = nil, map_label = 'json_attributes' )
         orig_event ||= @event
 
         # return orig_event if already mapped
@@ -74,16 +74,26 @@ module Sensu
           ##
           # Fill in missing client attributes
           ##
-          event['client']['name']        ||= event['entity']['id']
+          event['client']['name']        ||= event['entity']['metadata']['name']
           event['client']['subscribers'] ||= event['entity']['subscriptions']
+
+          ##
+          #  Map entity metadata label from json string into client attributes
+          #  Note this is potentially destructive as it may overwrite existing client attributes.
+          ##
+          if event['entity']['metadata'].key?('labels') && event['entity']['metadata']['labels'].key?(map_label)
+            json_hash = JSON.parse(event['entity']['metadata']['labels'][map_label]
+            event['client'].update(json_hash)
+          end  
+
 
           ##
           # Fill in renamed check attributes expected in 1.4 event
           #   subscribers, source
           ##
           event['check']['subscribers'] ||= event['check']['subscriptions']
-          event['check']['source'] ||= event['check']['proxy_entity_id']
-
+          event['check']['source'] ||= event['check']['proxy_entity_name']
+ 
           ##
           # Mimic 1.4 event action based on 2.0 event state
           #  action used in logs and fluentd plugins handlers
