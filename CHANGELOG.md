@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   holding json string to be mapped into v1 entity attributes
   default value is "json_attributes"
   optional envvar SENSU_MAP_LABEL to use as environment override 
+- add mutator-go-into-v1.rb  binary. This mutator command can be used to mutate Sensu Go events into Sensu Core 1.x events
 
 ## [2.7.0] - 2018-09-12
 ### Added

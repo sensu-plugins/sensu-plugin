@@ -242,6 +242,13 @@ def foo_enabled?
 end
 ```
 
+## Sensu Go Enablement
+
+This plugin provides basic Sensu Go enablement support to make it possible to continue to use existing Sensu plugin handlers and mutators for Sensu Core 1.x event model in a backwards compatible fashion.
+The provided mutator command `mutator-sensu-go-into-v1.rb` will mutate the Sensu Go event into a form compatible for handlers written to consume Sensu Core 1.x events.  Users may find this mutator useful until such time that community plugin handler are updated to support Sensu Go event model directly.
+
+Sensu plugins which provide either mutators or handlers can benefit from provided Sensu Go enablement support in the form of mixin commandline option support.  Once plugins update to the latest sensu-plugin version, all mutator and handler commands will automatically grow an additional commandline argument `--map_go_event_into_v1`
+
 ## Contributing
 
  * Fork repository
