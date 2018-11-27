@@ -9,10 +9,10 @@ module Sensu
   class Handler
     include Sensu::Plugin::Utils
     include Mixlib::CLI
-    option :map_v2_event_into_v1,
-           description: 'Enable 2.x to 1.4 event mapping. Alternatively set envvar SENSU_MAP_V2_EVENT_INTO_V1=1.',
+    option :map_go_event_into_v1,
+           description: 'Enable Sensu Go to 1.x event mapping. Alternatively set envvar SENSU_MAP_GO_EVENT_INTO_V1=1.',
            boolean:     true,
-           long:        '--map-v2-event-into-v1'
+           long:        '--map-go-event-into-v1'
 
     attr_accessor :argv
 
@@ -79,10 +79,10 @@ module Sensu
         handler.read_event(STDIN)
 
         TRUTHY_VALUES = %w[1 t true yes y].freeze
-        automap = ENV['SENSU_MAP_V2_EVENT_INTO_V1'].to_s.downcase
+        automap = ENV['SENSU_MAP_GO_EVENT_INTO_V1'].to_s.downcase
 
-        if handler.config[:map_v2_event_into_v1] || TRUTHY_VALUES.include?(automap)
-          new_event = handler.map_v2_event_into_v1
+        if handler.config[:map_go_event_into_v1] || TRUTHY_VALUES.include?(automap)
+          new_event = handler.map_go_event_into_v1
           handler.event = new_event
         end
         handler.filter

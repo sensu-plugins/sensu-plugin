@@ -50,15 +50,17 @@ module Sensu
       #
       #    Note:
       #      The 1.4 mapping overwrites some attributes so the resulting event cannot
-      #      be used in a 2.0 workflow. The top level boolean attribute "v2_event_mapped_into_v1"
+      #      be used in a 2.0 workflow. The top level boolean attribute "go_event_mapped_into_v1"
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def map_v2_event_into_v1(orig_event = nil, map_label = 'json_attributes')
+      def map_go_event_into_v1(orig_event = nil, map_label = 'json_attributes')
         orig_event ||= @event
 
+        map_label ||= ENV['SENSU_MAP_LABEL'] if ENV['SENSU_MAP_LABEL']
+
         # return orig_event if already mapped
-        return orig_event if orig_event['v2_event_mapped_into_v1']
+        return orig_event if orig_event['go_event_mapped_into_v1']
 
         # Deep copy of orig_event
         event = Marshal.load(Marshal.dump(orig_event))
@@ -129,8 +131,8 @@ module Sensu
           ##
           if event['check']['history']
             # Let's save the original history
-            history_v2 = Marshal.load(Marshal.dump(event['check']['history']))
-            event['check']['history_v2'] = history_v2
+            original_history = Marshal.load(Marshal.dump(event['check']['history']))
+            event['check']['original_history'] = original_history
             legacy_history = []
             event['check']['history'].each do |h|
               legacy_history << h['status'].to_i.to_s || '3'
@@ -141,7 +143,7 @@ module Sensu
           ##
           # Setting flag indicating this function has already been called
           ##
-          event['v2_event_mapped_into_v1'] = true
+          event['go_event_mapped_into_v1'] = true
         end
         # return the updated event
         event
