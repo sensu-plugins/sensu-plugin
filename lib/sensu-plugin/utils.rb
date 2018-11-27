@@ -54,10 +54,11 @@ module Sensu
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def map_go_event_into_v1(orig_event = nil, map_label = 'json_attributes')
+      def map_go_event_into_v1(orig_event = nil, map_label = nil)
         orig_event ||= @event
 
         map_label ||= ENV['SENSU_MAP_LABEL'] if ENV['SENSU_MAP_LABEL']
+        map_label ||= 'json_attributes'
 
         # return orig_event if already mapped
         return orig_event if orig_event['go_event_mapped_into_v1']

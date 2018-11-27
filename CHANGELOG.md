@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changes
+- renamed event mapping utility function to match naming change to Sensu Go map_go_event_into_v1
+- renamed mutator and handler mixin arguments to match naming change to Sensu Go -map-go-event-into-v1
+- renamed envar option SENSU_MAP_GO_EVENT_INTO_V1
+- updated map_go_event_into_v1 logic to account for entity attribute refactor
+- 
+### Added
+- map_go_event_info_v1 now takes optional map_label argument to indicate label key 
+  holding json string to be mapped into v1 entity attributes
+  default value is "json_attributes"
+  optional envvar SENSU_MAP_LABEL to use as environment override 
 
 ## [2.7.0] - 2018-09-12
 ### Added
