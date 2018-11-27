@@ -3,11 +3,8 @@
 require 'sensu-mutator'
 
 class Helper < Sensu::Mutator
-
   def mutate
-    new_event = self.map_go_event_into_v1
-    self.event= new_event
+    new_event = map_go_event_into_v1
+    @event = new_event
   end
-
 end
-
