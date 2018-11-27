@@ -4,6 +4,7 @@ require 'sensu-mutator'
 
 class Helper < Sensu::Mutator
   def mutate
+    STDERR.puts 'Notice: this is a stderr message, should not cause an error'
     @event.merge!(mutated: true)
   end
 end

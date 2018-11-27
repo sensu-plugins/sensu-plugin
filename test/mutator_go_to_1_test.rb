@@ -7,7 +7,7 @@ require 'test_helper'
 class TestMutatorHelpers < MiniTest::Test
   include SensuPluginTestHelper
   def test_base_go_to_1_mutator
-    set_script 'external/mutator-trivial --map-go-event-into-v1'
+    set_script 'external/mutator-trivial --map-go-event-into-ruby'
     event = JSON.parse(fixture('basic_go_event.json').read)
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $CHILD_STATUS.exitstatus)
@@ -18,7 +18,7 @@ class TestMutatorHelpers < MiniTest::Test
   end
 
   def test_external_go_to_1_mutator
-    set_script 'external/mutator-helpers --map-go-event-into-v1'
+    set_script 'external/mutator-helpers --map-go-event-into-ruby'
     event = JSON.parse(fixture('basic_go_event.json').read)
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $CHILD_STATUS.exitstatus)

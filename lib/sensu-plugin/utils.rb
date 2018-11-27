@@ -42,26 +42,26 @@ module Sensu
       end
 
       ##
-      #  Helper method to convert Sensu 2.0 event into Sensu 1.4 event
+      #  Helper method to convert Sensu Go event into Sensu Ruby event
       #    This is here to help keep Sensu Plugin community handlers working
-      #    until they natively support 2.0
-      #    Takes 2.0 event json object as argument
-      #    Returns event with 1.4 mapping included
+      #    until they natively support Go events
+      #    Takes Go event json object as argument
+      #    Returns event with Sensu Ruby mapping included
       #
       #    Note:
-      #      The 1.4 mapping overwrites some attributes so the resulting event cannot
-      #      be used in a 2.0 workflow. The top level boolean attribute "go_event_mapped_into_v1"
+      #      The Sensu Ruby mapping overwrites some attributes so the resulting event cannot
+      #      be used in a Sensu Go workflow. The top level boolean attribute "go_event_mapped_into_ruby"
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def map_go_event_into_v1(orig_event = nil, map_label = nil)
+      def map_go_event_into_ruby(orig_event = nil, map_label = nil)
         orig_event ||= @event
 
         map_label ||= ENV['SENSU_MAP_LABEL'] if ENV['SENSU_MAP_LABEL']
         map_label ||= 'json_attributes'
 
         # return orig_event if already mapped
-        return orig_event if orig_event['go_event_mapped_into_v1']
+        return orig_event if orig_event['go_event_mapped_into_ruby']
 
         # Deep copy of orig_event
         event = Marshal.load(Marshal.dump(orig_event))
@@ -101,14 +101,14 @@ module Sensu
           end
 
           ##
-          # Fill in renamed check attributes expected in 1.4 event
+          # Fill in renamed check attributes expected in Sensu Ruby event
           #   subscribers, source
           ##
           event['check']['subscribers'] ||= event['check']['subscriptions']
           event['check']['source'] ||= event['check']['proxy_entity_name']
 
           ##
-          # Mimic 1.4 event action based on 2.0 event state
+          # Mimic Sensu Ruby event action based on Go event state
           #  action used in logs and fluentd plugins handlers
           ##
           action_state_mapping = {
@@ -117,18 +117,18 @@ module Sensu
             'failing' => 'create'
           }
 
-          state = event['check']['state'] || 'unknown::2.0_event'
+          state = event['check']['state'] || 'unknown::go_event'
 
-          # Attempt to map 2.0 event state to 1.4 event action
+          # Attempt to map Go event state to Sensu Ruby event action
           event['action'] ||= action_state_mapping[state.downcase]
-          # Fallback action is 2.0 event state
+          # Fallback action is Go event state
           event['action'] ||= state
 
           ##
-          # Mimic 1.4 event history based on 2.0 event history
+          # Mimic Sensu Ruby event history based on Go event history
           #  Note: This overwrites the same history attribute
-          #    2.x history is an array of hashes, each hash includes status
-          #    1.x history is an array of statuses
+          #    Go history is an array of hashes, each hash includes status
+          #    Sensu Ruby history is an array of statuses
           ##
           if event['check']['history']
             # Let's save the original history
@@ -144,7 +144,7 @@ module Sensu
           ##
           # Setting flag indicating this function has already been called
           ##
-          event['go_event_mapped_into_v1'] = true
+          event['go_event_mapped_into_ruby'] = true
         end
         # return the updated event
         event
