@@ -142,6 +142,25 @@ module Sensu
           end
 
           ##
+          #  Map check metadata into client attributes
+          #  Note this is potentially destructive as it may overwrite existing check attributes.
+          ##
+          if event['check'].key?('metadata')
+            ##
+            #  Map metadata label 'name' to client name attribute
+            ##
+            event['check']['name'] ||= event['check']['metadata']['name']
+
+            ##
+            #  Map special metadata label defined in map_label as json string and convert to check attributes
+            #  Note this is potentially destructive as it may overwrite existing check attributes.
+            ##
+            if event['check']['metadata'].key?('labels') && event['check']['metadata']['labels'].key?(map_label)
+              json_hash = JSON.parse(event['check']['metadata']['labels'][map_label])
+              event['check'].update(json_hash)
+            end
+          end
+          ##
           # Setting flag indicating this function has already been called
           ##
           event['go_event_mapped_into_ruby'] = true

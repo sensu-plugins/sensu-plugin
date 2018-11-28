@@ -10,7 +10,7 @@ class TestHandleGoto1 < MiniTest::Test
 
   def test_go_to_ruby_enabled
     event = JSON.parse(fixture('basic_go_event.json').read)
-    expected = "test_entity : test_check : test_proxy : test_output : 4 : create : sub1|sub2|sub3 : sub1^sub2^sub3 : 01230\n"
+    expected = "test_entity : top_value : test_check : test_proxy : test_output : 4 : create : sub1|sub2|sub3 : sub1^sub2^sub3 : potato : 01230\n"
     output = run_script_with_input(JSON.generate(event))
     assert_equal(0, $CHILD_STATUS.exitstatus)
     assert_match(expected, output)
