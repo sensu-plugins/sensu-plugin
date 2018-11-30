@@ -1,8 +1,8 @@
-{"entity":{"metadata":{"name":"test_entity","labels":{"json_attributes": "{\"top\":\"top_value\",\"test_json\":{\"nested01\":\"nested01_value\",\"nested02\":\"nested02_value\"}}"}},"subscriptions":["sub1","sub2","sub3"]},
+{"entity":{"metadata":{"name":"test_entity","annotations":{"json_attributes": "{\"top\":\"top_value\",\"test_json\":{\"nested01\":\"nested01_value\",\"nested02\":\"nested02_value\"}}"}},"subscriptions":["sub1","sub2","sub3"]},
 "check":{
   "metadata":{
     "name" : "test_check",
-    "labels" : {
+    "annotations" : {
       "json_attributes" : "{\"foo\":\"bar\",\"tomato\":\"potato\"}"
     }
   },

@@ -10,10 +10,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - updated map_go_event_into_ruby logic to account for entity attribute refactor
 - 
 ### Added
-- map_go_event_info_ruby now takes optional map_label argument to indicate label key 
+- map_go_event_info_ruby now takes optional map_annotation argument to indicate annotation key 
   holding json string to be mapped into ruby entity attributes
   default value is "json_attributes"
-  optional envvar SENSU_MAP_LABEL to use as environment override 
+  optional envvar SENSU_MAP_ANNOTATION to use as environment override 
 - add mutator-go-into-ruby.rb  binary. This mutator command can be used to mutate Sensu Go events into Sensu Core 1.x events
 
 ## [2.7.0] - 2018-09-12

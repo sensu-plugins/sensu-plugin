@@ -54,11 +54,11 @@ module Sensu
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def map_go_event_into_ruby(orig_event = nil, map_label = nil)
+      def map_go_event_into_ruby(orig_event = nil, map_annotation = nil)
         orig_event ||= @event
 
-        map_label ||= ENV['SENSU_MAP_LABEL'] if ENV['SENSU_MAP_LABEL']
-        map_label ||= 'json_attributes'
+        map_annotation ||= ENV['SENSU_MAP_ANNOTATION'] if ENV['SENSU_MAP_ANNOTATION']
+        map_annotation ||= 'json_attributes'
 
         # return orig_event if already mapped
         return orig_event if orig_event['go_event_mapped_into_ruby']
@@ -86,16 +86,16 @@ module Sensu
           ##
           if event['entity'].key?('metadata')
             ##
-            #  Map metadata label 'name' to client name attribute
+            #  Map metadata annotation 'name' to client name attribute
             ##
             event['client']['name'] ||= event['entity']['metadata']['name']
 
             ##
-            #  Map special metadata label defined in map_label as json string and convert to client attributes
+            #  Map special metadata annotation defined in map_annotation as json string and convert to client attributes
             #  Note this is potentially destructive as it may overwrite existing client attributes.
             ##
-            if event['entity']['metadata'].key?('labels') && event['entity']['metadata']['labels'].key?(map_label)
-              json_hash = JSON.parse(event['entity']['metadata']['labels'][map_label])
+            if event['entity']['metadata'].key?('annotations') && event['entity']['metadata']['annotations'].key?(map_annotation)
+              json_hash = JSON.parse(event['entity']['metadata']['annotations'][map_annotation])
               event['client'].update(json_hash)
             end
           end
@@ -147,16 +147,16 @@ module Sensu
           ##
           if event['check'].key?('metadata')
             ##
-            #  Map metadata label 'name' to client name attribute
+            #  Map metadata annotation 'name' to client name attribute
             ##
             event['check']['name'] ||= event['check']['metadata']['name']
 
             ##
-            #  Map special metadata label defined in map_label as json string and convert to check attributes
+            #  Map special metadata annotation defined in map_annotation as json string and convert to check attributes
             #  Note this is potentially destructive as it may overwrite existing check attributes.
             ##
-            if event['check']['metadata'].key?('labels') && event['check']['metadata']['labels'].key?(map_label)
-              json_hash = JSON.parse(event['check']['metadata']['labels'][map_label])
+            if event['check']['metadata'].key?('annotations') && event['check']['metadata']['annotations'].key?(map_annotation)
+              json_hash = JSON.parse(event['check']['metadata']['annotations'][map_annotation])
               event['check'].update(json_hash)
             end
           end
