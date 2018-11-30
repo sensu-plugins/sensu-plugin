@@ -242,12 +242,19 @@ def foo_enabled?
 end
 ```
 
-## Sensu Go Enablement
+## Sensu Go enablement
 
 This plugin provides basic Sensu Go enablement support to make it possible to continue to use existing Sensu plugin handlers and mutators for Sensu Core 1.x event model in a backwards compatible fashion.
+
+### Sensu Go event mapping
+
 The provided mutator command `mutator-sensu-go-into-ruby.rb` will mutate the Sensu Go event into a form compatible for handlers written to consume Sensu Core 1.x events.  Users may find this mutator useful until such time that community plugin handler are updated to support Sensu Go event model directly.
 
 Sensu plugins which provide either mutators or handlers can benefit from provided Sensu Go enablement support in the form of mixin commandline option support.  Once plugins update to the latest sensu-plugin version, all mutator and handler commands will automatically grow an additional commandline argument `--map_go_event_into_ruby`
+
+### Custom attributes
+
+For backwards compatibility, you can store custom entity and check attributes as a json string in a specially named annotation. By default the annotation key is `sensu.io.json_attributes`, but can be overridden using the environment variable `MAP_ANNOTATION`.  The json string stored in the `MAP_ANNOTATION` key will be converted into a ruby hash and merged into the ruby event hash object as part of the event mapping.  
 
 ## Contributing
 
