@@ -58,7 +58,7 @@ module Sensu
         orig_event ||= @event
 
         map_annotation ||= ENV['SENSU_MAP_ANNOTATION'] if ENV['SENSU_MAP_ANNOTATION']
-        map_annotation ||= 'json_attributes'
+        map_annotation ||= 'sensu.io.json_attributes'
 
         # return orig_event if already mapped
         return orig_event if orig_event['go_event_mapped_into_ruby']
