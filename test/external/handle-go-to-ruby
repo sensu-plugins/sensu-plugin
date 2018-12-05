@@ -20,7 +20,9 @@ class Helpers < Sensu::Handler
 
   def event_summary
     client_name = @event['client']['name']
+    client_attribute = @event['client']['top']
     check_name = @event['check']['name']
+    check_attribute = @event['check']['tomato']
     source = @event['check']['source']
     output = @event['check']['output']
     total_state_change = @event['check']['total_state_change']
@@ -28,6 +30,7 @@ class Helpers < Sensu::Handler
     client_subscribers = @event['client']['subscribers'].join('|')
     check_subscribers = @event['client']['subscribers'].join('^')
     history = @event['check']['history'].join('')
-    [client_name, check_name, source, output, total_state_change, action, client_subscribers, check_subscribers, history].join(' : ')
+    [client_name, client_attribute, check_name, source, output, total_state_change,
+     action, client_subscribers, check_subscribers, check_attribute, history].join(' : ')
   end
 end

@@ -42,23 +42,26 @@ module Sensu
       end
 
       ##
-      #  Helper method to convert Sensu 2.0 event into Sensu 1.4 event
+      #  Helper method to convert Sensu Go event into Sensu Ruby event
       #    This is here to help keep Sensu Plugin community handlers working
-      #    until they natively support 2.0
-      #    Takes 2.0 event json object as argument
-      #    Returns event with 1.4 mapping included
+      #    until they natively support Go events
+      #    Takes Go event json object as argument
+      #    Returns event with Sensu Ruby mapping included
       #
       #    Note:
-      #      The 1.4 mapping overwrites some attributes so the resulting event cannot
-      #      be used in a 2.0 workflow. The top level boolean attribute "v2_event_mapped_into_v1"
+      #      The Sensu Ruby mapping overwrites some attributes so the resulting event cannot
+      #      be used in a Sensu Go workflow. The top level boolean attribute "go_event_mapped_into_ruby"
       #      will be set to true as a hint to indicate this is a mapped event object.
       #
       ##
-      def map_v2_event_into_v1(orig_event = nil)
+      def map_go_event_into_ruby(orig_event = nil, map_annotation = nil)
         orig_event ||= @event
 
+        map_annotation ||= ENV['SENSU_MAP_ANNOTATION'] if ENV['SENSU_MAP_ANNOTATION']
+        map_annotation ||= 'sensu.io.json_attributes'
+
         # return orig_event if already mapped
-        return orig_event if orig_event['v2_event_mapped_into_v1']
+        return orig_event if orig_event['go_event_mapped_into_ruby']
 
         # Deep copy of orig_event
         event = Marshal.load(Marshal.dump(orig_event))
@@ -74,18 +77,38 @@ module Sensu
           ##
           # Fill in missing client attributes
           ##
-          event['client']['name']        ||= event['entity']['id']
+
           event['client']['subscribers'] ||= event['entity']['subscriptions']
 
           ##
-          # Fill in renamed check attributes expected in 1.4 event
+          #  Map entity metadata into client attributes
+          #  Note this is potentially destructive as it may overwrite existing client attributes.
+          ##
+          if event['entity'].key?('metadata')
+            ##
+            #  Map metadata annotation 'name' to client name attribute
+            ##
+            event['client']['name'] ||= event['entity']['metadata']['name']
+
+            ##
+            #  Map special metadata annotation defined in map_annotation as json string and convert to client attributes
+            #  Note this is potentially destructive as it may overwrite existing client attributes.
+            ##
+            if event['entity']['metadata'].key?('annotations') && event['entity']['metadata']['annotations'].key?(map_annotation)
+              json_hash = JSON.parse(event['entity']['metadata']['annotations'][map_annotation])
+              event['client'].update(json_hash)
+            end
+          end
+
+          ##
+          # Fill in renamed check attributes expected in Sensu Ruby event
           #   subscribers, source
           ##
           event['check']['subscribers'] ||= event['check']['subscriptions']
-          event['check']['source'] ||= event['check']['proxy_entity_id']
+          event['check']['source'] ||= event['check']['proxy_entity_name']
 
           ##
-          # Mimic 1.4 event action based on 2.0 event state
+          # Mimic Sensu Ruby event action based on Go event state
           #  action used in logs and fluentd plugins handlers
           ##
           action_state_mapping = {
@@ -94,23 +117,23 @@ module Sensu
             'failing' => 'create'
           }
 
-          state = event['check']['state'] || 'unknown::2.0_event'
+          state = event['check']['state'] || 'unknown::go_event'
 
-          # Attempt to map 2.0 event state to 1.4 event action
+          # Attempt to map Go event state to Sensu Ruby event action
           event['action'] ||= action_state_mapping[state.downcase]
-          # Fallback action is 2.0 event state
+          # Fallback action is Go event state
           event['action'] ||= state
 
           ##
-          # Mimic 1.4 event history based on 2.0 event history
+          # Mimic Sensu Ruby event history based on Go event history
           #  Note: This overwrites the same history attribute
-          #    2.x history is an array of hashes, each hash includes status
-          #    1.x history is an array of statuses
+          #    Go history is an array of hashes, each hash includes status
+          #    Sensu Ruby history is an array of statuses
           ##
           if event['check']['history']
             # Let's save the original history
-            history_v2 = Marshal.load(Marshal.dump(event['check']['history']))
-            event['check']['history_v2'] = history_v2
+            original_history = Marshal.load(Marshal.dump(event['check']['history']))
+            event['check']['original_history'] = original_history
             legacy_history = []
             event['check']['history'].each do |h|
               legacy_history << h['status'].to_i.to_s || '3'
@@ -119,9 +142,28 @@ module Sensu
           end
 
           ##
+          #  Map check metadata into client attributes
+          #  Note this is potentially destructive as it may overwrite existing check attributes.
+          ##
+          if event['check'].key?('metadata')
+            ##
+            #  Map metadata annotation 'name' to client name attribute
+            ##
+            event['check']['name'] ||= event['check']['metadata']['name']
+
+            ##
+            #  Map special metadata annotation defined in map_annotation as json string and convert to check attributes
+            #  Note this is potentially destructive as it may overwrite existing check attributes.
+            ##
+            if event['check']['metadata'].key?('annotations') && event['check']['metadata']['annotations'].key?(map_annotation)
+              json_hash = JSON.parse(event['check']['metadata']['annotations'][map_annotation])
+              event['check'].update(json_hash)
+            end
+          end
+          ##
           # Setting flag indicating this function has already been called
           ##
-          event['v2_event_mapped_into_v1'] = true
+          event['go_event_mapped_into_ruby'] = true
         end
         # return the updated event
         event

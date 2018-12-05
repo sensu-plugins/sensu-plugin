@@ -1,0 +1,9 @@
+{"entity":{"metadata":{"name":"test_entity","annotations":{"sensu.io.json_attributes": "{\"top\":\"top_value\",\"test_json\":{\"nested01\":\"nested01_value\",\"nested02\":\"nested02_value\"}}"}},"subscriptions":["sub1","sub2","sub3"]},
+"check":{
+  "metadata":{
+    "name" : "test_check",
+    "annotations" : {
+      "sensu.io.json_attributes" : "{\"foo\":\"bar\",\"tomato\":\"potato\"}"
+    }
+  },
+  "output":"test_output","subscriptions":["sub1","sub2","sub3"],"proxy_entity_name":"test_proxy","total_state_change":4,"state":"failing","history":[{"status":0,"executed":0},{"status":1,"executed":1},{"status":2,"executed":2},{"status":3,"executed":3},{"status":0,"executed":4}],"status":0}}

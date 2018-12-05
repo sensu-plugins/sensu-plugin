@@ -12,7 +12,8 @@ Gem::Specification.new do |s|
   s.license               = 'MIT'
   s.has_rdoc              = false
   s.require_paths         = ['lib']
-  s.files                 = Dir['lib/**/*.rb']
+  s.executables           = Dir.glob('bin/**/*.rb').map { |file| File.basename(file) }
+  s.files                 = Dir.glob('{bin,lib}/**/*')
   s.test_files            = Dir['test/*.rb']
   s.required_ruby_version = '~> 2.0'
 
