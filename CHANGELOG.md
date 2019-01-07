@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- locked `mixlib-cli` dep to `~> 1.5` as `2.0` removes ruby support for `< 2.5` (@majormoses)
+
 ## [3.0.0] - 2018-12-04
 ### Breaking Changes
 - renamed event mapping utility function `map_v2_event_into_v1` to match naming change to Sensu Go `map_go_event_into_ruby` (@jspaleta)
