@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.1] - 2018-01-07
 ### Fixed
 - locked `mixlib-cli` dep to `~> 1.5` as `2.0` removes ruby support for `< 2.5` (@majormoses)
 
@@ -160,7 +161,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/3.0.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/3.0.1...HEAD
+[3.0.1]: https://github.com/sensu-plugins/sensu-plugin/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.7.0...3.0.0
 [2.7.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.6.1...2.7.0
 [2.6.1]: https://github.com/sensu-plugins/sensu-plugin/compare/2.6.0...2.6.1
