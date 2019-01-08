@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 require 'sensu-plugin'
 require 'mixlib/cli'
 require 'English'
