@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Sensu
   module Plugin
-    VERSION = '3.0.1'.freeze
+    VERSION = '3.0.1'
     EXIT_CODES = {
       'OK'       => 0,
       'WARNING'  => 1,

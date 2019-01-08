@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 require 'net/http'
 require 'timeout'
 require 'uri'

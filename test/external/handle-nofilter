@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'sensu-handler'
 
 class NoFilter < Sensu::Handler
   def filter; end
 
   def handle
-    puts 'Event: ' + @event.inspect
+    puts "Event: #{@event.inspect}"
   end
 end

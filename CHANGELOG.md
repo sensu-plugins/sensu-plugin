@@ -4,6 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Breaking Changes
+- remove support for EOL ruby `< 2.3` as they are EOL (@majormoses)
+
+### Changed
+- appease the cops (@majormoses)
+
 ## [3.0.1] - 2018-01-07
 ### Fixed
 - locked `mixlib-cli` dep to `~> 1.5` as `2.0` removes ruby support for `< 2.5` (@majormoses)
