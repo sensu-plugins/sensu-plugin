@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### [4.0.0] - 2018-02-17
 ### Breaking Changes
 - remove support for EOL ruby `< 2.3` as they are EOL (@majormoses)
 
@@ -167,7 +168,8 @@ The changes in earlier releases are not fully documented but comparison links ar
 * [v0.1.1]
 * [v0.1.0]
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/3.0.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugin/compare/4.0.0...HEAD
+[4.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/3.0.1...4.0.0
 [3.0.1]: https://github.com/sensu-plugins/sensu-plugin/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.7.0...3.0.0
 [2.7.0]: https://github.com/sensu-plugins/sensu-plugin/compare/2.6.1...2.7.0
