@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v2.0.2] - 2019-02-20
+
+- Update lock for `mixlib-cli` to `~> 1.5` as 2.0 removes ruby < 2.5 support
+
 ## [v2.0.1] - 2017-04-28
 
 - Update json module requirement to < 3.0.0

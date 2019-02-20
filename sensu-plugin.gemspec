@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '~> 2.0'
 
   s.add_dependency('json',       '< 3.0.0')
-  s.add_dependency('mixlib-cli', '>= 1.5.0')
+  s.add_dependency 'mixlib-cli', '~> 1.5'
 
   s.add_development_dependency('rake')
   s.add_development_dependency('minitest')
