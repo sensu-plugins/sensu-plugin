@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['test/*.rb']
 
   s.add_dependency('json',       '< 2.0.0')
-  s.add_dependency('mixlib-cli', '>= 1.5.0')
+  s.add_dependency('mixlib-cli', '~> 1.5')
 
   s.add_development_dependency('rake')
   s.add_development_dependency('minitest')

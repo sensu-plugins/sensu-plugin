@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.4.6] - 2019-02-20
+
+- Update lock for `mixlib-cli` to `~> 1.5` as 2.0 removes ruby < 2.5 support
+
 ## [v1.4.5] - 2017-03-07
 
 - Added support for globally disabling deprecated filtering methods via the
